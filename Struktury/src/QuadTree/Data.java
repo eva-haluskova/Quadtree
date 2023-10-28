@@ -14,7 +14,15 @@ package QuadTree;
 public class Data<T>
 {
     private T data;
+    //private final int id;
+    private int id;
     private Coordinates coordinates;
+
+    public Data(T parData, Coordinates parCoordinates, int parId) {
+        this.data = parData;
+        this.coordinates = parCoordinates;
+        this.id = parId;
+    }
 
     public Data(T parData, Coordinates parCoordinates) {
         this.data = parData;
@@ -22,10 +30,14 @@ public class Data<T>
     }
 
     public T getData() {
-        return data;
+        return this.data;
     }
 
     public Coordinates getCoordinates() {
-        return coordinates;
+        return this.coordinates;
+    }
+
+    public int getId() {
+        return this.id;
     }
 }

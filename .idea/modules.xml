@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Semestralka/Semestralka.iml" filepath="$PROJECT_DIR$/Semestralka/Semestralka.iml" />
       <module fileurl="file://$PROJECT_DIR$/Struktury/Struktury.iml" filepath="$PROJECT_DIR$/Struktury/Struktury.iml" />
     </modules>
   </component>

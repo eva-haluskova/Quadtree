@@ -1,5 +1,10 @@
 package QuadTree;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+
 /**
  * Represents class of some object coordinates. Holds four values -
  * two for x axis, two for y axis. If we want to have only point,
@@ -47,12 +52,15 @@ public class Coordinates {
         this.upperY = parY;
     }
 
+    /**
+     * Copy constructor
+     */
     public Coordinates(
-            Coordinates otherCoordinates
+            @NotNull Coordinates otherCoordinates
     ) {
         this.lowerX = otherCoordinates.getLowerX();
         this.upperX = otherCoordinates.getUpperX();
-        this.lowerY = otherCoordinates.getUpperY();
+        this.lowerY = otherCoordinates.getLowerY();
         this.upperY = otherCoordinates.getUpperY();
     }
 

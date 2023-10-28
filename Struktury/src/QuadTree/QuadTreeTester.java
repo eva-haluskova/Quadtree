@@ -38,7 +38,7 @@ public class QuadTreeTester {
                 QuadTreeNode<Place> currentNode = queue.poll();
                 // Process the current node, e.g., add it to a list or perform some operation.
                 System.out.println("V node sa nachadza:");
-                for (Data<Place> data: currentNode.accessToData()) {
+                for (Data<Place> data: currentNode.getListOfData()) {
                     System.out.println("Miesto: " + data.getData().getName()+
                             " x: " + data.getCoordinates().getLowerX() +
                             " x2: " + data.getCoordinates().getUpperX() +
@@ -46,14 +46,14 @@ public class QuadTreeTester {
                             " y2: " + data.getCoordinates().getUpperY());
                 }
 
-                QuadTreeNode<Place>[] children = currentNode.accessChildren();
-                if (children != null) {
-                    for (int i = 0; i < 4; i++) {
-                        if (children[i] != null) {
-                            queue.add(children[i]);
-                        }
-                    }
-                }
+                //QuadTreeNode<Place>[] children = currentNode.accessChildren();
+//                if (children != null) {
+//                    for (int i = 0; i < 4; i++) {
+//                        if (children[i] != null) {
+//                            queue.add(children[i]);
+//                        }
+//                    }
+//                }
             }
         }
 
@@ -77,20 +77,22 @@ public class QuadTreeTester {
 
             for (int i = 0; i < nodesAtCurrentLevel; i++) {
                 QuadTreeNode<Place> currentNode = queue.poll();
-                currentNode.setNodeNumber(nodeNumber); // Assign a number to the node
-                nodeNumber++;
+                //currentNode.setNodeNumber(nodeNumber); // Assign a number to the node
 
-                System.out.println("V node " + currentNode.getNumber() + "sa nachadza:");
-                for (Data<Place> data: currentNode.accessToData()) {
+                System.out.println("V node " + nodeNumber + " na urovni: " + currentNode.getLevel() + " sa nachadza:");
+                for (Data<Place> data: currentNode.getListOfData()) {
                     System.out.println("Miesto: " + data.getData().getName()+
                             " x: " + data.getCoordinates().getLowerX() +
-                            " x2: " + data.getCoordinates().getUpperX() +
-                            " y: " + data.getCoordinates().getLowerY() +
-                            " y2: " + data.getCoordinates().getUpperY());
+                            //" x2: " + data.getCoordinates().getUpperX() +
+                            " y: " + data.getCoordinates().getLowerY());
+                            //" y2: " + data.getCoordinates().getUpperY());
                 }
 
+                nodeNumber++;
 
-                QuadTreeNode<Place>[] children = currentNode.accessChildren();
+
+
+                QuadTreeNode<Place>[] children = currentNode.getChildren();
                 if (children != null) {
                     for (int j = 0; j < 4; j++) {
                         if (children[j] != null) {
