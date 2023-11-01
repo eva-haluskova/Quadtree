@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- * Represents class of some object coordinates. Holds four values -
+ * Represents class of some objects coordinates. Holds four values -
  * two for x axis, two for y axis. If we want to have only point,
  * not polygon, class contain constructor just for point.
  */

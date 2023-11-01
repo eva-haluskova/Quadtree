@@ -1,5 +1,8 @@
 package QuadTree;
 
+/**
+ * Basic class mainly for testing how quad tree implementation works.
+ */
 public class Place implements Comparable<Place> {
 
     private String name;
@@ -16,10 +19,12 @@ public class Place implements Comparable<Place> {
         this.name = name;
     }
 
-
     @Override
     public int compareTo(Place parOtherPlace) {
-
-        return 0;
+        if (this.name.equals(parOtherPlace.getName())) {
+            return 1;
+        } else {
+            return -1;
+        }
     }
 }

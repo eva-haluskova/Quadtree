@@ -2,33 +2,14 @@ package QuadTree;
 
 import jdk.jshell.spi.ExecutionControl;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.*;
 
-// TODO Majo
-// univerzalny pseudofind ktory ti najde cestu k nodu...lebo tu pouzivas vsade :)
-// v intervalovom finde prehladavas vsetky intervali, ked patri cela oblast, vlozis tam vsetky synov
-// delete vymazavas cyklicky nahor, kukas si mas bratov...resp. ci si prazdy. K parentovi sa dostanes bud
-// z uchvatneho zozonamu z pseudofindu alebo budes mat jednoducho ulozenych parentov :)
-
-// TODO uschvatny pseudofind:
-// najdi node podla suradnic? by som povedala... ako param ti pojde suradnica a vrati ti to
-// node do ktoreho vkladas...no, hej alebo v ktorom sa nachadzaju data. Len ako zaroven dostanes aj
-// nejaky linked list parentov?
-
-
-// TODO zoptimalizuj insertik
-// TODO vyries zahadu ze preco je vkladanie polygonov jednoduchsie...asi preto ze sa vklada do oneho ved jasne
-// je to uz jasne!!!
-// TODO mas osetrenie ked ti padne bod na hranicu?? HMM??? pochybujem.
-// TODO ohranicenie stromu refactorni tiez do Coordinates
-// TODO ten insert mas stale totalne nahovno, po novom ti insert polygonov vobec negungiruje
-
-// findujes podla sekundarnych klucov...vrati ti to vsetky zaznami s danymi suradnicami,
-// no a deletujes asi podla primarneho kluca, proste ides vymazat speci zaznam, akoze aj iny moze mat
-// rovnake suradnice, ale to neznamena ze ho chces vymazat :)
-
+/**
+ * Class represents QuadTree, into which can be inserted any data.
+ * This data needs to be type class Data, which holds needed things for
+ * data inserted in quadtree - coordinates and uniqe id - and of course
+ * data itself.
+ */
 public class QuadTree<T extends Comparable<T>> {
 
     private final int maxDepth;
@@ -49,20 +30,47 @@ public class QuadTree<T extends Comparable<T>> {
         this.depth = 0;
     }
 
+    /**
+     * Getters and requests
+     */
+    public QuadTreeNode<T> getRoot() {
+        return root;
+    }
+
+    public int getDepth() {
+        return this.depth;
+    }
+
+    public int getMaxDepth() {
+        return this.maxDepth;
+    }
+
+    public boolean isEmpty() {
+        return this.root == null;
+    }
+
+    public Coordinates getRangeOfTree() {
+        return this.rangeOfTree;
+    }
+
+    /**
+     * Private class used for obtaining data in method FindAppropriateNodeData,
+     * for next usage in deleting data and another processing.
+     */
     private class Result {
 
         private QuadTreeNode<T> searchedNode;
         private LinkedList<QuadTreeNode<T>> parents;
-        private int level;
+        private LinkedList<Integer> indices;
 
         private Result(
                 QuadTreeNode<T> parSearchedNode,
                 LinkedList<QuadTreeNode<T>> parParents,
-                int parLevel
+                LinkedList<Integer> parIndices
         ){
             this.searchedNode = parSearchedNode;
-            this.level = parLevel;
             this.parents = parParents;
+            this.indices = parIndices;
 
         }
         public void addParent(QuadTreeNode<T> parNode) {
@@ -72,44 +80,19 @@ public class QuadTree<T extends Comparable<T>> {
         public QuadTreeNode<T> getSearchedNode() {
             return this.searchedNode;
         }
+
+        public LinkedList<QuadTreeNode<T>> getParents() {
+            return this.parents;
+        }
+
+        public LinkedList<Integer> getIndices() {
+            return this.indices;
+        }
     }
 
     /**
-     * Method will find appropriate node for next precessing - inserting, finding, deleting.
+     * Method will find appropriate node for next precessing.
      */
-    // TODO at this time you dont need to put there parcurrent, thing about it in futur if you fil need it
-    private Result findAppropriateNodeData(Coordinates parCoordinates, QuadTreeNode<T> parCurrent) {
-
-        LinkedList<QuadTreeNode<T>> parents = new LinkedList<>();
-
-        if (this.depth == 1) {
-            return new Result(this.root,null,1);
-        }
-
-        int level = parCurrent.getLevel();
-        QuadTreeNode<T> current = parCurrent;
-        boolean nodeIsFind = false;
-
-        while (!nodeIsFind) {
-            int quadrant = current.isFitsToQuadrant(parCoordinates);
-
-            if (quadrant == -1) {
-                nodeIsFind = true;
-            } else if (!current.isLeaf()) {
-                if (current.hasNthChild(quadrant)) {
-                    current = current.accessToNthSon(quadrant);
-                    level = level + 1;
-                    parents.add(current);
-                } else if (!current.hasNthChild(quadrant)) {
-                    nodeIsFind = true;
-                }
-            } else if (current.isLeaf()) {
-                    nodeIsFind = true;
-            }
-        }
-        return new Result(current,parents,level);
-    }
-
     private QuadTreeNode<T> findAppropriateNode(Coordinates parCoordinates, QuadTreeNode<T> parCurrent) {
 
         QuadTreeNode<T> current = parCurrent;
@@ -133,11 +116,47 @@ public class QuadTree<T extends Comparable<T>> {
         return current;
     }
 
-    // TODO decide if boolean return statement is necessarily
-    // TODO rename
-    public boolean insertSimpleTwo(Data<T> parData) {
+    /**
+     * Method will find appropriate node for next precessing. Difference between this method
+     * and method about is in return value. In this method btained data are storage in Result,
+     * where are list of parents, indicates of quadrant and of course searched node.
+     */
+    private Result findAppropriateNodeData(Coordinates parCoordinates, QuadTreeNode<T> parCurrent) {
+
+        LinkedList<QuadTreeNode<T>> parents = new LinkedList<>();
+        LinkedList<Integer> indices = new LinkedList<>();
+
+        QuadTreeNode<T> current = parCurrent;
+        boolean nodeIsFind = false;
+
+        while (!nodeIsFind) {
+            int quadrant = current.isFitsToQuadrant(parCoordinates);
+
+            if (quadrant == -1) {
+                nodeIsFind = true;
+            } else if (!current.isLeaf()) {
+                if (current.hasNthChild(quadrant)) {
+
+                    indices.add(quadrant);
+                    parents.add(current);
+                    current = current.accessToNthSon(quadrant);
+
+                } else if (!current.hasNthChild(quadrant)) {
+                    nodeIsFind = true;
+                }
+            } else if (current.isLeaf()) {
+                nodeIsFind = true;
+            }
+        }
+        return new Result(current,parents,indices);
+    }
+
+    /**
+     * Method ensure inserting data into tree.
+     */
+    public void insert(Data<T> parData) {
         if (!this.checkIfFitsToTree(parData.getCoordinates())) {
-            return false;
+            return;
         }
 
         if (this.isEmpty()) {
@@ -145,7 +164,7 @@ public class QuadTree<T extends Comparable<T>> {
             QuadTreeNode<T> newNode = new QuadTreeNode<T>(parData, newCoordinates,1);
             this.root = newNode;
             this.depth = 1;
-            return true;
+            return;
         }
 
         ArrayList<Data<T>> dataToInsert = new ArrayList<Data<T>>();
@@ -198,50 +217,131 @@ public class QuadTree<T extends Comparable<T>> {
                 }
             }
         }
-        return true;
     }
 
+    /**
+     * Return list of all data which are in tree witch root is given node
+     */
+    public ArrayList<Data<T>> getAllDataInSubTree(QuadTreeNode<T> parNode) {
 
+        ArrayList<Data<T>> listToReturn = new ArrayList<>();
+        Stack<QuadTreeNode<T>> nodesToProcess = new Stack<>();
+
+        nodesToProcess.push(parNode);
+
+        while (!nodesToProcess.isEmpty()) {
+
+            QuadTreeNode<T> current = nodesToProcess.pop();
+            listToReturn.addAll(current.getListOfData());
+
+            if (!current.isLeaf()) {
+                for (QuadTreeNode<T> child: current.getChildren()) {
+                    if (child != null) {
+                        nodesToProcess.push(child);
+                    }
+                }
+            }
+        }
+        return listToReturn;
+    }
 
     /**
      * Return all data which have given coordinates
-     * @param parCoordinates - coordinates of data which we want to find
+     * @param parCoordinates coordinates of data which we want to find
      */
     public ArrayList<Data<T>> find(Coordinates parCoordinates) {
         if (!this.checkIfFitsToTree(parCoordinates)) {
             return null;
         }
-
         QuadTreeNode<T> searchedNode = this.findAppropriateNode(parCoordinates, this.root);
         return searchedNode.getDataWithSameCoordinates(parCoordinates);
     }
 
     /**
      * Returns all data in given area
-     * @param parCoordinates - coordinates of area in which we want to find data
+     * @param parCoordinates coordinates of area in which we want to find data
      */
     public ArrayList<Data<T>> findInArea(Coordinates parCoordinates) {
+        if (!this.checkIfFitsToTree(parCoordinates)) {
+            return null;
+        }
 
-    }
+        ArrayList<Data<T>> listToReturn = new ArrayList<>();
+        Stack<QuadTreeNode> nodesToProcess = new Stack<>();
 
-    public QuadTreeNode<T> getRoot() {
-        return root;
-    }
+        nodesToProcess.push(this.root);
 
-    public int getDepth() {
-        return this.depth;
-    }
+        while (!nodesToProcess.isEmpty()) {
 
-    public int getMaxDepth() {
-        return this.maxDepth;
-    }
+            QuadTreeNode<T> current = nodesToProcess.pop();
 
-    public boolean isEmpty() {
-        return this.root == null;
+            if (current.isIncludingWholeNodeArea(parCoordinates)) {
+                listToReturn.addAll(this.getAllDataInSubTree(current));
+            } else {
+                if (!current.isLeaf()) {
+                    ArrayList<Integer> indicesOfSons = current.getIncludingQuadrants(parCoordinates);
+                    for (int index : indicesOfSons) {
+                        nodesToProcess.push(current.accessToNthSon(index));
+                    }
+                }
+                listToReturn.addAll(current.getAllAppropriateData(parCoordinates));
+            }
+        }
+        return listToReturn;
     }
 
     /**
-     * Before inserting of data this method checks if data can be inserted,
+     * Method delete appropriate data from tree
+     * @param parCoordinates of data we want to delete
+     * @param parId of data. It's needed, because in tree could by more data with same coordinates
+     */
+    public void delete(Coordinates parCoordinates, int parId) {
+
+        Result result = this.findAppropriateNodeData(parCoordinates,this.root);
+
+        QuadTreeNode<T> nodeWithDataToDelete = result.getSearchedNode();
+        LinkedList<QuadTreeNode<T>> parents = result.getParents();
+        LinkedList<Integer> indices = result.getIndices();
+
+        nodeWithDataToDelete.removeDataUsingPK(parId);
+
+        boolean correctlyRemoved = false;
+
+        while (!correctlyRemoved) {
+
+            if (!nodeWithDataToDelete.isLeaf()) {
+                correctlyRemoved = true;
+            } else if (nodeWithDataToDelete.isLeaf() && !nodeWithDataToDelete.isEmpty()) {
+                correctlyRemoved = true;
+            } else if (nodeWithDataToDelete.isLeaf() && nodeWithDataToDelete.isEmpty()) {
+                // vymazanie nodeWithDataToDelete
+                if (nodeWithDataToDelete == this.root) {
+                    correctlyRemoved = true;
+                    this.root = null;
+                } else {
+
+                    QuadTreeNode<T> actualParent = parents.getLast();
+                    // ak je tento node leaf a je prazdy mazem ho. Dole idem dalej zistovat ci ma brata.
+                    actualParent.removeChild(indices.removeLast());
+
+                    // ak ma brata chcem ho vymazat. ale pozor!! jedine ak je brat leaf!!! :)
+                    if (actualParent.getCountOfChildren() == 1) {
+                        QuadTreeNode<T> brother = actualParent.accessToNthSon(actualParent.getIndexOfOnlyOneChild());
+                        if (brother.isLeaf()) {
+                            ArrayList<Data<T>> dataToMigrate = brother.getListOfData();
+                            brother.removeAllData();
+                            actualParent.removeChild(actualParent.getIndexOfOnlyOneChild());
+                            actualParent.addMultipleData(dataToMigrate);
+                        }
+                    }
+                    nodeWithDataToDelete = parents.removeLast();
+                }
+            }
+        }
+    }
+
+    /**
+     * Before inserting data this method checks if data can be inserted,
      * if coordinates are in range of tree. Outer points of tree are not accepted.
      */
     private boolean checkIfFitsToTree(Coordinates parCoordinates) {
