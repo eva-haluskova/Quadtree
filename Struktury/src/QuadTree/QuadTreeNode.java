@@ -10,6 +10,7 @@ public class QuadTreeNode<T extends Comparable<T>> {
     private Coordinates coordinates;
     private QuadTreeNode<T>[] children;
     private ArrayList<Data<T>> listOfData;
+
     private int level;
 
     public QuadTreeNode(Data<T> parData, Coordinates parCoordinates, int parLevel) {
@@ -125,6 +126,12 @@ public class QuadTreeNode<T extends Comparable<T>> {
 
     public void removeChild(int parIndex) {
         this.children[parIndex] = null;
+    }
+
+    public void removeChildren() {
+        for (int i = 0; i < CHILDREN; i++) {
+            this.children[i] = null;
+        }
     }
 
     public int getLevel() {

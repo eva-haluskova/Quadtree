@@ -46,7 +46,7 @@ public class TesterForPlace extends QuadTreeTester {
             Place newObject = new Place("Miesto" + i);
             Data<Place> data = new Data(newObject, coors, i);
 
-            this.testTree.insert(data);
+            this.testTree.insert(data, testTree.getRoot());
             super.testData.add(data);
 
             if (super.belongToArea(parCoordinatesForSearch,data.getCoordinates())) {

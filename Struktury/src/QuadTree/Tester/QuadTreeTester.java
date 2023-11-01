@@ -20,6 +20,7 @@ import java.util.function.Supplier;
  */
 abstract class QuadTreeTester<T extends Comparable<T>> {
 
+    Random random = new Random();
     protected QuadTree<T> testTree;
     protected ArrayList<Data<T>> testData = new ArrayList<>();
     protected ArrayList<Data<T>> dataToFindInArea = new ArrayList<Data<T>>();
@@ -88,13 +89,17 @@ abstract class QuadTreeTester<T extends Comparable<T>> {
      * in testing methods.
      */
     public void testOfSeed(int parNumberOfSeeds, int parCountOfReplications, Coordinates parCoordinatesForSearch) {
-        Random random = new Random();
         for (int i = 0; i < parNumberOfSeeds; i++) {
-            random.setSeed(i);
+            this.random.setSeed(i);
             System.out.println("-----TEST OF SEED " + i);
-            this.generateInsert(parCountOfReplications,random,parCoordinatesForSearch);
-            this.generateFind(parCoordinatesForSearch);
-            this.generateDelete();
+            this.generateInsert(parCountOfReplications,this.random,parCoordinatesForSearch);
+
+            System.out.println("Maximalna hlbka stromu: " + testTree.getMaxDepth());
+            System.out.println("Aktualna hlbka stromu: " + testTree.getDepth());
+
+
+            //this.generateFind(parCoordinatesForSearch);
+            //this.generateDelete();
         }
     }
 
@@ -103,10 +108,25 @@ abstract class QuadTreeTester<T extends Comparable<T>> {
      * more specific debugging of values of specific seed.
      */
     public void testForSeed(int parSeed, int parCountOfReplications, Coordinates parCoordinatesForSearch) {
-        Random random = new Random();
-        random.setSeed(parSeed);
+
+        this.random.setSeed(parSeed);
         System.out.println("-----TEST OF SEED " + parSeed);
-        this.generateInsert(parCountOfReplications,random,parCoordinatesForSearch);
+        this.generateInsert(parCountOfReplications,this.random,parCoordinatesForSearch);
+        this.generateDelete();
+    }
+
+    public void testOfChangeOfDepth(int parNewDepth,int parNumber, Coordinates parCoordinatesOfSearch) {
+        this.generateInsert(parNumber,this.random,parCoordinatesOfSearch);
+
+        System.out.println("maximalna hlbka: " + testTree.getMaxDepth());
+        System.out.println("aktualna hlbka: " + testTree.getDepth());
+
+        System.out.println("---- zmena hlbky ----");
+        testTree.changeDepth(parNewDepth);
+
+        System.out.println("maximalna hlbka: " + testTree.getMaxDepth());
+        System.out.println("aktualna hlbka: " + testTree.getDepth());
+
         this.generateDelete();
     }
 

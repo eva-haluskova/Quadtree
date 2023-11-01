@@ -12,7 +12,7 @@ import java.util.*;
  */
 public class QuadTree<T extends Comparable<T>> {
 
-    private final int maxDepth;
+    private int maxDepth;
     private int depth;
     private Coordinates rangeOfTree;
     private QuadTreeNode<T> root;
@@ -154,7 +154,7 @@ public class QuadTree<T extends Comparable<T>> {
     /**
      * Method ensure inserting data into tree.
      */
-    public void insert(Data<T> parData) {
+    public void insert(Data<T> parData, QuadTreeNode<T> parStartNode) {
         if (!this.checkIfFitsToTree(parData.getCoordinates())) {
             return;
         }
@@ -169,7 +169,7 @@ public class QuadTree<T extends Comparable<T>> {
 
         ArrayList<Data<T>> dataToInsert = new ArrayList<Data<T>>();
         dataToInsert.add(parData);
-        QuadTreeNode<T> searchedNode = this.findAppropriateNode(dataToInsert.get(0).getCoordinates(), this.root);
+        QuadTreeNode<T> searchedNode = this.findAppropriateNode(dataToInsert.get(0).getCoordinates(), parStartNode);
 
         while (!dataToInsert.isEmpty()) {
             int quadrant = searchedNode.isFitsToQuadrant(dataToInsert.get(0).getCoordinates());
@@ -341,6 +341,43 @@ public class QuadTree<T extends Comparable<T>> {
     }
 
     /**
+     * This method provide possibility of changing maximum depth of tree.
+     */
+    public void changeDepth(int parNewMaxDepth) {
+        int oldMaxDepth = this.maxDepth;
+        this.maxDepth = parNewMaxDepth;
+
+        if (this.maxDepth > oldMaxDepth) {
+            if (oldMaxDepth == this.depth) {
+                ArrayList<QuadTreeNode<T>> nodesToProcess = this.findAllNodesInLevel(oldMaxDepth);
+                for (int i = 0; i < nodesToProcess.size(); i++) {
+                    QuadTreeNode<T> node = nodesToProcess.get(i);
+                    ArrayList<Data<T>> dataToInsert = node.getListOfData();
+                    node.removeAllData();
+                    for (int j = 0; j < dataToInsert.size(); j++) {
+                        this.insert(dataToInsert.get(j),node);
+                    }
+                }
+            }
+        } else if (this.maxDepth < oldMaxDepth) {
+            if (this.maxDepth < this.depth) {
+                ArrayList<QuadTreeNode<T>> nodesToProcess = this.findAllNodesInLevel(this.maxDepth);
+                this.depth = 0;
+                for (int i = 0; i < nodesToProcess.size(); i++) {
+                    QuadTreeNode<T> node = nodesToProcess.get(i);
+                    ArrayList<Data<T>> dataToInsert = this.getAllDataInSubTree(node);
+                    node.removeAllData();
+                    node.removeChildren();
+                    node.addMultipleData(dataToInsert);
+                    if (node.getLevel() > this.depth) {
+                        this.depth = node.getLevel();
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * Before inserting data this method checks if data can be inserted,
      * if coordinates are in range of tree. Outer points of tree are not accepted.
      */
@@ -349,6 +386,40 @@ public class QuadTree<T extends Comparable<T>> {
                 !(parCoordinates.getUpperX() >= this.rangeOfTree.getUpperX()) &&
                 !(parCoordinates.getLowerY() <= this.rangeOfTree.getLowerY()) &&
                 !(parCoordinates.getUpperY() >= this.rangeOfTree.getUpperY());
+    }
+
+    private ArrayList<QuadTreeNode<T>> findAllNodesInLevel(int parLevel) {
+        QuadTreeNode<T> root = this.root;
+        ArrayList<QuadTreeNode<T>> nodesToReturn = new ArrayList<>();
+
+        if (root == null) {
+            return null;
+        }
+
+        Queue<QuadTreeNode<T>> queue = new LinkedList<>();
+        queue.add(root);
+
+        while (!queue.isEmpty()) {
+            // Number of nodes at the current level
+            int nodesAtCurrentLevel = queue.size();
+
+            for (int i = 0; i < nodesAtCurrentLevel; i++) {
+                QuadTreeNode<T> currentNode = queue.poll();
+                if (currentNode.getLevel() == parLevel) {
+                    nodesToReturn.add(currentNode);
+                }
+
+                QuadTreeNode<T>[] children = currentNode.getChildren();
+                if (children != null) {
+                    for (int j = 0; j < 4; j++) {
+                        if (children[j] != null) {
+                            queue.add(children[j]);
+                        }
+                    }
+                }
+            }
+        }
+        return nodesToReturn;
     }
 
 }

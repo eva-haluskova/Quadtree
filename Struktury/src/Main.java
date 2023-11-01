@@ -3,17 +3,29 @@ import QuadTree.Place;
 import QuadTree.Coordinates;
 import QuadTree.Tester.TesterForPlace;
 
+import java.util.Random;
+
 public class Main {
 
     public static void main(String[] args) {
 
-        int velkost = 100;
-        QuadTree<Place> testTree = new QuadTree<Place>(0, velkost, 0, velkost,20);
+        int velkost = 100000;
+        Random random = new Random();
+        random.setSeed(30);
+        QuadTree<Place> testTree = new QuadTree<Place>(0, velkost, 0, velkost,6);
 
         Coordinates coorsOfSearch = new Coordinates(30,60,30,80);
         TesterForPlace placeTester = new TesterForPlace(testTree);
-        //placeTester.testOfSeed(100,100000,coorsOfSearch);
-        placeTester.testForSeed(2,50000,coorsOfSearch);
+        //placeTester.testOfSeed(4,100000,coorsOfSearch);
+        //placeTester.testForSeed(2,20,coorsOfSearch);
+
+        //placeTester.generateInsert(50000,random,coorsOfSearch);
+
+        placeTester.levelOrderTraversalWithNodeNumbers();
+
+        placeTester.testOfChangeOfDepth(10,100, coorsOfSearch);
+
+        placeTester.levelOrderTraversalWithNodeNumbers();
 
         System.out.println("Zatial to funguje ^-^");
     }
@@ -38,3 +50,5 @@ public class Main {
 // TODO refactorni si cooridnates a s tym vsetky suvisiace metody ktore mas vsade po triedach...to tam nema co robit, ked to porovnana iba dooridnates!!!
 // TODO refactorni cely node, isto vela sa da pomazat a dat do coorinates a tak
 // TODO ZAPUZDRENIE!!!
+// TODO sorry jako, ale v delete nemas osetrenu zmenu hlbky stromu..teda akoze iba aktualizovanie ciselok, vis, ked tak potom oprav aj ten test na to
+// TODO tu zmenu vysky zvas si to ukladanie levelu nodu!! ulahcilo by ti to zivot, dobra rada nad zlato to je!!!
