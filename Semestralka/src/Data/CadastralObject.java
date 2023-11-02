@@ -2,7 +2,13 @@ package Data;
 
 import QuadTree.Coordinates;
 
-abstract class CadastralObject {
+public abstract class CadastralObject implements Comparable<CadastralObject> {
+
+    public enum TypeOfCadastralObject {
+        LAND_PARCEL,
+        REAL_ESTATE
+    }
+
 
     private static final int COORDINATES_COUNT = 2;
 

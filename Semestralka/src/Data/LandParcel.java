@@ -17,4 +17,8 @@ public class LandParcel extends CadastralObject {
         return TypeOfCadastralObject.LAND_PARCEL;
     }
 
+    @Override
+    public int compareTo(CadastralObject o) {
+        return 0;
+    }
 }

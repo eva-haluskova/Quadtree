@@ -20,4 +20,8 @@ public class RealEstate extends CadastralObject {
         return TypeOfCadastralObject.REAL_ESTATE;
     }
 
+    @Override
+    public int compareTo(CadastralObject o) {
+        return 0;
+    }
 }
