@@ -24,16 +24,17 @@ public class TesterForPlace extends QuadTreeTester {
      * specific creating of Place instances.
      */
     @Override
-    public void generateInsert(int parNumber, Random random, Coordinates parCoordinatesForSearch) {
+    public void generateInsert(int parNumber, Random random, Coordinates[] parCoordinatesForSearch) {
 
         int widthOfPolygon = 10;
         dataToFindInArea.clear();
         dataToFindOfPoint.clear();
         testData.clear();
 
+        // TODO
         // pay attention, this assume that tree starts with [0,0] point!!
-        double sizeOfXAxes = this.testTree.getRangeOfTree().getUpperX() - this.testTree.getRangeOfTree().getLowerX();
-        double sizeOfYAxes = this.testTree.getRangeOfTree().getUpperY() - this.testTree.getRangeOfTree().getLowerY();
+        double sizeOfXAxes = 100;
+        double sizeOfYAxes = 100;
 
         for (int i = 1; i <= parNumber; i++) {
             double x1 = random.nextDouble() * (sizeOfXAxes - widthOfPolygon - 1);
@@ -41,7 +42,9 @@ public class TesterForPlace extends QuadTreeTester {
             double y1 = random.nextDouble() * (sizeOfYAxes - widthOfPolygon - 1);
             double y2 = y1 + widthOfPolygon;
 
-            Coordinates coors = new Coordinates(x1, x2, y1, y2);
+            Coordinates coorOne = new Coordinates(Coordinates.Latitude.NORTH, Coordinates.Longitude.EAST,x1,y1);
+            Coordinates coorTwo = new Coordinates(Coordinates.Latitude.NORTH, Coordinates.Longitude.EAST,x2,y2);
+            Coordinates[] coors = {coorOne,coorTwo};
             //Coordinates coors = new Coordinates(x1, y1);
             Place newObject = new Place("Miesto" + i);
             Data<Place> data = new Data(newObject, coors, i);
@@ -49,7 +52,8 @@ public class TesterForPlace extends QuadTreeTester {
             this.testTree.insert(data, testTree.getRoot());
             super.testData.add(data);
 
-            if (super.belongToArea(parCoordinatesForSearch,data.getCoordinates())) {
+
+            if (Coordinates.areCoordinatesIntoAnother(parCoordinatesForSearch,data.getCoordinates())) {
                 dataToFindInArea.add(data);
             }
 

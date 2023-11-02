@@ -14,19 +14,16 @@ public class QuadTree<T extends Comparable<T>> {
 
     private int maxDepth;
     private int depth;
-    private Coordinates rangeOfTree;
+    private Coordinates[] rangeOfTree;
     private QuadTreeNode<T> root;
 
     public QuadTree(
-            double parMinimumX,
-            double parMaximumX,
-            double parMinimumY,
-            double parMaximumY,
+            Coordinates[] parRangeOfTree,
             int parMaxDepth
     ){
         this.maxDepth = parMaxDepth;
         this.root = null;
-        this.rangeOfTree = new Coordinates(parMinimumX,parMaximumX,parMinimumY,parMaximumY);
+        this.rangeOfTree = parRangeOfTree;
         this.depth = 0;
     }
 
@@ -49,7 +46,7 @@ public class QuadTree<T extends Comparable<T>> {
         return this.root == null;
     }
 
-    public Coordinates getRangeOfTree() {
+    public Coordinates[] getRangeOfTree() {
         return this.rangeOfTree;
     }
 
@@ -93,13 +90,13 @@ public class QuadTree<T extends Comparable<T>> {
     /**
      * Method will find appropriate node for next precessing.
      */
-    private QuadTreeNode<T> findAppropriateNode(Coordinates parCoordinates, QuadTreeNode<T> parCurrent) {
+    private QuadTreeNode<T> findAppropriateNode(Coordinates[] parCoordinates, QuadTreeNode<T> parCurrent) {
 
         QuadTreeNode<T> current = parCurrent;
         boolean nodeIsFind = false;
 
         while (!nodeIsFind) {
-            int quadrant = current.isFitsToQuadrant(parCoordinates);
+            int quadrant = Coordinates.isFitsToQuadrant(current.getCoordinates(),parCoordinates);
 
             if (quadrant == -1) {
                 nodeIsFind = true;
@@ -121,7 +118,7 @@ public class QuadTree<T extends Comparable<T>> {
      * and method about is in return value. In this method btained data are storage in Result,
      * where are list of parents, indicates of quadrant and of course searched node.
      */
-    private Result findAppropriateNodeData(Coordinates parCoordinates, QuadTreeNode<T> parCurrent) {
+    private Result findAppropriateNodeData(Coordinates[] parCoordinates, QuadTreeNode<T> parCurrent) {
 
         LinkedList<QuadTreeNode<T>> parents = new LinkedList<>();
         LinkedList<Integer> indices = new LinkedList<>();
@@ -130,7 +127,7 @@ public class QuadTree<T extends Comparable<T>> {
         boolean nodeIsFind = false;
 
         while (!nodeIsFind) {
-            int quadrant = current.isFitsToQuadrant(parCoordinates);
+            int quadrant = Coordinates.isFitsToQuadrant(current.getCoordinates(),parCoordinates);
 
             if (quadrant == -1) {
                 nodeIsFind = true;
@@ -155,12 +152,14 @@ public class QuadTree<T extends Comparable<T>> {
      * Method ensure inserting data into tree.
      */
     public void insert(Data<T> parData, QuadTreeNode<T> parStartNode) {
-        if (!this.checkIfFitsToTree(parData.getCoordinates())) {
+        if (!Coordinates.areCoordinatesIntoAnother(this.rangeOfTree,parData.getCoordinates())) {
             return;
         }
 
         if (this.isEmpty()) {
-            Coordinates newCoordinates = new Coordinates(this.rangeOfTree);
+            Coordinates newCoordinateOne = new Coordinates(this.rangeOfTree[0]);
+            Coordinates newCoordinateTwo = new Coordinates(this.rangeOfTree[1]);
+            Coordinates[] newCoordinates = {newCoordinateOne,newCoordinateTwo};
             QuadTreeNode<T> newNode = new QuadTreeNode<T>(parData, newCoordinates,1);
             this.root = newNode;
             this.depth = 1;
@@ -172,12 +171,12 @@ public class QuadTree<T extends Comparable<T>> {
         QuadTreeNode<T> searchedNode = this.findAppropriateNode(dataToInsert.get(0).getCoordinates(), parStartNode);
 
         while (!dataToInsert.isEmpty()) {
-            int quadrant = searchedNode.isFitsToQuadrant(dataToInsert.get(0).getCoordinates());
+            int quadrant = Coordinates.isFitsToQuadrant(searchedNode.getCoordinates(),dataToInsert.get(0).getCoordinates());
 
             if (quadrant == -1) {
                 searchedNode.addData(dataToInsert.remove(0));
             } else if (!searchedNode.isLeaf()) {
-                QuadTreeNode<T> newNode = new QuadTreeNode<T>(dataToInsert.remove(0),searchedNode.coordinatesOfNewNode(quadrant),searchedNode.getLevel() + 1);
+                QuadTreeNode<T> newNode = new QuadTreeNode<T>(dataToInsert.remove(0),Coordinates.coordinatesOfNewNode(searchedNode.getCoordinates(),quadrant),searchedNode.getLevel() + 1);
                 searchedNode.setChild(quadrant, newNode);
             } else if (searchedNode.isLeaf()) {
                 if (searchedNode.getLevel() == this.maxDepth) {
@@ -192,13 +191,13 @@ public class QuadTree<T extends Comparable<T>> {
                     Iterator<Data<T>> iterator = dataToInsert.iterator();
                     while (iterator.hasNext()) {
                         Data<T> data = iterator.next();
-                        int newQuadrant = searchedNode.isFitsToQuadrant(data.getCoordinates());
+                        int newQuadrant = Coordinates.isFitsToQuadrant(searchedNode.getCoordinates(),data.getCoordinates());
                         if (newQuadrant == -1) {
                             searchedNode.addData(data);
                             iterator.remove();
                         } else if (!searchedNode.hasNthChild(newQuadrant)) {
 
-                            QuadTreeNode<T> newNode = new QuadTreeNode<T>(data, searchedNode.coordinatesOfNewNode(newQuadrant), searchedNode.getLevel() + 1);
+                            QuadTreeNode<T> newNode = new QuadTreeNode<T>(data, Coordinates.coordinatesOfNewNode(searchedNode.getCoordinates(),newQuadrant), searchedNode.getLevel() + 1);
                             searchedNode.setChild(newQuadrant, newNode);
 
                             if (searchedNode.accessToNthSon(newQuadrant).getLevel() > this.depth) {
@@ -249,10 +248,11 @@ public class QuadTree<T extends Comparable<T>> {
      * Return all data which have given coordinates
      * @param parCoordinates coordinates of data which we want to find
      */
-    public ArrayList<Data<T>> find(Coordinates parCoordinates) {
-        if (!this.checkIfFitsToTree(parCoordinates)) {
+    public ArrayList<Data<T>> find(Coordinates[] parCoordinates) {
+        if (!Coordinates.areCoordinatesIntoAnother(this.rangeOfTree,parCoordinates)) {
             return null;
         }
+
         QuadTreeNode<T> searchedNode = this.findAppropriateNode(parCoordinates, this.root);
         return searchedNode.getDataWithSameCoordinates(parCoordinates);
     }
@@ -261,8 +261,8 @@ public class QuadTree<T extends Comparable<T>> {
      * Returns all data in given area
      * @param parCoordinates coordinates of area in which we want to find data
      */
-    public ArrayList<Data<T>> findInArea(Coordinates parCoordinates) {
-        if (!this.checkIfFitsToTree(parCoordinates)) {
+    public ArrayList<Data<T>> findInArea(Coordinates[] parCoordinates) {
+        if (!Coordinates.areCoordinatesIntoAnother(this.rangeOfTree,parCoordinates)) {
             return null;
         }
 
@@ -274,8 +274,7 @@ public class QuadTree<T extends Comparable<T>> {
         while (!nodesToProcess.isEmpty()) {
 
             QuadTreeNode<T> current = nodesToProcess.pop();
-
-            if (current.isIncludingWholeNodeArea(parCoordinates)) {
+            if (Coordinates.areCoordinatesIntoAnother(current.getCoordinates(),parCoordinates)) {
                 listToReturn.addAll(this.getAllDataInSubTree(current));
             } else {
                 if (!current.isLeaf()) {
@@ -295,7 +294,7 @@ public class QuadTree<T extends Comparable<T>> {
      * @param parCoordinates of data we want to delete
      * @param parId of data. It's needed, because in tree could by more data with same coordinates
      */
-    public void delete(Coordinates parCoordinates, int parId) {
+    public void delete(Coordinates[] parCoordinates, int parId) {
 
         Result result = this.findAppropriateNodeData(parCoordinates,this.root);
 
@@ -381,12 +380,12 @@ public class QuadTree<T extends Comparable<T>> {
      * Before inserting data this method checks if data can be inserted,
      * if coordinates are in range of tree. Outer points of tree are not accepted.
      */
-    private boolean checkIfFitsToTree(Coordinates parCoordinates) {
-        return !(parCoordinates.getLowerX() <= this.rangeOfTree.getLowerX()) &&
-                !(parCoordinates.getUpperX() >= this.rangeOfTree.getUpperX()) &&
-                !(parCoordinates.getLowerY() <= this.rangeOfTree.getLowerY()) &&
-                !(parCoordinates.getUpperY() >= this.rangeOfTree.getUpperY());
-    }
+//    private boolean checkIfFitsToTree(Coordinates parCoordinates) {
+//        return !(parCoordinates.getLowerX() <= this.rangeOfTree.getLowerX()) &&
+//                !(parCoordinates.getUpperX() >= this.rangeOfTree.getUpperX()) &&
+//                !(parCoordinates.getLowerY() <= this.rangeOfTree.getLowerY()) &&
+//                !(parCoordinates.getUpperY() >= this.rangeOfTree.getUpperY());
+//    }
 
     private ArrayList<QuadTreeNode<T>> findAllNodesInLevel(int parLevel) {
         QuadTreeNode<T> root = this.root;

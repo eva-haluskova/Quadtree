@@ -1,7 +1,9 @@
+
 import QuadTree.QuadTree;
 import QuadTree.Place;
 import QuadTree.Coordinates;
 import QuadTree.Tester.TesterForPlace;
+import QuadTree.Data;
 
 import java.util.Random;
 
@@ -12,20 +14,26 @@ public class Main {
         int velkost = 100000;
         Random random = new Random();
         random.setSeed(30);
-        QuadTree<Place> testTree = new QuadTree<Place>(0, velkost, 0, velkost,6);
+        Coordinates coorOneOfThree = new Coordinates(Coordinates.Latitude.NORTH, Coordinates.Longitude.EAST,100,100);
+        Coordinates coorTwoOfThree = new Coordinates(Coordinates.Latitude.SOUTH, Coordinates.Longitude.WEST, 200,400);
+        Coordinates[] coorsOfTree = {coorOneOfThree,coorTwoOfThree};
 
-        Coordinates coorsOfSearch = new Coordinates(30,60,30,80);
+        QuadTree<Place> testTree = new QuadTree<Place>(coorsOfTree,5);
+
+        Coordinates coorOfSearchOne = new Coordinates(Coordinates.Latitude.NORTH, Coordinates.Longitude.EAST,30,80);
+        Coordinates coorOfSearchTwo = new Coordinates(Coordinates.Latitude.NORTH, Coordinates.Longitude.EAST,30,80);
+        Coordinates[] coorsOfSearch = {coorOfSearchOne,coorOfSearchTwo};
+
         TesterForPlace placeTester = new TesterForPlace(testTree);
         //placeTester.testOfSeed(4,100000,coorsOfSearch);
         //placeTester.testForSeed(2,20,coorsOfSearch);
 
-        //placeTester.generateInsert(50000,random,coorsOfSearch);
+        placeTester.generateInsert(400000,random,coorsOfSearch);
+        //placeTester.generateSimpleFind(coorsOfSearch);
+        //placeTester.generateFind(coorsOfSearch);
+        placeTester.generateDelete();
 
-        placeTester.levelOrderTraversalWithNodeNumbers();
-
-        placeTester.testOfChangeOfDepth(10,100, coorsOfSearch);
-
-        placeTester.levelOrderTraversalWithNodeNumbers();
+        //placeTester.testOfChangeOfDepth(10,100000, coorsOfSearch);
 
         System.out.println("Zatial to funguje ^-^");
     }
@@ -52,3 +60,5 @@ public class Main {
 // TODO ZAPUZDRENIE!!!
 // TODO sorry jako, ale v delete nemas osetrenu zmenu hlbky stromu..teda akoze iba aktualizovanie ciselok, vis, ked tak potom oprav aj ten test na to
 // TODO tu zmenu vysky zvas si to ukladanie levelu nodu!! ulahcilo by ti to zivot, dobra rada nad zlato to je!!!
+// TODO pk long long minimalne
+// TODO change all your shitty implemetnation of arraylist!!!

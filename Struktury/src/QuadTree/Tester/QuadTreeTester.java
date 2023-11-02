@@ -33,7 +33,7 @@ abstract class QuadTreeTester<T extends Comparable<T>> {
     /**
      * Abstract class in which is needed to generate specific data in inherit class.
      */
-    public abstract void generateInsert(int parNumber, Random random, Coordinates parCoordinatesForSearch);
+    public abstract void generateInsert(int parNumber, Random random, Coordinates[] parCoordinatesForSearch);
 
     /**
      * Method tries to delete all data which was inserted into tree.
@@ -54,7 +54,7 @@ abstract class QuadTreeTester<T extends Comparable<T>> {
      * Tries to find all data in searches area of tree
      * @param parCoordinatesOfArea coordinates od searched area
      */
-    public void generateFind(Coordinates parCoordinatesOfArea) {
+    public void generateFind(Coordinates[] parCoordinatesOfArea) {
         ArrayList<Data<T>> findData = new ArrayList<>();
         findData = testTree.findInArea(parCoordinatesOfArea);
         if (findData.containsAll(this.dataToFindInArea)) { // pay attention
@@ -68,7 +68,7 @@ abstract class QuadTreeTester<T extends Comparable<T>> {
      * Tries to fine all data with specific coordinates
      * @param parCoordinatesOfData coordinates of some specific point/polygon
      */
-    public void generateSimpleFind(Coordinates parCoordinatesOfData) {
+    public void generateSimpleFind(Coordinates[] parCoordinatesOfData) {
         ArrayList<Data<T>> findData = new ArrayList<>();
         findData = testTree.find(parCoordinatesOfData);
         if (findData.containsAll(this.dataToFindOfPoint)) { // pay attention
@@ -88,7 +88,7 @@ abstract class QuadTreeTester<T extends Comparable<T>> {
      * for testing differnet seeds of numbers and test where is problem
      * in testing methods.
      */
-    public void testOfSeed(int parNumberOfSeeds, int parCountOfReplications, Coordinates parCoordinatesForSearch) {
+    public void testOfSeed(int parNumberOfSeeds, int parCountOfReplications, Coordinates[] parCoordinatesForSearch) {
         for (int i = 0; i < parNumberOfSeeds; i++) {
             this.random.setSeed(i);
             System.out.println("-----TEST OF SEED " + i);
@@ -107,7 +107,7 @@ abstract class QuadTreeTester<T extends Comparable<T>> {
      * After find out in which seed program cause error, this method could be used for
      * more specific debugging of values of specific seed.
      */
-    public void testForSeed(int parSeed, int parCountOfReplications, Coordinates parCoordinatesForSearch) {
+    public void testForSeed(int parSeed, int parCountOfReplications, Coordinates[] parCoordinatesForSearch) {
 
         this.random.setSeed(parSeed);
         System.out.println("-----TEST OF SEED " + parSeed);
@@ -115,7 +115,7 @@ abstract class QuadTreeTester<T extends Comparable<T>> {
         this.generateDelete();
     }
 
-    public void testOfChangeOfDepth(int parNewDepth,int parNumber, Coordinates parCoordinatesOfSearch) {
+    public void testOfChangeOfDepth(int parNewDepth,int parNumber, Coordinates[] parCoordinatesOfSearch) {
         this.generateInsert(parNumber,this.random,parCoordinatesOfSearch);
 
         System.out.println("maximalna hlbka: " + testTree.getMaxDepth());
@@ -154,10 +154,10 @@ abstract class QuadTreeTester<T extends Comparable<T>> {
 
                 System.out.println("V node " + nodeNumber + " na urovni: " + currentNode.getLevel() + " sa nachadza:");
                 for (Data<T> data: currentNode.getListOfData()) {
-                    System.out.println("Miesto: " + data.getId() +
-                            " x: " + data.getCoordinates().getLowerX() +
+                    System.out.println("Miesto: " + data.getId());
+                         //   " x: " + data.getCoordinates().getLowerX() +
                             //" x2: " + data.getCoordinates().getUpperX() +
-                            " y: " + data.getCoordinates().getLowerY());
+                        //    " y: " + data.getCoordinates().getLowerY());
                     //" y2: " + data.getCoordinates().getUpperY());
                 }
                 nodeNumber++;
@@ -177,12 +177,12 @@ abstract class QuadTreeTester<T extends Comparable<T>> {
     /**
      * Return if cooridnates belongs to specific area.
      */
-    boolean belongToArea(Coordinates parCoordinatesOfArea, Coordinates parCoordinatesOfData) {
-        return !(parCoordinatesOfData.getLowerX() <= parCoordinatesOfArea.getLowerX()) &&
-                !(parCoordinatesOfData.getUpperX() >= parCoordinatesOfArea.getUpperX()) &&
-                !(parCoordinatesOfData.getLowerY() <= parCoordinatesOfArea.getLowerY()) &&
-                !(parCoordinatesOfData.getUpperY() >= parCoordinatesOfArea.getUpperY());
-
-    }
+  //  boolean belongToArea(Coordinates parCoordinatesOfArea, Coordinates parCoordinatesOfData) {
+//        return !(parCoordinatesOfData.getLowerX() <= parCoordinatesOfArea.getLowerX()) &&
+//                !(parCoordinatesOfData.getUpperX() >= parCoordinatesOfArea.getUpperX()) &&
+//                !(parCoordinatesOfData.getLowerY() <= parCoordinatesOfArea.getLowerY()) &&
+//                !(parCoordinatesOfData.getUpperY() >= parCoordinatesOfArea.getUpperY());
+//
+//    }
 }
 

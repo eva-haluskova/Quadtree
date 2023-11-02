@@ -7,13 +7,13 @@ public class QuadTreeNode<T extends Comparable<T>> {
 
     private static final int CHILDREN = 4;
 
-    private Coordinates coordinates;
+    private Coordinates[] coordinates;
     private QuadTreeNode<T>[] children;
     private ArrayList<Data<T>> listOfData;
 
     private int level;
 
-    public QuadTreeNode(Data<T> parData, Coordinates parCoordinates, int parLevel) {
+    public QuadTreeNode(Data<T> parData, Coordinates[] parCoordinates, int parLevel) {
         this.children = new QuadTreeNode[CHILDREN];
         this.listOfData = new ArrayList<>();
         this.listOfData.add(parData);
@@ -40,15 +40,6 @@ public class QuadTreeNode<T extends Comparable<T>> {
     /**
      * Other reqests
      */
-    public boolean isSKFits(Coordinates parCoordinates) {
-        if (this.coordinates.getLowerX() < parCoordinates.getLowerX() &&
-                this.coordinates.getUpperX() > parCoordinates.getUpperX() &&
-                this.coordinates.getLowerY() < parCoordinates.getLowerY() &&
-                this.coordinates.getUpperY() > parCoordinates.getUpperY()) {
-            return true;
-        }
-        return false;
-    }
 
     /**
      * return true if in data list are some data with same coordiantes as parameter
@@ -104,7 +95,7 @@ public class QuadTreeNode<T extends Comparable<T>> {
         return Arrays.copyOf(this.children, this.children.length);
     }
 
-    public ArrayList<Data<T>> getDataWithSameCoordinates(Coordinates parCoordinates) {
+    public ArrayList<Data<T>> getDataWithSameCoordinates(Coordinates[] parCoordinates) {
 
         ArrayList<Data<T>> listToReturn = new ArrayList<>();
 
@@ -158,11 +149,11 @@ public class QuadTreeNode<T extends Comparable<T>> {
         return -1;
     }
 
-    public void setCoordinates(Coordinates parCoordinates) {
+    public void setCoordinates(Coordinates[] parCoordinates) {
         this.coordinates = parCoordinates;
     }
 
-    public Coordinates getCoordinates() {
+    public Coordinates[] getCoordinates() {
         return this.coordinates;
     }
 
@@ -170,14 +161,14 @@ public class QuadTreeNode<T extends Comparable<T>> {
      * This method is designed for finding area in tree. It returns
      * array of indexes which are connected with wanted area.
      */
-    public ArrayList<Integer> getIncludingQuadrants(Coordinates parCoordinatesOfArea) {
+    public ArrayList<Integer> getIncludingQuadrants(Coordinates[] parCoordinatesOfArea) {
 
         ArrayList<Integer> indices = new ArrayList<>();
 
         for (int i = 0; i < CHILDREN; i++) {
             if (this.children[i] != null){
-                if (this.children[i].belongsToArea(parCoordinatesOfArea, this.children[i].getCoordinates())
-                || this.children[i].isIncludingWholeData(parCoordinatesOfArea, this.children[i].getCoordinates()))
+                if (Coordinates.belongsToArea(parCoordinatesOfArea,this.children[i].getCoordinates())
+                || Coordinates.areCoordinatesIntoAnother(parCoordinatesOfArea,this.children[i].getCoordinates()))
                 {
                     indices.add(i);
                 }
@@ -189,74 +180,74 @@ public class QuadTreeNode<T extends Comparable<T>> {
     /**
      * Return true if some part of quadrant belong to area, or if some data belongs to area
      */
-    private boolean belongsToArea(Coordinates parCoordinatesOfArea, Coordinates parCoordinatesOfQuadrant) {
-        return (
-            //1
-                (parCoordinatesOfArea.getLowerX() > parCoordinatesOfQuadrant.getLowerX() &&
-             parCoordinatesOfArea.getLowerX() < parCoordinatesOfQuadrant.getUpperX() &&
-             parCoordinatesOfArea.getLowerY() > parCoordinatesOfQuadrant.getLowerY() &&
-             parCoordinatesOfArea.getLowerY() < parCoordinatesOfQuadrant.getUpperY()) ||
-            //2
-                        (parCoordinatesOfArea.getUpperX() > parCoordinatesOfQuadrant.getLowerX() &&
-             parCoordinatesOfArea.getUpperX() < parCoordinatesOfQuadrant.getUpperX() &&
-             parCoordinatesOfArea.getLowerY() > parCoordinatesOfQuadrant.getLowerY() &&
-             parCoordinatesOfArea.getLowerY() < parCoordinatesOfQuadrant.getUpperY()) ||
-            //3
-                        (parCoordinatesOfArea.getLowerX() > parCoordinatesOfQuadrant.getLowerX() &&
-             parCoordinatesOfArea.getLowerX() < parCoordinatesOfQuadrant.getUpperX() &&
-             parCoordinatesOfArea.getUpperY() > parCoordinatesOfQuadrant.getLowerY() &&
-             parCoordinatesOfArea.getUpperY() < parCoordinatesOfQuadrant.getUpperY()) ||
-            //4
-                        (parCoordinatesOfArea.getUpperX() > parCoordinatesOfQuadrant.getLowerX() &&
-             parCoordinatesOfArea.getUpperX() < parCoordinatesOfQuadrant.getUpperX() &&
-             parCoordinatesOfArea.getUpperY() > parCoordinatesOfQuadrant.getLowerY() &&
-             parCoordinatesOfArea.getUpperY() < parCoordinatesOfQuadrant.getUpperY()) ||
-             //5
-                        (parCoordinatesOfArea.getLowerY() > parCoordinatesOfQuadrant.getLowerY() &&
-             parCoordinatesOfArea.getLowerY() < parCoordinatesOfQuadrant.getUpperY() &&
-             parCoordinatesOfArea.getLowerX() < parCoordinatesOfQuadrant.getLowerX() &&
-             parCoordinatesOfArea.getUpperX() > parCoordinatesOfQuadrant.getUpperX()) ||
-            //6
-                        (parCoordinatesOfArea.getUpperY() > parCoordinatesOfQuadrant.getLowerY() &&
-             parCoordinatesOfArea.getUpperY() < parCoordinatesOfQuadrant.getUpperY() &&
-             parCoordinatesOfArea.getLowerX() < parCoordinatesOfQuadrant.getLowerX() &&
-             parCoordinatesOfArea.getUpperX() > parCoordinatesOfQuadrant.getUpperX()) ||
-             //7
-                        (parCoordinatesOfArea.getLowerX() > parCoordinatesOfQuadrant.getLowerX() &&
-             parCoordinatesOfArea.getLowerX() < parCoordinatesOfQuadrant.getUpperX() &&
-             parCoordinatesOfArea.getLowerY() < parCoordinatesOfQuadrant.getLowerY() &&
-             parCoordinatesOfArea.getUpperY() > parCoordinatesOfQuadrant.getUpperY()) ||
-             //8
-                        (parCoordinatesOfArea.getUpperX() > parCoordinatesOfQuadrant.getLowerX() &&
-             parCoordinatesOfArea.getUpperX() < parCoordinatesOfQuadrant.getUpperX() &&
-             parCoordinatesOfArea.getLowerY() < parCoordinatesOfQuadrant.getLowerY() &&
-             parCoordinatesOfArea.getUpperY() > parCoordinatesOfQuadrant.getUpperY())
-        );
-    }
+//    private boolean belongsToArea(Coordinates parCoordinatesOfArea, Coordinates parCoordinatesOfQuadrant) {
+//        return (
+//            //1
+//                (parCoordinatesOfArea.getLowerX() > parCoordinatesOfQuadrant.getLowerX() &&
+//             parCoordinatesOfArea.getLowerX() < parCoordinatesOfQuadrant.getUpperX() &&
+//             parCoordinatesOfArea.getLowerY() > parCoordinatesOfQuadrant.getLowerY() &&
+//             parCoordinatesOfArea.getLowerY() < parCoordinatesOfQuadrant.getUpperY()) ||
+//            //2
+//                        (parCoordinatesOfArea.getUpperX() > parCoordinatesOfQuadrant.getLowerX() &&
+//             parCoordinatesOfArea.getUpperX() < parCoordinatesOfQuadrant.getUpperX() &&
+//             parCoordinatesOfArea.getLowerY() > parCoordinatesOfQuadrant.getLowerY() &&
+//             parCoordinatesOfArea.getLowerY() < parCoordinatesOfQuadrant.getUpperY()) ||
+//            //3
+//                        (parCoordinatesOfArea.getLowerX() > parCoordinatesOfQuadrant.getLowerX() &&
+//             parCoordinatesOfArea.getLowerX() < parCoordinatesOfQuadrant.getUpperX() &&
+//             parCoordinatesOfArea.getUpperY() > parCoordinatesOfQuadrant.getLowerY() &&
+//             parCoordinatesOfArea.getUpperY() < parCoordinatesOfQuadrant.getUpperY()) ||
+//            //4
+//                        (parCoordinatesOfArea.getUpperX() > parCoordinatesOfQuadrant.getLowerX() &&
+//             parCoordinatesOfArea.getUpperX() < parCoordinatesOfQuadrant.getUpperX() &&
+//             parCoordinatesOfArea.getUpperY() > parCoordinatesOfQuadrant.getLowerY() &&
+//             parCoordinatesOfArea.getUpperY() < parCoordinatesOfQuadrant.getUpperY()) ||
+//             //5
+//                        (parCoordinatesOfArea.getLowerY() > parCoordinatesOfQuadrant.getLowerY() &&
+//             parCoordinatesOfArea.getLowerY() < parCoordinatesOfQuadrant.getUpperY() &&
+//             parCoordinatesOfArea.getLowerX() < parCoordinatesOfQuadrant.getLowerX() &&
+//             parCoordinatesOfArea.getUpperX() > parCoordinatesOfQuadrant.getUpperX()) ||
+//            //6
+//                        (parCoordinatesOfArea.getUpperY() > parCoordinatesOfQuadrant.getLowerY() &&
+//             parCoordinatesOfArea.getUpperY() < parCoordinatesOfQuadrant.getUpperY() &&
+//             parCoordinatesOfArea.getLowerX() < parCoordinatesOfQuadrant.getLowerX() &&
+//             parCoordinatesOfArea.getUpperX() > parCoordinatesOfQuadrant.getUpperX()) ||
+//             //7
+//                        (parCoordinatesOfArea.getLowerX() > parCoordinatesOfQuadrant.getLowerX() &&
+//             parCoordinatesOfArea.getLowerX() < parCoordinatesOfQuadrant.getUpperX() &&
+//             parCoordinatesOfArea.getLowerY() < parCoordinatesOfQuadrant.getLowerY() &&
+//             parCoordinatesOfArea.getUpperY() > parCoordinatesOfQuadrant.getUpperY()) ||
+//             //8
+//                        (parCoordinatesOfArea.getUpperX() > parCoordinatesOfQuadrant.getLowerX() &&
+//             parCoordinatesOfArea.getUpperX() < parCoordinatesOfQuadrant.getUpperX() &&
+//             parCoordinatesOfArea.getLowerY() < parCoordinatesOfQuadrant.getLowerY() &&
+//             parCoordinatesOfArea.getUpperY() > parCoordinatesOfQuadrant.getUpperY())
+//        );
+//    }
 
     /**
      * Return true if whole area of node belongs to searched area
      */
-    public boolean isIncludingWholeNodeArea(Coordinates parCoordinatesOfArea) {
-        return (parCoordinatesOfArea.getLowerX() <= this.coordinates.getLowerX() &&
-                parCoordinatesOfArea.getUpperX() >= this.coordinates.getUpperX() &&
-                parCoordinatesOfArea.getLowerY() <= this.coordinates.getLowerY() &&
-                parCoordinatesOfArea.getUpperY() >= this.coordinates.getUpperY());
-    }
+//    public boolean isIncludingWholeNodeArea(Coordinates parCoordinatesOfArea) {
+//        return (parCoordinatesOfArea.getLowerX() <= this.coordinates.getLowerX() &&
+//                parCoordinatesOfArea.getUpperX() >= this.coordinates.getUpperX() &&
+//                parCoordinatesOfArea.getLowerY() <= this.coordinates.getLowerY() &&
+//                parCoordinatesOfArea.getUpperY() >= this.coordinates.getUpperY());
+//    }
+//
+//    public boolean isIncludingWholeData(Coordinates parCoordinatesOfArea, Coordinates parCoordinatesOfData) {
+//        return (parCoordinatesOfArea.getLowerX() <= parCoordinatesOfData.getLowerX() &&
+//                parCoordinatesOfArea.getUpperX() >= parCoordinatesOfData.getUpperX() &&
+//                parCoordinatesOfArea.getLowerY() <= parCoordinatesOfData.getLowerY() &&
+//                parCoordinatesOfArea.getUpperY() >= parCoordinatesOfData.getUpperY());
+//    }
 
-    public boolean isIncludingWholeData(Coordinates parCoordinatesOfArea, Coordinates parCoordinatesOfData) {
-        return (parCoordinatesOfArea.getLowerX() <= parCoordinatesOfData.getLowerX() &&
-                parCoordinatesOfArea.getUpperX() >= parCoordinatesOfData.getUpperX() &&
-                parCoordinatesOfArea.getLowerY() <= parCoordinatesOfData.getLowerY() &&
-                parCoordinatesOfArea.getUpperY() >= parCoordinatesOfData.getUpperY());
-    }
-
-    public ArrayList<Data<T>> getAllAppropriateData(Coordinates parCoordinates) {
+    public ArrayList<Data<T>> getAllAppropriateData(Coordinates[] parCoordinates) {
 
         ArrayList<Data<T>> dataToReturn = new ArrayList<>();
 
         for (Data<T> data : this.listOfData) {
-            if (isIncludingWholeData(parCoordinates, data.getCoordinates())) {
+            if (Coordinates.areCoordinatesIntoAnother(this.coordinates,data.getCoordinates())) {
                 dataToReturn.add(data);
             }
         }
@@ -267,38 +258,38 @@ public class QuadTreeNode<T extends Comparable<T>> {
     /**
      * Returns coordinates for new node created in specific node
      */
-    public Coordinates coordinatesOfNewNode(int parQuadrant) {
-
-        Coordinates newCoordinates = new Coordinates(0,0,0,0);
-
-        switch (parQuadrant) {
-            case 0 -> {
-                newCoordinates.setLowerX(this.coordinates.getLowerX());
-                newCoordinates.setUpperX((this.coordinates.getUpperX() + this.coordinates.getLowerX()) / 2);
-                newCoordinates.setLowerY(this.coordinates.getLowerY());
-                newCoordinates.setUpperY((this.coordinates.getUpperY() + this.coordinates.getLowerY()) / 2);
-            }
-            case 1 -> {
-                newCoordinates.setLowerX((this.coordinates.getUpperX() + this.coordinates.getLowerX()) / 2);
-                newCoordinates.setUpperX(this.coordinates.getUpperX());
-                newCoordinates.setLowerY(this.coordinates.getLowerY());
-                newCoordinates.setUpperY((this.coordinates.getUpperY() + this.coordinates.getLowerY()) / 2);
-            }
-            case 2 -> {
-                newCoordinates.setLowerX((this.coordinates.getUpperX() + this.coordinates.getLowerX()) / 2);
-                newCoordinates.setUpperX(this.coordinates.getUpperX());
-                newCoordinates.setLowerY((this.coordinates.getUpperY() + this.coordinates.getLowerY()) / 2);
-                newCoordinates.setUpperY(this.coordinates.getUpperY());
-            }
-            case 3 -> {
-                newCoordinates.setLowerX(this.coordinates.getLowerX());
-                newCoordinates.setUpperX((this.coordinates.getUpperX() + this.coordinates.getLowerX()) / 2);
-                newCoordinates.setLowerY((this.coordinates.getUpperY() + this.coordinates.getLowerY()) / 2);
-                newCoordinates.setUpperY(this.coordinates.getUpperY());
-            }
-        }
-        return newCoordinates;
-    }
+//    public Coordinates coordinatesOfNewNode(int parQuadrant) {
+//
+//        Coordinates newCoordinates = new Coordinates(0,0,0,0);
+//
+//        switch (parQuadrant) {
+//            case 0 -> {
+//                newCoordinates.setLowerX(this.coordinates.getLowerX());
+//                newCoordinates.setUpperX((this.coordinates.getUpperX() + this.coordinates.getLowerX()) / 2);
+//                newCoordinates.setLowerY(this.coordinates.getLowerY());
+//                newCoordinates.setUpperY((this.coordinates.getUpperY() + this.coordinates.getLowerY()) / 2);
+//            }
+//            case 1 -> {
+//                newCoordinates.setLowerX((this.coordinates.getUpperX() + this.coordinates.getLowerX()) / 2);
+//                newCoordinates.setUpperX(this.coordinates.getUpperX());
+//                newCoordinates.setLowerY(this.coordinates.getLowerY());
+//                newCoordinates.setUpperY((this.coordinates.getUpperY() + this.coordinates.getLowerY()) / 2);
+//            }
+//            case 2 -> {
+//                newCoordinates.setLowerX((this.coordinates.getUpperX() + this.coordinates.getLowerX()) / 2);
+//                newCoordinates.setUpperX(this.coordinates.getUpperX());
+//                newCoordinates.setLowerY((this.coordinates.getUpperY() + this.coordinates.getLowerY()) / 2);
+//                newCoordinates.setUpperY(this.coordinates.getUpperY());
+//            }
+//            case 3 -> {
+//                newCoordinates.setLowerX(this.coordinates.getLowerX());
+//                newCoordinates.setUpperX((this.coordinates.getUpperX() + this.coordinates.getLowerX()) / 2);
+//                newCoordinates.setLowerY((this.coordinates.getUpperY() + this.coordinates.getLowerY()) / 2);
+//                newCoordinates.setUpperY(this.coordinates.getUpperY());
+//            }
+//        }
+//        return newCoordinates;
+//    }
 
     /**
      * In case, we need to split current node into new nodes, this method
@@ -309,56 +300,56 @@ public class QuadTreeNode<T extends Comparable<T>> {
      */
 
     // todo osetirt vstupovanie okrajov
-    public int isFitsToQuadrant(Coordinates parCoordinates) {
-
-        if (
-                this.coordinates.getLowerX() < parCoordinates.getLowerX() &&
-                        (this.coordinates.getLowerX() + this.coordinates.getUpperX()) / 2
-                                > parCoordinates.getUpperX() &&
-                        this.coordinates.getLowerY() < parCoordinates.getLowerY() &&
-                        (this.coordinates.getLowerY() + this.coordinates.getUpperY()) / 2
-                                > parCoordinates.getUpperY()
-        ) {
-            return 0;
-        } else if (
-                (this.coordinates.getLowerX() + this.coordinates.getUpperX()) / 2
-                        < parCoordinates.getLowerX() &&
-                        this.coordinates.getUpperX() > parCoordinates.getUpperX() &&
-                        this.coordinates.getLowerY() < parCoordinates.getLowerY() &&
-                        (this.coordinates.getLowerY() + this.coordinates.getUpperY()) / 2
-                                > parCoordinates.getUpperY()
-        ) {
-            return 1;
-        } else if (
-                (this.coordinates.getLowerX() + this.coordinates.getUpperX()) / 2
-                        < parCoordinates.getLowerX() &&
-                        this.coordinates.getUpperX() > parCoordinates.getUpperX() &&
-                        (this.coordinates.getLowerY() + this.coordinates.getUpperY()) / 2
-                                < parCoordinates.getLowerY() &&
-                        this.coordinates.getUpperY() > parCoordinates.getUpperY()
-        ) {
-            return 2;
-        } else if (
-                this.coordinates.getLowerX() < parCoordinates.getLowerX() &&
-                        (this.coordinates.getLowerX() + this.coordinates.getUpperX()) / 2
-                                > parCoordinates.getUpperX() &&
-                        (this.coordinates.getLowerY() + this.coordinates.getUpperY()) / 2
-                                < parCoordinates.getLowerY() &&
-                        this.coordinates.getUpperY() > parCoordinates.getUpperY()
-        ) {
-            return 3;
-        } else if (
-                this.coordinates.getLowerX() < parCoordinates.getLowerX() &&
-                        this.coordinates.getUpperX() > parCoordinates.getUpperX() &&
-                        this.coordinates.getLowerY() < parCoordinates.getLowerY() &&
-                        this.coordinates.getUpperY() > parCoordinates.getUpperY()
-        ) {
-            return -1;
-        } else {
-            return -10;
-        }
-
-    }
+//    public int isFitsToQuadrant(Coordinates parCoordinates) {
+//
+//        if (
+//                this.coordinates.getLowerX() < parCoordinates.getLowerX() &&
+//                        (this.coordinates.getLowerX() + this.coordinates.getUpperX()) / 2
+//                                > parCoordinates.getUpperX() &&
+//                        this.coordinates.getLowerY() < parCoordinates.getLowerY() &&
+//                        (this.coordinates.getLowerY() + this.coordinates.getUpperY()) / 2
+//                                > parCoordinates.getUpperY()
+//        ) {
+//            return 0;
+//        } else if (
+//                (this.coordinates.getLowerX() + this.coordinates.getUpperX()) / 2
+//                        < parCoordinates.getLowerX() &&
+//                        this.coordinates.getUpperX() > parCoordinates.getUpperX() &&
+//                        this.coordinates.getLowerY() < parCoordinates.getLowerY() &&
+//                        (this.coordinates.getLowerY() + this.coordinates.getUpperY()) / 2
+//                                > parCoordinates.getUpperY()
+//        ) {
+//            return 1;
+//        } else if (
+//                (this.coordinates.getLowerX() + this.coordinates.getUpperX()) / 2
+//                        < parCoordinates.getLowerX() &&
+//                        this.coordinates.getUpperX() > parCoordinates.getUpperX() &&
+//                        (this.coordinates.getLowerY() + this.coordinates.getUpperY()) / 2
+//                                < parCoordinates.getLowerY() &&
+//                        this.coordinates.getUpperY() > parCoordinates.getUpperY()
+//        ) {
+//            return 2;
+//        } else if (
+//                this.coordinates.getLowerX() < parCoordinates.getLowerX() &&
+//                        (this.coordinates.getLowerX() + this.coordinates.getUpperX()) / 2
+//                                > parCoordinates.getUpperX() &&
+//                        (this.coordinates.getLowerY() + this.coordinates.getUpperY()) / 2
+//                                < parCoordinates.getLowerY() &&
+//                        this.coordinates.getUpperY() > parCoordinates.getUpperY()
+//        ) {
+//            return 3;
+//        } else if (
+//                this.coordinates.getLowerX() < parCoordinates.getLowerX() &&
+//                        this.coordinates.getUpperX() > parCoordinates.getUpperX() &&
+//                        this.coordinates.getLowerY() < parCoordinates.getLowerY() &&
+//                        this.coordinates.getUpperY() > parCoordinates.getUpperY()
+//        ) {
+//            return -1;
+//        } else {
+//            return -10;
+//        }
+//
+//    }
 
     /**
      * another private methods

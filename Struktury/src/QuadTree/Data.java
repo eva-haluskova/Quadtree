@@ -16,15 +16,15 @@ public class Data<T>
     private T data;
     //private final int id;
     private int id;
-    private Coordinates coordinates;
+    private Coordinates[] coordinates;
 
-    public Data(T parData, Coordinates parCoordinates, int parId) {
+    public Data(T parData, Coordinates[] parCoordinates, int parId) {
         this.data = parData;
         this.coordinates = parCoordinates;
         this.id = parId;
     }
 
-    public Data(T parData, Coordinates parCoordinates) {
+    public Data(T parData, Coordinates[] parCoordinates) {
         this.data = parData;
         this.coordinates = parCoordinates;
     }
@@ -33,7 +33,7 @@ public class Data<T>
         return this.data;
     }
 
-    public Coordinates getCoordinates() {
+    public Coordinates[] getCoordinates() {
         return this.coordinates;
     }
 
