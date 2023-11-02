@@ -2,7 +2,7 @@
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="GUI.View">
   <grid id="27dc6" binding="RootPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
     <constraints>
-      <xy x="20" y="20" width="500" height="400"/>
+      <xy x="20" y="20" width="575" height="400"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -21,7 +21,13 @@
           <component id="21bf0" class="javax.swing.JButton" binding="FindButton">
             <constraints/>
             <properties>
-              <text value="Vyhladaj"/>
+              <text value="Vyhladaj bodovo"/>
+            </properties>
+          </component>
+          <component id="feec3" class="javax.swing.JButton" binding="FindAreaButton">
+            <constraints/>
+            <properties>
+              <text value="Vyhladaj v oblasti"/>
             </properties>
           </component>
           <component id="b0ca2" class="javax.swing.JButton" binding="EditButton">
@@ -42,7 +48,9 @@
       </grid>
       <grid id="9342c" binding="InputPanel" layout-manager="GridBagLayout">
         <constraints border-constraint="West"/>
-        <properties/>
+        <properties>
+          <enabled value="false"/>
+        </properties>
         <border type="none"/>
         <children>
           <grid id="bbe95" binding="CoordinatesOnePanel" layout-manager="GridBagLayout">
@@ -51,6 +59,7 @@
               <gridbag weightx="0.0" weighty="0.0" ipadx="5" ipady="5"/>
             </constraints>
             <properties>
+              <enabled value="true"/>
               <toolTipText value="Suradnica 1"/>
             </properties>
             <border type="none"/>
@@ -61,6 +70,7 @@
                   <gridbag weightx="0.0" weighty="0.0" ipadx="5" ipady="5"/>
                 </constraints>
                 <properties>
+                  <enabled value="false"/>
                   <model>
                     <item value="Severna"/>
                     <item value="Juzna"/>
@@ -73,6 +83,7 @@
                   <gridbag weightx="0.0" weighty="0.0" ipadx="5" ipady="5"/>
                 </constraints>
                 <properties>
+                  <enabled value="false"/>
                   <text value="Zemepsina vyska"/>
                 </properties>
               </component>
@@ -82,6 +93,7 @@
                   <gridbag weightx="0.0" weighty="0.0" ipadx="5" ipady="5"/>
                 </constraints>
                 <properties>
+                  <enabled value="false"/>
                   <text value="Zepepisna sirka"/>
                 </properties>
               </component>
@@ -91,6 +103,7 @@
                   <gridbag weightx="0.0" weighty="0.0" ipadx="5" ipady="5"/>
                 </constraints>
                 <properties>
+                  <enabled value="false"/>
                   <model>
                     <item value="Vychodna"/>
                     <item value="Zapadna"/>
@@ -105,7 +118,9 @@
                   <gridbag top="0" left="5" bottom="0" right="5" weightx="0.5" weighty="0.0" ipadx="5" ipady="5"/>
                 </constraints>
                 <properties>
-                  <text value="0"/>
+                  <editable value="true"/>
+                  <enabled value="false"/>
+                  <text value=""/>
                 </properties>
               </component>
               <component id="7da84" class="javax.swing.JTextField" binding="LatitudeOnePosition">
@@ -113,10 +128,11 @@
                   <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                     <preferred-size width="150" height="-1"/>
                   </grid>
-                  <gridbag top="0" left="5" bottom="0" right="5" weightx="0.5" weighty="0.0" ipadx="5" ipady="5"/>
+                  <gridbag top="0" left="5" bottom="0" right="5" weightx="0.5" weighty="0.0" ipadx="30" ipady="5"/>
                 </constraints>
                 <properties>
-                  <text value="0"/>
+                  <enabled value="false"/>
+                  <text value=""/>
                 </properties>
               </component>
             </children>
@@ -137,6 +153,7 @@
                   <gridbag weightx="0.0" weighty="0.0" ipadx="5" ipady="5"/>
                 </constraints>
                 <properties>
+                  <enabled value="false"/>
                   <text value="Zemepisna vyska"/>
                 </properties>
               </component>
@@ -146,6 +163,7 @@
                   <gridbag weightx="0.0" weighty="0.0" ipadx="5" ipady="5"/>
                 </constraints>
                 <properties>
+                  <enabled value="false"/>
                   <model>
                     <item value="Severna"/>
                     <item value="Juzna"/>
@@ -157,10 +175,11 @@
                   <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                     <preferred-size width="150" height="-1"/>
                   </grid>
-                  <gridbag top="0" left="5" bottom="0" right="5" weightx="2.0" weighty="0.0" ipadx="5" ipady="5"/>
+                  <gridbag top="0" left="5" bottom="0" right="5" weightx="2.0" weighty="0.0" ipadx="20" ipady="5"/>
                 </constraints>
                 <properties>
-                  <text value="0"/>
+                  <enabled value="false"/>
+                  <text value=""/>
                 </properties>
               </component>
               <component id="e92b" class="javax.swing.JLabel" binding="LongitudeTwo">
@@ -169,6 +188,7 @@
                   <gridbag weightx="0.0" weighty="0.0" ipadx="5" ipady="5"/>
                 </constraints>
                 <properties>
+                  <enabled value="false"/>
                   <text value="Zemepisna sirka"/>
                 </properties>
               </component>
@@ -178,6 +198,7 @@
                   <gridbag weightx="0.0" weighty="0.0" ipadx="5" ipady="5"/>
                 </constraints>
                 <properties>
+                  <enabled value="false"/>
                   <model>
                     <item value="Vychodna"/>
                     <item value="Zapadna"/>
@@ -192,7 +213,8 @@
                   <gridbag top="0" left="5" bottom="0" right="5" weightx="0.5" weighty="0.0" ipadx="5" ipady="5"/>
                 </constraints>
                 <properties>
-                  <text value="0"/>
+                  <enabled value="false"/>
+                  <text value=""/>
                 </properties>
               </component>
             </children>
@@ -211,6 +233,7 @@
                   <gridbag top="0" left="5" bottom="0" right="5" weightx="0.0" weighty="0.0"/>
                 </constraints>
                 <properties>
+                  <enabled value="false"/>
                   <text value="Supisne cislo"/>
                 </properties>
               </component>
@@ -219,10 +242,11 @@
                   <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                     <preferred-size width="150" height="-1"/>
                   </grid>
-                  <gridbag top="0" left="5" bottom="0" right="5" weightx="0.0" weighty="0.0"/>
+                  <gridbag top="0" left="5" bottom="0" right="5" weightx="0.0" weighty="0.0" ipadx="40"/>
                 </constraints>
                 <properties>
-                  <text value="0"/>
+                  <enabled value="false"/>
+                  <text value=""/>
                 </properties>
               </component>
               <component id="68445" class="javax.swing.JTextField" binding="AddDescription">
@@ -230,10 +254,11 @@
                   <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                     <preferred-size width="150" height="-1"/>
                   </grid>
-                  <gridbag top="0" left="5" bottom="0" right="5" weightx="0.0" weighty="0.0"/>
+                  <gridbag top="0" left="5" bottom="0" right="5" weightx="0.0" weighty="0.0" ipadx="50"/>
                 </constraints>
                 <properties>
-                  <text value="Zadaj text"/>
+                  <enabled value="false"/>
+                  <text value=""/>
                 </properties>
               </component>
               <component id="16d86" class="javax.swing.JLabel" binding="Description">
@@ -242,21 +267,38 @@
                   <gridbag top="0" left="5" bottom="0" right="5" weightx="0.0" weighty="0.0"/>
                 </constraints>
                 <properties>
+                  <enabled value="false"/>
                   <text value="Popis"/>
                 </properties>
               </component>
             </children>
           </grid>
+          <component id="9eba4" class="javax.swing.JButton" binding="ConfirmButton">
+            <constraints>
+              <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <gridbag weightx="0.0" weighty="0.0"/>
+            </constraints>
+            <properties>
+              <enabled value="false"/>
+              <text value="Vytvor"/>
+            </properties>
+          </component>
         </children>
       </grid>
-      <grid id="9e33b" binding="OutputPanel" layout-manager="BorderLayout" hgap="5" vgap="5">
+      <grid id="9e33b" binding="OutputPanel" layout-manager="BorderLayout" hgap="10" vgap="10">
         <constraints border-constraint="Center"/>
         <properties/>
         <border type="none"/>
         <children>
           <component id="40232" class="javax.swing.JList" binding="ListOfOutput">
             <constraints border-constraint="Center"/>
-            <properties/>
+            <properties>
+              <name value="Prosim"/>
+              <toolTipText value="AJ tu prosim"/>
+            </properties>
+            <clientProperties>
+              <List.isFileList class="java.lang.Boolean" value="false"/>
+            </clientProperties>
           </component>
         </children>
       </grid>
