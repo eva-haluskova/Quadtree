@@ -1,32 +1,23 @@
 package Data;
 
 import QuadTree.Coordinates;
-import QuadTree.GPS;
 
 import java.util.ArrayList;
 
 
-public class RealEstate {
-
-    private static final int GPS_COUNT = 2;
-
+public class RealEstate extends CadastralObject {
 
     private int serialNumber;
-    private String description;
-    private ArrayList<LandParcel> belongingLandParcels; // referencie
-    private GPS[] GPSCoordinates;
+    private ArrayList<LandParcel> belongingLandParcels;
 
-    public RealEstate(
-            int parSerialNumber,
-            String parDescription,
-            GPS parCoordinatesOne,
-            GPS parCoordinatesTwo
-    ) {
-
+    public RealEstate(String parDescription,Coordinates[] parCoordinates, int parSerialNumber) {
+        super(parDescription,parCoordinates);
         this.serialNumber = parSerialNumber;
-        this.description = parDescription;
-        this.GPSCoordinates = new GPS[GPS_COUNT];
-        this.GPSCoordinates[0] = parCoordinatesOne;
-        this.GPSCoordinates[1] = parCoordinatesTwo;
     }
+
+    @Override
+    public TypeOfCadastralObject isInstanceOf() {
+        return TypeOfCadastralObject.REAL_ESTATE;
+    }
+
 }
