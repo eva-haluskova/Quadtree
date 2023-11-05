@@ -1,11 +1,17 @@
 package GUI;
 
+import MainLogic.Cadaster;
+import QuadTree.Coordinates;
+
 import javax.swing.*;
-import java.awt.*;
+import javax.swing.text.NumberFormatter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.NumberFormat;
 
 public class View {
+
+    private Controller controller;
     private JPanel RootPanel;
     private JPanel MenuPanel;
     private JButton InsertButton;
@@ -37,7 +43,20 @@ public class View {
     private JButton ConfirmButton;
     private JButton FindAreaButton;
 
+    private Cadaster cadaster;
+
     public View() {
+
+        this.cadaster = new Cadaster();
+
+        CoordinatesOnePanel.setBorder(BorderFactory.createTitledBorder("Prva suradnica"));
+        CoordinatesTwoPanel.setBorder(BorderFactory.createTitledBorder("Druha suradnica"));
+        AddObjectPanel.setBorder(BorderFactory.createTitledBorder("Dalsie informacie"));
+        OutputPanel.setBorder(BorderFactory.createTitledBorder("Zoznam vysledkov"));
+
+
+
+
         InsertButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -63,8 +82,12 @@ public class View {
 
                 ConfirmButton.setText("Pridaj");
                 ConfirmButton.setEnabled(true);
+
             }
+
         });
+
+
 
         ConfirmButton.addActionListener(new ActionListener() {
             @Override
@@ -91,6 +114,11 @@ public class View {
                 ConfirmButton.setEnabled(false);
 
             }
+            public void addUpdateListener(ActionListener listener) {
+                ConfirmButton.addActionListener(listener);
+            }
+
+
         });
 
         FindButton.addActionListener(new ActionListener() {
@@ -121,11 +149,6 @@ public class View {
             }
         });
 
-        CoordinatesOnePanel.setBorder(BorderFactory.createTitledBorder("Prva suradnica"));
-        CoordinatesTwoPanel.setBorder(BorderFactory.createTitledBorder("Druha suradnica"));
-        AddObjectPanel.setBorder(BorderFactory.createTitledBorder("Dalsie informacie"));
-        OutputPanel.setBorder(BorderFactory.createTitledBorder("Zoznam vysledkov"));
-
         FindAreaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -148,6 +171,8 @@ public class View {
                 ConfirmButton.setEnabled(true);
             }
         });
+
+
     }
 
     public static void main(String[] args) {
@@ -158,11 +183,33 @@ public class View {
         frame.setVisible(true);
     }
 
-    public void collectDataForInsert() {
 
+
+    public String getDesc() {
+        return Description.getText();
+    }
+    public int getSerialNumb() {
+        return Integer.valueOf(NumberOfObject.getText());
+    }
+
+    public Coordinates getCoordinateOne() {
+        if (LangitudeOne.getText() == "Vychodna") {
+            return new Coordinates(0,0,2,4);
+        } else {
+            return new Coordinates(9,3,4,2);
+        }
+
+    }
+
+
+
+    public void setDisplay(String value) {
+        ListOfOutput.add(LangitudeOne);
     }
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
     }
+
+
 }

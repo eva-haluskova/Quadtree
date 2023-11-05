@@ -237,18 +237,6 @@
                   <text value="Supisne cislo"/>
                 </properties>
               </component>
-              <component id="55f97" class="javax.swing.JTextField" binding="NumberOfObject">
-                <constraints>
-                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                    <preferred-size width="150" height="-1"/>
-                  </grid>
-                  <gridbag top="0" left="5" bottom="0" right="5" weightx="0.0" weighty="0.0" ipadx="40"/>
-                </constraints>
-                <properties>
-                  <enabled value="false"/>
-                  <text value=""/>
-                </properties>
-              </component>
               <component id="68445" class="javax.swing.JTextField" binding="AddDescription">
                 <constraints>
                   <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
@@ -270,6 +258,15 @@
                   <enabled value="false"/>
                   <text value="Popis"/>
                 </properties>
+              </component>
+              <component id="8cd31" class="javax.swing.JTextField" binding="NumberOfObject">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                  </grid>
+                  <gridbag top="0" left="5" bottom="0" right="5" weightx="0.0" weighty="0.0"/>
+                </constraints>
+                <properties/>
               </component>
             </children>
           </grid>
@@ -293,8 +290,8 @@
           <component id="40232" class="javax.swing.JList" binding="ListOfOutput">
             <constraints border-constraint="Center"/>
             <properties>
-              <name value="Prosim"/>
-              <toolTipText value="AJ tu prosim"/>
+              <name value=""/>
+              <toolTipText value=""/>
             </properties>
             <clientProperties>
               <List.isFileList class="java.lang.Boolean" value="false"/>
