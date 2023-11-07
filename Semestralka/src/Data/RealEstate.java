@@ -10,8 +10,8 @@ public class RealEstate extends CadastralObject {
     private int serialNumber;
     private ArrayList<LandParcel> belongingLandParcels;
 
-    public RealEstate(String parDescription,Coordinates[] parCoordinates, int parSerialNumber) {
-        super(parDescription,parCoordinates);
+    public RealEstate(String parDescription, int parSerialNumber) {
+        super(parDescription);
         this.serialNumber = parSerialNumber;
     }
 

@@ -1,215 +1,362 @@
 package GUI;
 
-import MainLogic.Cadaster;
-import QuadTree.Coordinates;
-
 import javax.swing.*;
-import javax.swing.text.NumberFormatter;
+import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.NumberFormat;
+import java.awt.event.ItemListener;
+import java.util.ArrayList;
+import java.util.Objects;
 
-public class View {
+public class View extends JFrame {
 
-    private Controller controller;
     private JPanel RootPanel;
+
     private JPanel MenuPanel;
     private JButton InsertButton;
     private JButton FindButton;
+    private JButton FindAreaButton;
     private JButton EditButton;
     private JButton DeleteButton;
+
     private JPanel InputPanel;
+
     private JPanel CoordinatesOnePanel;
     private JComboBox LatitudeOneOption;
+    private JTextField LatitudeOnePosition;
     private JComboBox LongitudeOneOption;
     private JTextField LongitudeOnePosition;
+
     private JPanel CoordinatesTwoPanel;
     private JComboBox LatitudeTwoOption;
     private JTextField LatitudeTwoPosition;
     private JComboBox LongitudeTwoOption;
     private JTextField LongitudeTwoPosition;
-    private JLabel LatitudeOne;
-    private JLabel LangitudeOne;
-    private JLabel LatitudeTwo;
-    private JLabel LongitudeTwo;
-    private JTextField LatitudeOnePosition;
+
+    private JPanel AddObjectPanel;
+    private JLabel TitleNumber;
     private JTextField NumberOfObject;
     private JTextField AddDescription;
-    private JLabel Description;
-    private JLabel TitleNumber;
-    private JPanel AddObjectPanel;
-    private JPanel OutputPanel;
-    private JList ListOfOutput;
-    private JButton ConfirmButton;
-    private JButton FindAreaButton;
 
-    private Cadaster cadaster;
+    private JButton ConfirmButton;
+    private JButton TreeButton;
+    private JButton OtherButton;
+    private JPanel IOPanel;
+    private JPanel InsertEditPanel;
+    private JPanel FindPanel;
+    private JPanel DeleteEditPanel;
+    private JPanel TreePanel;
+    private JPanel OtherPanel;
+    private JLabel CoordinateOneLatitudeText;
+    private JComboBox CoordinateOneLatitudeOption;
+    private JTextField CoordinateOneLatitudePosition;
+    private JLabel CoordinateOneLongitudeText;
+    private JComboBox CoordinateOneLongitudeOption;
+    private JTextField CoordinateOneLongitudePosition;
+    private JPanel TypeOfObjectPanel;
+    private JLabel TypeOfObject;
+    private JComboBox TypeOfObjectChoose;
+    private JPanel NEObjectInfoPanel;
+    private JLabel CoordinateTwoLatitudeText;
+    private JComboBox CoordinateTwoLatitudeOption;
+    private JTextField CoordinateTwoLatitudePosition;
+    private JLabel CoordinatesTwoLongitudeText;
+    private JTextField CoordinateTwoLongitudePosition;
+    private JComboBox CoordinateTwoLongitudeOption;
+    private JPanel CoorsPanel;
+
+
+    private JPanel LowerPanel;
+    private JLabel ObjectNumber;
+    private JTextField ObjectNumberText;
+    private JLabel ObjectDescription;
+    private JTextArea ObjectDescriptionText;
+    private JPanel OutputPanel;
+    private JButton ConfirmButtonDown;
+    private JList ListOfOutput;
+    private JScrollPane ScrollPane;
+    JList<String> outputList;
+    DefaultListModel outputModel;
 
     public View() {
-
-        this.cadaster = new Cadaster();
-
-        CoordinatesOnePanel.setBorder(BorderFactory.createTitledBorder("Prva suradnica"));
-        CoordinatesTwoPanel.setBorder(BorderFactory.createTitledBorder("Druha suradnica"));
-        AddObjectPanel.setBorder(BorderFactory.createTitledBorder("Dalsie informacie"));
-        OutputPanel.setBorder(BorderFactory.createTitledBorder("Zoznam vysledkov"));
-
-
-
-
-        InsertButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // enable first coorinate
-                LangitudeOne.setEnabled(true);
-                LatitudeOne.setEnabled(true);
-                LatitudeOnePosition.setEnabled(true);
-                LatitudeOneOption.setEnabled(true);
-                LongitudeOneOption.setEnabled(true);
-                LongitudeOnePosition.setEnabled(true);
-                // enable second coorinate
-                LongitudeTwo.setEnabled(true);
-                LatitudeTwo.setEnabled(true);
-                LatitudeTwoOption.setEnabled(true);
-                LatitudeTwoPosition.setEnabled(true);
-                LongitudeTwoOption.setEnabled(true);
-                LongitudeTwoPosition.setEnabled(true);
-                // enable creating object
-                Description.setEnabled(true);
-                TitleNumber.setEnabled(true);
-                AddDescription.setEnabled(true);
-                NumberOfObject.setEnabled(true);
-
-                ConfirmButton.setText("Pridaj");
-                ConfirmButton.setEnabled(true);
-
-            }
-
-        });
-
-
-
-        ConfirmButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                LangitudeOne.setEnabled(false);
-                LatitudeOne.setEnabled(false);
-                LatitudeOnePosition.setEnabled(false);
-                LatitudeOneOption.setEnabled(false);
-                LongitudeOneOption.setEnabled(false);
-                LongitudeOnePosition.setEnabled(false);
-                // enable second coorinate
-                LongitudeTwo.setEnabled(false);
-                LatitudeTwo.setEnabled(false);
-                LatitudeTwoOption.setEnabled(false);
-                LatitudeTwoPosition.setEnabled(false);
-                LongitudeTwoOption.setEnabled(false);
-                LongitudeTwoPosition.setEnabled(false);
-                // enable creating object
-                Description.setEnabled(false);
-                TitleNumber.setEnabled(false);
-                AddDescription.setEnabled(false);
-                NumberOfObject.setEnabled(false);
-
-                ConfirmButton.setEnabled(false);
-
-            }
-            public void addUpdateListener(ActionListener listener) {
-                ConfirmButton.addActionListener(listener);
-            }
-
-
-        });
-
-        FindButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                LangitudeOne.setEnabled(true);
-                LatitudeOne.setEnabled(true);
-                LatitudeOnePosition.setEnabled(true);
-                LatitudeOneOption.setEnabled(true);
-                LongitudeOneOption.setEnabled(true);
-                LongitudeOnePosition.setEnabled(true);
-
-                // enable second coorinate
-                LongitudeTwo.setEnabled(false);
-                LatitudeTwo.setEnabled(false);
-                LatitudeTwoOption.setEnabled(false);
-                LatitudeTwoPosition.setEnabled(false);
-                LongitudeTwoOption.setEnabled(false);
-                LongitudeTwoPosition.setEnabled(false);
-                // enable creating object
-                Description.setEnabled(false);
-                TitleNumber.setEnabled(false);
-                AddDescription.setEnabled(false);
-                NumberOfObject.setEnabled(false);
-
-                ConfirmButton.setText("Vyhladaj");
-                ConfirmButton.setEnabled(true);
-            }
-        });
-
-        FindAreaButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // enable first coorinate
-                LangitudeOne.setEnabled(true);
-                LatitudeOne.setEnabled(true);
-                LatitudeOnePosition.setEnabled(true);
-                LatitudeOneOption.setEnabled(true);
-                LongitudeOneOption.setEnabled(true);
-                LongitudeOnePosition.setEnabled(true);
-                // enable second coorinate
-                LongitudeTwo.setEnabled(true);
-                LatitudeTwo.setEnabled(true);
-                LatitudeTwoOption.setEnabled(true);
-                LatitudeTwoPosition.setEnabled(true);
-                LongitudeTwoOption.setEnabled(true);
-                LongitudeTwoPosition.setEnabled(true);
-
-                ConfirmButton.setText("Vyhladaj");
-                ConfirmButton.setEnabled(true);
-            }
-        });
-
-
+        CoordinatesOnePanel.setBorder(BorderFactory.createTitledBorder("Coordinate number one"));
+        CoordinatesTwoPanel.setBorder(BorderFactory.createTitledBorder("Coordinate number two"));
+        outputModel = new DefaultListModel<>();
+        outputList = new JList<>(outputModel);
+        ListOfOutput.setModel(outputModel);
     }
 
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Kataster");
-        frame.setContentPane(new View().RootPanel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
+    /**
+     * Listeners for different actions
+     */
+    void addInsertButtonListener(ActionListener insertButtonListener) {
+        InsertButton.addActionListener(insertButtonListener);
+    }
+
+    void addEditButtonListener(ActionListener editButtonListener) {
+        EditButton.addActionListener(editButtonListener);
+    }
+
+    void addDeleteButtonListener(ActionListener deleteButtonListener) {
+        DeleteButton.addActionListener(deleteButtonListener);
+    }
+
+    void addTreeButtonListener(ActionListener treeButtonListener) {
+        TreeButton.addActionListener(treeButtonListener);
+    }
+
+    void addFindButtonListener(ActionListener findButtonListener) {
+        FindButton.addActionListener(findButtonListener);
+    }
+
+    void addOtherButtonListener(ActionListener otherButtonListener) {
+        OtherButton.addActionListener(otherButtonListener);
+    }
+
+    void addMainComboBoxListener(ItemListener comboBoxListener) {
+        TypeOfObjectChoose.addItemListener(comboBoxListener);
+    }
+
+    void addOutputListSelectionListener(ListSelectionListener listSelectionListener) {
+        ListOfOutput.addListSelectionListener(listSelectionListener);
     }
 
 
-
-    public String getDesc() {
-        return Description.getText();
-    }
-    public int getSerialNumb() {
-        return Integer.valueOf(NumberOfObject.getText());
-    }
-
-    public Coordinates getCoordinateOne() {
-        if (LangitudeOne.getText() == "Vychodna") {
-            return new Coordinates(0,0,2,4);
-        } else {
-            return new Coordinates(9,3,4,2);
-        }
-
+    /**
+     * Getters of JPanels
+     */
+    public JPanel getRootPanel() {
+        return RootPanel;
     }
 
-
-
-    public void setDisplay(String value) {
-        ListOfOutput.add(LangitudeOne);
+    public JPanel getInsertEditPanel() {
+        return InsertEditPanel;
     }
 
-    private void createUIComponents() {
-        // TODO: place custom component creation code here
+    public JPanel getDeleteEditPanel() {
+        return DeleteEditPanel;
     }
+
+    public JPanel getFindPanel() {
+        return FindPanel;
+    }
+
+    public JPanel getTreePanel() {
+        return TreePanel;
+    }
+
+    public JPanel getOtherPanel() {
+        return OtherPanel;
+    }
+
+    public JPanel getMenuPanel() {
+        return MenuPanel;
+    }
+
+    public JPanel getInputPanel() {
+        return InputPanel;
+    }
+
+    public JPanel getCoordinatesOnePanel() {
+        return CoordinatesOnePanel;
+    }
+
+    public JPanel getCoordinatesTwoPanel() {
+        return CoordinatesTwoPanel;
+    }
+
+    public JPanel getAddObjectPanel() {
+        return AddObjectPanel;
+    }
+
+    public JPanel getIOPanel() {
+        return IOPanel;
+    }
+
+    public JPanel getTypeOfObjectPanel() {
+        return TypeOfObjectPanel;
+    }
+
+    public JPanel getCoorsPanel() {
+        return CoorsPanel;
+    }
+
+    public JPanel getLowerPanel() {
+        return LowerPanel;
+    }
+
+    public JPanel getOutputPanel() {
+        return OutputPanel;
+    }
+
+    /**
+     * Getters of JButtons
+     */
+    public JButton getInsertButton() {
+        return InsertButton;
+    }
+
+    public JButton getFindButton() {
+        return FindButton;
+    }
+
+    public JButton getEditButton() {
+        return EditButton;
+    }
+
+    public JButton getDeleteButton() {
+        return DeleteButton;
+    }
+
+    public JButton getTreeButton() {
+        return TreeButton;
+    }
+
+    public JButton getOtherButton() {
+        return OtherButton;
+    }
+
+    public JButton getConfirmButton() {
+        return ConfirmButton;
+    }
+
+    public JButton getConfirmButtonDown() {
+        return ConfirmButtonDown;
+    }
+
+    public void setConfirmButtonText(String text) {
+        ConfirmButton.setText(text);
+    }
+
+    /**
+     * Getters and setters of JTextfields
+     */
+    public Integer getLatitudeOnePosition() {
+        return Integer.parseInt(LatitudeOnePosition.getText());
+    }
+
+    public void setLatitudeOnePosition(int parLatitudeOnePosition) {
+        LatitudeOnePosition.setText(Integer.toString(parLatitudeOnePosition));
+    }
+
+    public Integer getLongitudeOnePosition() {
+        return Integer.parseInt(LongitudeOnePosition.getText());
+    }
+
+    public void setLongitudeOnePosition(int parLongitudeOnePosition) {
+        LongitudeOnePosition.setText(Integer.toString(parLongitudeOnePosition));
+    }
+
+    public Integer getLatitudeTwoPosition() {
+        return Integer.parseInt(LatitudeTwoPosition.getText());
+    }
+
+    public void setLatitudeTwoPosition(int parLatitudeTwoPosition) {
+        LatitudeTwoPosition.setText(Integer.toString(parLatitudeTwoPosition));
+    }
+
+    public Integer getLongitudeTwoPosition() {
+        return Integer.parseInt(LongitudeTwoPosition.getText());
+    }
+
+    public void setLongitudeTwoPosition(int parLongitudeTwoPosition) {
+        LongitudeTwoPosition.setText(Integer.toString(parLongitudeTwoPosition));
+    }
+
+    public Integer getNumberOfObject() {
+        return Integer.parseInt(NumberOfObject.getText());
+    }
+
+    public void setNumberOfObject(int parNumberOfObject) {
+        NumberOfObject.setText(Integer.toString(parNumberOfObject));
+    }
+
+    public String getAddDescription() {
+        return AddDescription.getText();
+    }
+
+    public void setAddDescription(String parAddDescription) {
+        AddDescription.setText(parAddDescription);
+    }
+
+
+    public JLabel getObjectNumber() {
+        return ObjectNumber;
+    }
+
+//    public void setListOfOutput() {
+//
+//    }
+
+    public void addItemToOutput(String param) {
+        this.outputModel.addElement(param);
+    }
+
+    public void addMultipleItemsToOutput(ArrayList<String> param) {
+        this.outputModel.addAll(param);
+    }
+
+    public void removeData(Object o) {
+        this.outputModel.removeElement(o);
+    }
+
+    public void removeAllData() {
+        this.outputModel.removeAllElements();
+    }
+
+//    public DefaultListModel<String> createScrollPanel() {
+//
+//        return listModel;
+//    }
+
+
+
+
+    /**
+     *
+     * Getters of Comboboxes
+     */
+    public String getLatitudeOneOption() {
+        return Objects.requireNonNull(LatitudeOneOption.getSelectedItem()).toString();
+    }
+
+    public String getLongitudeOneOption() {
+        return LongitudeOneOption.getSelectedItem().toString();
+    }
+
+    public String getLatitudeTwoOption() {
+        return LatitudeTwoOption.getSelectedItem().toString();
+    }
+
+    public String getLongitudeTwoOption() {
+        return LongitudeTwoOption.getSelectedItem().toString();
+    }
+
+    public String getMainComboBoxValue() {
+        return TypeOfObjectChoose.getSelectedItem().toString();
+    }
+
+    /**
+     *  Setters of some needed JLables
+     */
+
+    public void setTypeOfObject(String text) {
+        TypeOfObject.setText(text);
+    }
+
+    public void setTypeOfObjectChoose(String value1, String value2) {
+        TypeOfObjectChoose.removeAllItems();
+        TypeOfObjectChoose.addItem(value1);
+        TypeOfObjectChoose.addItem(value2);
+    }
+
+    public JList getListOfOutput() {
+        return ListOfOutput;
+    }
+
+    /**
+     * Setter for JList
+     */
 
 
 }

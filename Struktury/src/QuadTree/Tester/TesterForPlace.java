@@ -58,6 +58,6 @@ public class TesterForPlace extends QuadTreeTester {
             }
         }
 
-        System.out.println("Insert is done!");
+        System.out.println("Insert of place is done!");
     }
 }

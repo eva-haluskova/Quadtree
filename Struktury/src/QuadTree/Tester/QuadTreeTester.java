@@ -54,7 +54,7 @@ abstract class QuadTreeTester<T extends Comparable<T>> {
      * Tries to find all data in searches area of tree
      * @param parCoordinatesOfArea coordinates od searched area
      */
-    public void generateFind(Coordinates parCoordinatesOfArea) {
+    public ArrayList<Data<T>> generateFind(Coordinates parCoordinatesOfArea) {
         ArrayList<Data<T>> findData = new ArrayList<>();
         findData = testTree.findInArea(parCoordinatesOfArea);
         if (findData.containsAll(this.dataToFindInArea)) { // pay attention
@@ -62,13 +62,14 @@ abstract class QuadTreeTester<T extends Comparable<T>> {
         } else {
             System.out.println("Find failed! :(");
         }
+        return findData;
     }
 
     /**
      * Tries to fine all data with specific coordinates
      * @param parCoordinatesOfData coordinates of some specific point/polygon
      */
-    public void generateSimpleFind(Coordinates parCoordinatesOfData) {
+    public ArrayList<Data<T>> generateSimpleFind(Coordinates parCoordinatesOfData) {
         ArrayList<Data<T>> findData = new ArrayList<>();
         findData = testTree.find(parCoordinatesOfData);
         if (findData.containsAll(this.dataToFindOfPoint)) { // pay attention
@@ -80,6 +81,7 @@ abstract class QuadTreeTester<T extends Comparable<T>> {
             System.out.println(findData.get(i));
 
         }
+        return findData;
     }
 
 
