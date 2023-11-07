@@ -1,31 +1,22 @@
 package QuadTree.Tester;
 
-import QuadTree.QuadTree;
-import QuadTree.Tester.QuadTreeTester;
 import QuadTree.Coordinates;
-import QuadTree.QuadTreeNode;
+import QuadTree.QuadTree;
+import Data.RealEstate;
 import QuadTree.Data;
-import QuadTree.Place;
 
 import java.util.Random;
 
-/**
- * Class specified for testing Quad tree with data of type Place.
- */
-public class TesterForPlace extends QuadTreeTester {
+public class RealEstateTester extends QuadTreeTester {
 
-    public TesterForPlace(QuadTree parTree) {
+    public RealEstateTester(QuadTree parTree) {
         super(parTree);
         this.testTree = parTree;
     }
 
-    /**
-     * Specific method for inserting Place into quadTree, it means
-     * specific creating of Place instances.
-     */
+
     @Override
     public void generateInsert(int parNumber, Random random, Coordinates parCoordinatesForSearch) {
-
         int widthOfPolygon = 10;
         dataToFindInArea.clear();
         dataToFindOfPoint.clear();
@@ -42,9 +33,8 @@ public class TesterForPlace extends QuadTreeTester {
             double y2 = y1 + widthOfPolygon;
 
             Coordinates coors = new Coordinates(x1, x2, y1, y2);
-            //Coordinates coors = new Coordinates(x1, y1);
-            Place newObject = new Place("Miesto" + i);
-            Data<Place> data = new Data(newObject, coors, i);
+            RealEstate newObject = new RealEstate("RealEstate number3",i);
+            Data<RealEstate> data = new Data(newObject, coors, i);
 
             this.testTree.insert(data, testTree.getRoot());
             super.testData.add(data);
@@ -58,6 +48,6 @@ public class TesterForPlace extends QuadTreeTester {
             }
         }
 
-        System.out.println("Insert of place is done!");
+        System.out.println("Insert of RealEstates is done!");
     }
 }

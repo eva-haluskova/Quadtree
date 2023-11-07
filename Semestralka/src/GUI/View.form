@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="GUI.View">
+  <grid id="27dc6" binding="RootPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
+    <constraints>
+      <xy x="20" y="20" width="1242" height="400"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <grid id="63682" binding="MenuPanel" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+        <constraints border-constraint="North"/>
+        <properties/>
+        <border type="bevel-raised"/>
+        <children>
+          <component id="d89cf" class="javax.swing.JButton" binding="TreeButton">
+            <constraints/>
+            <properties>
+              <text value="QuadTree"/>
+            </properties>
+          </component>
+          <component id="52ee3" class="javax.swing.JButton" binding="InsertButton">
+            <constraints/>
+            <properties>
+              <text value="Insert"/>
+            </properties>
+          </component>
+          <component id="21bf0" class="javax.swing.JButton" binding="FindButton">
+            <constraints/>
+            <properties>
+              <text value="Find"/>
+            </properties>
+          </component>
+          <component id="b0ca2" class="javax.swing.JButton" binding="EditButton">
+            <constraints/>
+            <properties>
+              <enabled value="true"/>
+              <text value="Edit"/>
+            </properties>
+          </component>
+          <component id="8d5b1" class="javax.swing.JButton" binding="DeleteButton">
+            <constraints/>
+            <properties>
+              <enabled value="true"/>
+              <text value="Delete"/>
+            </properties>
+          </component>
+          <component id="6d93c" class="javax.swing.JButton" binding="OtherButton">
+            <constraints/>
+            <properties>
+              <text value="More Actions"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <grid id="9ccc4" binding="IOPanel" layout-manager="CardLayout" hgap="0" vgap="0">
+        <constraints border-constraint="Center"/>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <grid id="7c3e8" binding="InsertEditPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
+            <constraints>
+              <card name="Card1"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <grid id="db7f8" binding="CoorsPanel" layout-manager="GridBagLayout">
+                <constraints border-constraint="Center"/>
+                <properties>
+                  <minimumSize width="600" height="150"/>
+                  <preferredSize width="570" height="190"/>
+                </properties>
+                <border type="none"/>
+                <children>
+                  <grid id="5ca4f" binding="CoordinatesOnePanel" layout-manager="GridBagLayout">
+                    <constraints>
+                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <gridbag top="5" left="10" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <component id="f3ae4" class="javax.swing.JLabel" binding="CoordinateOneLatitudeText">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                          <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <text value="Latitude"/>
+                        </properties>
+                      </component>
+                      <component id="45e6a" class="javax.swing.JComboBox" binding="CoordinateOneLatitudeOption">
+                        <constraints>
+                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                          <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <model>
+                            <item value="North"/>
+                            <item value="South"/>
+                          </model>
+                        </properties>
+                      </component>
+                      <component id="3df9a" class="javax.swing.JTextField" binding="CoordinateOneLatitudePosition">
+                        <constraints>
+                          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                            <preferred-size width="150" height="-1"/>
+                          </grid>
+                          <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0" ipadx="60"/>
+                        </constraints>
+                        <properties/>
+                      </component>
+                      <component id="de2d6" class="javax.swing.JLabel" binding="CoordinateOneLongitudeText">
+                        <constraints>
+                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                          <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <text value="Longitude"/>
+                        </properties>
+                      </component>
+                      <component id="b33e9" class="javax.swing.JComboBox" binding="CoordinateOneLongitudeOption">
+                        <constraints>
+                          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                          <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <model>
+                            <item value="West"/>
+                            <item value="East"/>
+                          </model>
+                        </properties>
+                      </component>
+                      <component id="b5fa1" class="javax.swing.JTextField" binding="CoordinateOneLongitudePosition">
+                        <constraints>
+                          <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                            <preferred-size width="150" height="-1"/>
+                          </grid>
+                          <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties/>
+                      </component>
+                    </children>
+                  </grid>
+                  <grid id="88df8" binding="TypeOfObjectPanel" layout-manager="GridBagLayout">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <gridbag top="5" left="10" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <component id="5096f" class="javax.swing.JLabel" binding="TypeOfObject">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                          <gridbag top="10" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <text value="Type of object"/>
+                        </properties>
+                      </component>
+                      <component id="4e624" class="javax.swing.JComboBox" binding="TypeOfObjectChoose">
+                        <constraints>
+                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                          <gridbag top="10" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <model>
+                            <item value="Real Estate"/>
+                            <item value="Land Parcel"/>
+                          </model>
+                        </properties>
+                      </component>
+                    </children>
+                  </grid>
+                  <grid id="893ce" binding="CoordinatesTwoPanel" layout-manager="GridBagLayout">
+                    <constraints>
+                      <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                      <gridbag top="5" left="5" bottom="5" right="10" weightx="0.0" weighty="0.0"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <component id="8fb4a" class="javax.swing.JLabel" binding="CoordinateTwoLatitudeText">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                          <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <text value="Latitude"/>
+                        </properties>
+                      </component>
+                      <component id="bd827" class="javax.swing.JComboBox" binding="CoordinateTwoLatitudeOption">
+                        <constraints>
+                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                          <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <model>
+                            <item value="North"/>
+                            <item value="South"/>
+                          </model>
+                        </properties>
+                      </component>
+                      <component id="1cb31" class="javax.swing.JTextField" binding="CoordinateTwoLatitudePosition">
+                        <constraints>
+                          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                            <preferred-size width="150" height="-1"/>
+                          </grid>
+                          <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0" ipadx="60"/>
+                        </constraints>
+                        <properties/>
+                      </component>
+                      <component id="5dfec" class="javax.swing.JLabel" binding="CoordinatesTwoLongitudeText">
+                        <constraints>
+                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                          <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <text value="Longitude"/>
+                        </properties>
+                      </component>
+                      <component id="4ebce" class="javax.swing.JTextField" binding="CoordinateTwoLongitudePosition">
+                        <constraints>
+                          <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                            <preferred-size width="150" height="-1"/>
+                          </grid>
+                          <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0" ipadx="30"/>
+                        </constraints>
+                        <properties/>
+                      </component>
+                      <component id="b3fe8" class="javax.swing.JComboBox" binding="CoordinateTwoLongitudeOption">
+                        <constraints>
+                          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                          <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <model>
+                            <item value="West"/>
+                            <item value="East"/>
+                          </model>
+                        </properties>
+                      </component>
+                    </children>
+                  </grid>
+                  <component id="33141" class="javax.swing.JButton" binding="ConfirmButton">
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <gridbag top="0" left="60" bottom="0" right="60" weightx="0.0" weighty="0.0"/>
+                    </constraints>
+                    <properties>
+                      <inheritsPopupMenu value="false"/>
+                      <margin top="0" left="0" bottom="0" right="0"/>
+                      <text value="Create"/>
+                      <verifyInputWhenFocusTarget value="false"/>
+                      <visible value="true"/>
+                    </properties>
+                  </component>
+                </children>
+              </grid>
+              <grid id="2efc4" binding="LowerPanel" layout-manager="CardLayout" hgap="0" vgap="0">
+                <constraints border-constraint="South"/>
+                <properties>
+                  <minimumSize width="250" height="145"/>
+                  <preferredSize width="600" height="100"/>
+                </properties>
+                <border type="line"/>
+                <children>
+                  <grid id="4c059" binding="AddObjectPanel" layout-manager="GridBagLayout">
+                    <constraints>
+                      <card name="Card1"/>
+                    </constraints>
+                    <properties>
+                      <minimumSize width="200" height="145"/>
+                    </properties>
+                    <border type="none"/>
+                    <children>
+                      <component id="b9df3" class="javax.swing.JLabel" binding="ObjectNumber">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                          <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <text value="SerialNumber"/>
+                        </properties>
+                      </component>
+                      <component id="c5630" class="javax.swing.JTextField" binding="ObjectNumberText">
+                        <constraints>
+                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                            <preferred-size width="150" height="-1"/>
+                          </grid>
+                          <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0" ipadx="150"/>
+                        </constraints>
+                        <properties/>
+                      </component>
+                      <component id="8e7ee" class="javax.swing.JLabel" binding="ObjectDescription">
+                        <constraints>
+                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                          <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <text value="Description"/>
+                        </properties>
+                      </component>
+                      <component id="1c82d" class="javax.swing.JTextArea" binding="ObjectDescriptionText">
+                        <constraints>
+                          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                            <preferred-size width="150" height="50"/>
+                          </grid>
+                          <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0" ipadx="50" ipady="20"/>
+                        </constraints>
+                        <properties>
+                          <columns value="2"/>
+                        </properties>
+                      </component>
+                      <component id="9e8ae" class="javax.swing.JButton" binding="ConfirmButtonDown">
+                        <constraints>
+                          <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                          <gridbag top="5" left="15" bottom="5" right="15" weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <text value="Create"/>
+                        </properties>
+                      </component>
+                    </children>
+                  </grid>
+                  <grid id="426fc" binding="OutputPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
+                    <constraints>
+                      <card name="Card2"/>
+                    </constraints>
+                    <properties/>
+                    <border type="bevel-raised"/>
+                    <children>
+                      <scrollpane id="a250a" binding="ScrollPane">
+                        <constraints border-constraint="Center"/>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <component id="6d8b" class="javax.swing.JList" binding="ListOfOutput">
+                            <constraints/>
+                            <properties/>
+                          </component>
+                        </children>
+                      </scrollpane>
+                    </children>
+                  </grid>
+                </children>
+              </grid>
+            </children>
+          </grid>
+          <grid id="66d98" binding="TreePanel" layout-manager="BorderLayout" hgap="0" vgap="0">
+            <constraints>
+              <card name="Card3"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children/>
+          </grid>
+          <grid id="f7d07" binding="OtherPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
+            <constraints>
+              <card name="Card5"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children/>
+          </grid>
+        </children>
+      </grid>
+    </children>
+  </grid>
+</form>

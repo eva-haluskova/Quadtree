@@ -7,8 +7,8 @@ public class LandParcel extends CadastralObject {
     private int parcelNumber;
     private RealEstate belongingRealEstates;
 
-    public LandParcel(String parDescription,Coordinates[] parCoordinates, int parParcelNumber) {
-        super(parDescription,parCoordinates);
+    public LandParcel(String parDescription, int parParcelNumber) {
+        super(parDescription);
         this.parcelNumber = parParcelNumber;
     }
 
@@ -17,4 +17,8 @@ public class LandParcel extends CadastralObject {
         return TypeOfCadastralObject.LAND_PARCEL;
     }
 
+    @Override
+    public int compareTo(CadastralObject o) {
+        return 0;
+    }
 }

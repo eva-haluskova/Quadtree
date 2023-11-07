@@ -1,5 +1,7 @@
 package QuadTree;
 
+import java.util.UUID;
+
 /**
  * Represent any data, which can be inserted into quad tree.
  * Because data inserted into quad tree needs to have coordinates,

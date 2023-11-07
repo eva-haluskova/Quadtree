@@ -290,6 +290,8 @@ public class QuadTree<T extends Comparable<T>> {
         return listToReturn;
     }
 
+    // poslem tam tie triedy a porovnavam, ziedne idecko!!!
+
     /**
      * Method delete appropriate data from tree
      * @param parCoordinates of data we want to delete
