@@ -4,6 +4,7 @@ import Data.CadastralObject;
 import MainLogic.Cadaster;
 import QuadTree.Coordinates;
 import QuadTree.Data;
+import Data.GPS;
 import Data.RealEstate;
 
 import javax.swing.*;
@@ -92,6 +93,7 @@ public class Controller {
             view.getIOPanel().setBorder(BorderFactory.createTitledBorder("Find data"));
             view.getConfirmButton().setText("Find");
             view.getConfirmButton().setVisible(true);
+            // TODO nezabudni opravit
             ArrayList<String> salala = new ArrayList<>();
             for (int i = 0; i < 2; i++) {
                 salala.add(newItem());
@@ -108,6 +110,14 @@ public class Controller {
         }
     }
 
+    class OtherButtonListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            view.getOtherPanel().setVisible(true);
+            view.getInsertEditPanel().setVisible(false);
+        }
+    }
+
+    // TODO
     class ConfirmButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if (view.getConfirmButton().getText().equals("Find")) {
@@ -139,15 +149,8 @@ public class Controller {
                     addLandParcel();
                 }
             } else if (view.getConfirmButtonDown().getText().equals("Edit")) {
-
+                // TODO
             }
-        }
-    }
-
-    class OtherButtonListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            view.getOtherPanel().setVisible(true);
-            view.getInsertEditPanel().setVisible(false);
         }
     }
 
@@ -156,7 +159,6 @@ public class Controller {
         public void itemStateChanged(ItemEvent e) {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 Object item = e.getItem();
-                //returnAction(view.getMainComboBoxValue());
                 returnAction(item.toString());
 
             }
@@ -164,7 +166,6 @@ public class Controller {
     }
 
     class OutputListSelectionListener implements ListSelectionListener {
-
         @Override
         public void valueChanged(ListSelectionEvent e) {
             if (!e.getValueIsAdjusting()) {
@@ -181,7 +182,6 @@ public class Controller {
                 } else if (view.getConfirmButton().getText().equals("Get objects to delete")) {
                     view.removeData(selectedValue);
                 }
-
             }
         }
     }
@@ -213,6 +213,7 @@ public class Controller {
         }
     }
 
+    // bullshit
     public String newItem() {
         Random random = new Random();
         return "Objekt" + random.nextInt();
@@ -223,14 +224,14 @@ public class Controller {
      * work with model
      */
     public void addRealEstate() {
-        Coordinates coors = new Coordinates(20,30,30,30);
-        this.cadaster.createRealEstate(view.getNumberOfObject(),coors,view.getAddDescription());
+        this.cadaster.createRealEstate(view.getNumberOfObject(),this.returnGPSFromView(),view.getAddDescription());
     }
 
+
     public void addLandParcel() {
-        Coordinates coors = new Coordinates(20,30,30,30);
-        this.cadaster.createLandParcel(view.getNumberOfObject(),coors,view.getAddDescription());
+        this.cadaster.createLandParcel(view.getNumberOfObject(),this.returnGPSFromView(),view.getAddDescription());
     }
+
 
 
 //    public ArrayList<Data<CadastralObject>> returnListOfReadEstates() {
@@ -244,5 +245,45 @@ public class Controller {
 //    public ArrayList<Data<CadastralObject>> returnFindData() {
 //        return this.cadaster.findAccordingCoordinates();
 //    }
+
+
+    /**
+     * extract GPS array from
+     */
+    private GPS[] returnGPSFromView() {
+        GPS.Latitude latOne;
+        GPS.Longitude longOne;
+        GPS.Latitude latTwo;
+        GPS.Longitude longTwo;
+
+        if (view.getLatitudeOneOption().equals("North")) {
+            latOne = GPS.Latitude.NORTH;
+        } else {
+            latOne = GPS.Latitude.SOUTH;
+        }
+
+        if (view.getLongitudeOneOption().equals("West")) {
+            longOne = GPS.Longitude.WEST;
+        } else {
+            longOne = GPS.Longitude.EAST;
+        }
+
+        if (view.getLatitudeTwoOption().equals("North")) {
+            latTwo = GPS.Latitude.NORTH;
+        } else {
+            latTwo = GPS.Latitude.SOUTH;
+        }
+
+        if (view.getLongitudeTwoOption().equals("West")) {
+            longTwo = GPS.Longitude.WEST;
+        } else {
+            longTwo = GPS.Longitude.EAST;
+        }
+
+        GPS gpsOne = new GPS(latOne,view.getLatitudeOnePosition(),longOne,view.getLongitudeOnePosition());
+        GPS gpsTwo = new GPS(latTwo,view.getLatitudeTwoPosition(),longTwo,view.getLongitudeTwoPosition());
+        GPS[] gps = {gpsOne,gpsTwo};
+        return gps;
+    }
 
 }

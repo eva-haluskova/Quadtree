@@ -6,6 +6,7 @@ import Data.RealEstate;
 import QuadTree.QuadTree;
 import QuadTree.Coordinates;
 import QuadTree.Data;
+import Data.GPS;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -14,21 +15,20 @@ import java.util.WeakHashMap;
 public class Cadaster {
 
     private QuadTree<CadastralObject> quadTree;
-    private int uniqueID;
 
     public Cadaster() {
         this.quadTree = new QuadTree<CadastralObject>(0, 10000, 0, 1000, 0);
-        this.uniqueID = 0;
     }
 
-    public void createRealEstate(int parSerialNumber, Coordinates parCoordinates, String parDescription) {
+    public void createRealEstate(int parSerialNumber, GPS[] parCoordinates, String parDescription) {
         RealEstate newRealEstate = new RealEstate(parDescription,parSerialNumber);
-        Data<CadastralObject> dataToInsert = new Data(newRealEstate,parCoordinates,this.uniqueID);
-        this.addToTree(dataToInsert, this.quadTree);
+        // TODO cierna magia
+        //Data<CadastralObject> dataToInsert = new Data(newRealEstate,parCoordinates,this.uniqueID);
+        //this.addToTree(dataToInsert, this.quadTree);
         this.uniqueID ++;
     }
 
-    public void createLandParcel(int parParcelNumber, Coordinates parCoordinates, String parDescription) {
+    public void createLandParcel(int parParcelNumber, GPS[] parCoordinates, String parDescription) {
         // TODO
     }
 

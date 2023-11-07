@@ -7,8 +7,8 @@ public class LandParcel extends CadastralObject {
     private int parcelNumber;
     private RealEstate belongingRealEstates;
 
-    public LandParcel(String parDescription, int parParcelNumber) {
-        super(parDescription);
+    public LandParcel(String parDescription,GPS[] parCoordinates, int parParcelNumber) {
+        super(parDescription, parCoordinates);
         this.parcelNumber = parParcelNumber;
     }
 
