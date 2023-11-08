@@ -21,7 +21,15 @@ public class RealEstate extends CadastralObject {
     }
 
     @Override
-    public int compareTo(CadastralObject o) {
-        return 0;
+    public String toString() {
+        return "Type of object: Real Estate, serial number: " + this.serialNumber + ", desc: " + this.getDescription();
+    }
+
+    public int getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(int serialNumber) {
+        this.serialNumber = serialNumber;
     }
 }

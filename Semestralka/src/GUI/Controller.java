@@ -2,10 +2,8 @@ package GUI;
 
 import Data.CadastralObject;
 import MainLogic.Cadaster;
-import QuadTree.Coordinates;
-import QuadTree.Data;
 import Data.GPS;
-import Data.RealEstate;
+import QuadTree.Data;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -35,11 +33,18 @@ public class Controller {
         this.view.addOtherButtonListener(new OtherButtonListener());
         this.view.addMainComboBoxListener(new MainComboBoxListener());
         this.view.addOutputListSelectionListener(new OutputListSelectionListener());
+        this.view.addCreateTreeButtonListener(new CreateTreeButtonListener());
+        this.view.addConfirmButtonListener(new ConfirmButtonListener());
+        this.view.addConfirmButtonDownListener(new ConfirmButtonDownListener());
     }
 
+    /**
+     * Main menu listeners
+     */
     class InsertButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            view.getInsertEditPanel().setVisible(true);
+            view.getMainPanel().setVisible(true);
+            view.getTreePanel().setVisible(false);
             view.getTypeOfObjectPanel().setVisible(true);
             view.getAddObjectPanel().setVisible(true);
             view.setTypeOfObject("Type of object");
@@ -53,7 +58,8 @@ public class Controller {
 
     class EditButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            view.getInsertEditPanel().setVisible(true);
+            view.getMainPanel().setVisible(true);
+            view.getTreePanel().setVisible(false);
             view.getTypeOfObjectPanel().setVisible(true);
             view.getOutputPanel().setVisible(true);
             view.getAddObjectPanel().setVisible(false);
@@ -68,8 +74,9 @@ public class Controller {
 
     class DeleteButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            view.getInsertEditPanel().setVisible(true);
+            view.getMainPanel().setVisible(true);
             view.getOutputPanel().setVisible(true);
+            view.getTreePanel().setVisible(false);
             view.getTypeOfObjectPanel().setVisible(true);
             view.getAddObjectPanel().setVisible(false);
             view.setTypeOfObject("Type of object");
@@ -84,7 +91,8 @@ public class Controller {
 
     class FindButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            view.getInsertEditPanel().setVisible(true);
+            view.getMainPanel().setVisible(true);
+            view.getTreePanel().setVisible(false);
             view.getTypeOfObjectPanel().setVisible(true);
             view.getOutputPanel().setVisible(true);
             view.getAddObjectPanel().setVisible(false);
@@ -93,46 +101,48 @@ public class Controller {
             view.getIOPanel().setBorder(BorderFactory.createTitledBorder("Find data"));
             view.getConfirmButton().setText("Find");
             view.getConfirmButton().setVisible(true);
-            // TODO nezabudni opravit
-            ArrayList<String> salala = new ArrayList<>();
-            for (int i = 0; i < 2; i++) {
-                salala.add(newItem());
-            }
-            view.addMultipleItemsToOutput(salala);
+            System.out.println("som tu");
+            view.addMultipleItemsToOutput(returnAllData());
         }
     }
 
     class TreeButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             view.getTreePanel().setVisible(true);
-            view.getInsertEditPanel().setVisible(false);
-
+            view.getMainPanel().setVisible(false);
+            view.getOutputPanel().setVisible(false);
         }
     }
 
     class OtherButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             view.getOtherPanel().setVisible(true);
-            view.getInsertEditPanel().setVisible(false);
+            view.getMainPanel().setVisible(false);
         }
     }
 
+    /**
+     * Main Panel listeners
+     */
     // TODO
     class ConfirmButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if (view.getConfirmButton().getText().equals("Find")) {
-                if (view.getMainComboBoxValue().equals("Find in area")) {
-                    Coordinates coors = new Coordinates(
-                            view.getLatitudeOnePosition(),view.getLatitudeTwoPosition(),
-                            view.getLongitudeOnePosition(),view.getLongitudeTwoPosition()
-                    );
-                    ArrayList<Data<CadastralObject>> list = cadaster.findInArea(coors);
-                    // change to string
-                    //view.addMultipleItemsToOutput();
-                } else if (view.getMainComboBoxValue().equals("Find by point")) {
+                if (view.getTypeOfObjectValue().equals("Find in area")) {
+                    view.addMultipleItemsToOutput(findInArea());
 
+                    //    ArrayList<String> salala = new ArrayList<>();
+//            for (int i = 0; i < 2; i++) {
+//        salala.add(newItem());
+//    }
+//            view.addMultipleItemsToOutput(salala);
+
+                } else if (view.getTypeOfObjectValue().equals("Find by point")) {
+                    view.addMultipleItemsToOutput(findAccordingToCoordinates());
                 }
             } else if (view.getConfirmButton().getText().equals("Get objects to delete")) {
+                view.addMultipleItemsToOutput(findAccordingToCoordinates());
+                // TODO najst choosnoty prvok
 
             } else if (view.getConfirmButton().getText().equals("Get objects to edit")) {
 
@@ -143,9 +153,9 @@ public class Controller {
     class ConfirmButtonDownListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if (view.getConfirmButtonDown().getText().equals("Create")) {
-                if (view.getMainComboBoxValue().equals("Real Estate")) {
+                if (view.getTypeOfObjectValue().equals("Real Estate")) {
                     addRealEstate();
-                } else if (view.getMainComboBoxValue().equals("Land Parcel")) {
+                } else if (view.getTypeOfObjectValue().equals("Land Parcel")) {
                     addLandParcel();
                 }
             } else if (view.getConfirmButtonDown().getText().equals("Edit")) {
@@ -165,13 +175,31 @@ public class Controller {
         }
     }
 
+    /**
+     * Create Tree listeners
+     */
+    class CreateTreeButtonListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            if (view.getTypeOfTreeOption().equals("Real Estate")) {
+                createNewEstateTree();
+            } else if (view.getTypeOfTreeOption().equals("Land Parcel")) {
+                createNewParcelTree();
+            }
+        }
+    }
+
+
+    /**
+     * Output panel listener
+     */
+
     class OutputListSelectionListener implements ListSelectionListener {
         @Override
         public void valueChanged(ListSelectionEvent e) {
             if (!e.getValueIsAdjusting()) {
                 Object selectedValue = view.getListOfOutput().getSelectedValue();
                 if (view.getConfirmButton().getText().equals("Get objects to edit")) {
-                    view.getInsertEditPanel().setVisible(true);
+                    view.getMainPanel().setVisible(true);
                     view.getAddObjectPanel().setVisible(true);
                     view.getTypeOfObjectPanel().setVisible(false);
                     view.getOutputPanel().setVisible(false);
@@ -180,75 +208,50 @@ public class Controller {
                     view.getConfirmButton().setVisible(false);
                     manageCoordinateTwoPanel(true);
                 } else if (view.getConfirmButton().getText().equals("Get objects to delete")) {
-                    view.removeData(selectedValue);
+                    view.removeData((Data<? extends CadastralObject>) selectedValue);
                 }
             }
         }
     }
-
-    public void returnAction(String parString) {
-        switch (parString) {
-            case "Real Estate" -> {
-                view.getObjectNumber().setText("Serial number");
-            }
-            case "Land Parcel" -> {
-                view.getObjectNumber().setText("Parcel number");
-            }
-            case "Find by point" -> {
-                view.getCoordinatesTwoPanel().setEnabled(false);
-                for (Component cp : view.getCoordinatesTwoPanel().getComponents() ) {
-                    cp.setEnabled(false);
-                }
-            }
-            case "Find in area" -> {
-                manageCoordinateTwoPanel(true);
-            }
-        }
-    }
-
-    public void manageCoordinateTwoPanel(Boolean setValue) {
-        view.getCoordinatesTwoPanel().setEnabled(setValue);
-        for (Component cp : view.getCoordinatesTwoPanel().getComponents() ) {
-            cp.setEnabled(setValue);
-        }
-    }
-
-    // bullshit
-    public String newItem() {
-        Random random = new Random();
-        return "Objekt" + random.nextInt();
-    }
-
 
     /**
      * work with model
      */
     public void addRealEstate() {
-        this.cadaster.createRealEstate(view.getNumberOfObject(),this.returnGPSFromView(),view.getAddDescription());
+        this.cadaster.insertRealEstate(view.getNumberOfObject(),this.returnGPSFromView(),view.getAddDescription());
     }
 
 
     public void addLandParcel() {
-        this.cadaster.createLandParcel(view.getNumberOfObject(),this.returnGPSFromView(),view.getAddDescription());
+        this.cadaster.insertLandParcel(view.getNumberOfObject(),this.returnGPSFromView(),view.getAddDescription());
     }
 
+    public void createNewParcelTree() {
+        this.cadaster.createLandParcelTree(returnGPSForTreeFromView(),this.view.getMaxDepthOfTree());
+    }
 
+    public void createNewEstateTree() {
+        this.cadaster.createRealEstateTree(returnGPSForTreeFromView(),this.view.getMaxDepthOfTree());
+    }
 
-//    public ArrayList<Data<CadastralObject>> returnListOfReadEstates() {
-//        return this.cadaster.findInArea();
-//    }
-//
-//    public ArrayList<Data<CadastralObject>> returnFindDataArea() {
-//        return this.cadaster.findInArea();
-//    }
-//
-//    public ArrayList<Data<CadastralObject>> returnFindData() {
-//        return this.cadaster.findAccordingCoordinates();
-//    }
+    public ArrayList<Data<? extends CadastralObject>> findAccordingToCoordinates() {
+        return this.cadaster.findAccordingCoordinates(this.returnGPSFromView());
+    }
 
+    public ArrayList<Data<? extends CadastralObject>> findInArea() {
+        return this.cadaster.findInArea(this.returnGPSFromView());
+    }
+
+    public ArrayList<Data<? extends CadastralObject>> returnAllData() {
+        return this.cadaster.returnAllData();
+    }
 
     /**
-     * extract GPS array from
+     * Private methods for work with data
+     */
+
+    /**
+     * extract GPS array for work with data
      */
     private GPS[] returnGPSFromView() {
         GPS.Latitude latOne;
@@ -286,4 +289,74 @@ public class Controller {
         return gps;
     }
 
+    /**
+     * extract GPS array for range of tree
+     */
+    private GPS[] returnGPSForTreeFromView() {
+        GPS.Latitude latOne;
+        GPS.Longitude longOne;
+        GPS.Latitude latTwo;
+        GPS.Longitude longTwo;
+        if (view.getLatitudeOneTreeOption().equals("North")) {
+            latOne = GPS.Latitude.NORTH;
+        } else {
+            latOne = GPS.Latitude.SOUTH;
+        }
+
+        if (view.getLongitudeOneTreeOption().equals("West")) {
+            longOne = GPS.Longitude.WEST;
+        } else {
+            longOne = GPS.Longitude.EAST;
+        }
+
+        if (view.getLatitudeTwoTreeOption().equals("North")) {
+            latTwo = GPS.Latitude.NORTH;
+        } else {
+            latTwo = GPS.Latitude.SOUTH;
+        }
+
+        if (view.getLongitudeTwoTreeOption().equals("West")) {
+            longTwo = GPS.Longitude.WEST;
+        } else {
+            longTwo = GPS.Longitude.EAST;
+        }
+
+        GPS gpsOne = new GPS(latOne,view.getLatitudeOneTreePosition(),longOne,view.getLongitudeOneTreePosition());
+        GPS gpsTwo = new GPS(latTwo,view.getLatitudeTwoTreePosition(),longTwo,view.getLongitudeTwoTreePosition());
+        GPS[] gps = {gpsOne,gpsTwo};
+        return gps;
+    }
+
+    /**
+     * change view of some items according to value of combobox
+     */
+    private void returnAction(String parString) {
+        switch (parString) {
+            case "Real Estate" -> {
+                view.getObjectNumber().setText("Serial number");
+            }
+            case "Land Parcel" -> {
+                view.getObjectNumber().setText("Parcel number");
+            }
+            case "Find by point" -> {
+                view.getCoordinatesTwoPanel().setEnabled(false);
+                for (Component cp : view.getCoordinatesTwoPanel().getComponents() ) {
+                    cp.setEnabled(false);
+                }
+            }
+            case "Find in area" -> {
+                manageCoordinateTwoPanel(true);
+            }
+        }
+    }
+
+    /**
+     * managing visibility of panel
+     */
+    private void manageCoordinateTwoPanel(Boolean setValue) {
+        view.getCoordinatesTwoPanel().setEnabled(setValue);
+        for (Component cp : view.getCoordinatesTwoPanel().getComponents() ) {
+            cp.setEnabled(setValue);
+        }
+    }
 }

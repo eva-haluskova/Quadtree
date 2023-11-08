@@ -2,7 +2,7 @@ package Data;
 
 import QuadTree.Coordinates;
 
-public abstract class CadastralObject implements Comparable<CadastralObject> {
+public abstract class CadastralObject {
 
     public enum TypeOfCadastralObject {
         LAND_PARCEL,
@@ -22,4 +22,22 @@ public abstract class CadastralObject implements Comparable<CadastralObject> {
     }
 
     public abstract TypeOfCadastralObject isInstanceOf();
+
+    public abstract String toString();
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public GPS[] getGPSCoordinates() {
+        return GPSCoordinates;
+    }
+
+    public void setGPSCoordinates(GPS[] GPSCoordinates) {
+        this.GPSCoordinates = GPSCoordinates;
+    }
 }

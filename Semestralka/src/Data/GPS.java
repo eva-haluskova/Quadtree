@@ -178,5 +178,38 @@ public class GPS {
         return 1;
     }
 
+    /**
+     * Return true when one coordinates are the same
+     * with another given coordinates, false otherwise
+     */
+    public static boolean equals(GPS parCoordinatesOne, GPS parCoordinatesTwo) {
+        return Math.abs(parCoordinatesOne.getLatitudePosition() - parCoordinatesTwo.getLatitudePosition()) < EPSILON &&
+                Math.abs(parCoordinatesOne.getLongitudePosition() - parCoordinatesTwo.getLongitudePosition()) < EPSILON &&
+                parCoordinatesOne.getLatitude() == parCoordinatesTwo.getLatitude() &&
+                parCoordinatesOne.getLongitude() == parCoordinatesTwo.getLongitude();
+    }
+
+    /**
+     * Return true when one array of coordinates are the same
+     * with another given array of coordinates, false otherwise
+     */
+    public static boolean equals(GPS[] parCoordinatesOne, GPS[] parCoordinatesTwo) {
+        boolean areSame = false;
+        for (int i = 0; i < parCoordinatesOne.length; i++) {
+            if (Math.abs(parCoordinatesOne[i].getLatitudePosition() - parCoordinatesTwo[i].getLatitudePosition()) < EPSILON &&
+                    Math.abs(parCoordinatesOne[i].getLongitudePosition() - parCoordinatesTwo[i].getLongitudePosition()) < EPSILON &&
+                    parCoordinatesOne[i].getLatitude() == parCoordinatesTwo[i].getLatitude() &&
+                    parCoordinatesOne[i].getLongitude() == parCoordinatesTwo[i].getLongitude()) {
+                areSame = true;
+            } else {
+                areSame = false;
+            }
+        }
+        System.out.println("bol som tu");
+        return areSame;
+    }
+
+
+
 
 }

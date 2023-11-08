@@ -10,7 +10,7 @@ import java.util.*;
  * data inserted in quadtree - coordinates and uniqe id - and of course
  * data itself.
  */
-public class QuadTree<T extends Comparable<T>> {
+public class QuadTree<T> {
 
     private int maxDepth;
     private int depth;
@@ -27,6 +27,16 @@ public class QuadTree<T extends Comparable<T>> {
         this.maxDepth = parMaxDepth;
         this.root = null;
         this.rangeOfTree = new Coordinates(parMinimumX,parMaximumX,parMinimumY,parMaximumY);
+        this.depth = 0;
+    }
+
+    public QuadTree(
+            Coordinates parCoordinates,
+            int parMaxDepth
+    ) {
+        this.maxDepth = parMaxDepth;
+        this.root = null;
+        this.rangeOfTree = new Coordinates(parCoordinates);
         this.depth = 0;
     }
 
@@ -158,6 +168,8 @@ public class QuadTree<T extends Comparable<T>> {
         if (!this.checkIfFitsToTree(parData.getCoordinates())) {
             return;
         }
+
+        // TODO okontrolovat ci uz tam nemam rovnaky objekt...staci pretraverzovat dole?
 
         if (this.isEmpty()) {
             Coordinates newCoordinates = new Coordinates(this.rangeOfTree);
@@ -297,15 +309,15 @@ public class QuadTree<T extends Comparable<T>> {
      * @param parCoordinates of data we want to delete
      * @param parId of data. It's needed, because in tree could by more data with same coordinates
      */
-    public void delete(Coordinates parCoordinates, int parId) {
+    public void delete(Data<T> parData) {
 
-        Result result = this.findAppropriateNodeData(parCoordinates,this.root);
+        Result result = this.findAppropriateNodeData(parData.getCoordinates(),this.root);
 
         QuadTreeNode<T> nodeWithDataToDelete = result.getSearchedNode();
         LinkedList<QuadTreeNode<T>> parents = result.getParents();
         LinkedList<Integer> indices = result.getIndices();
 
-        nodeWithDataToDelete.removeDataUsingPK(parId);
+        nodeWithDataToDelete.removeData(parData);
 
         boolean correctlyRemoved = false;
 
@@ -340,6 +352,16 @@ public class QuadTree<T extends Comparable<T>> {
                 }
             }
         }
+    }
+
+    /**
+     * If data in tree has changed key atribute - what ar coordinates, this
+     * data needs to be deleted and inserted again according to new coordinates.
+     */
+    public void edit(Data<T> parData, Coordinates newCoordinates) {
+        this.delete(parData);
+        parData.setCoordinates(newCoordinates);
+        this.insert(parData,this.root);
     }
 
     /**
@@ -384,10 +406,10 @@ public class QuadTree<T extends Comparable<T>> {
      * if coordinates are in range of tree. Outer points of tree are not accepted.
      */
     private boolean checkIfFitsToTree(Coordinates parCoordinates) {
-        return !(parCoordinates.getLowerX() <= this.rangeOfTree.getLowerX()) &&
-                !(parCoordinates.getUpperX() >= this.rangeOfTree.getUpperX()) &&
-                !(parCoordinates.getLowerY() <= this.rangeOfTree.getLowerY()) &&
-                !(parCoordinates.getUpperY() >= this.rangeOfTree.getUpperY());
+        return !(parCoordinates.getLowerX() < this.rangeOfTree.getLowerX()) &&
+                !(parCoordinates.getUpperX() > this.rangeOfTree.getUpperX()) &&
+                !(parCoordinates.getLowerY() < this.rangeOfTree.getLowerY()) &&
+                !(parCoordinates.getUpperY() > this.rangeOfTree.getUpperY());
     }
 
     private ArrayList<QuadTreeNode<T>> findAllNodesInLevel(int parLevel) {

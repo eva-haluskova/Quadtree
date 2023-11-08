@@ -18,7 +18,7 @@ import java.util.function.Supplier;
  * insert. So, this class contain abstract method generateInsert which is override
  * in every inherit class.
  */
-abstract class QuadTreeTester<T extends Comparable<T>> {
+abstract class QuadTreeTester<T> {
 
     Random random = new Random();
     protected QuadTree<T> testTree;
@@ -41,7 +41,7 @@ abstract class QuadTreeTester<T extends Comparable<T>> {
     public void generateDelete() {
 
         for (int i = 0; i < testData.size(); i++) {
-            this.testTree.delete(testData.get(i).getCoordinates(), testData.get(i).getId());
+            this.testTree.delete(testData.get(i));
         }
         if (this.testTree.isEmpty()) {
             System.out.println("Delete was success!!");
@@ -156,11 +156,7 @@ abstract class QuadTreeTester<T extends Comparable<T>> {
 
                 System.out.println("V node " + nodeNumber + " na urovni: " + currentNode.getLevel() + " sa nachadza:");
                 for (Data<T> data: currentNode.getListOfData()) {
-                    System.out.println("Miesto: " + data.getId() +
-                            " x: " + data.getCoordinates().getLowerX() +
-                            //" x2: " + data.getCoordinates().getUpperX() +
-                            " y: " + data.getCoordinates().getLowerY());
-                    //" y2: " + data.getCoordinates().getUpperY());
+                    data.toString();
                 }
                 nodeNumber++;
 

@@ -18,7 +18,16 @@ public class LandParcel extends CadastralObject {
     }
 
     @Override
-    public int compareTo(CadastralObject o) {
-        return 0;
+    public String toString() {
+        return "Type of object: Land Parcel, parcel number: " + this.parcelNumber + ", desc: " + this.getDescription();
     }
+
+    public int getParcelNumber() {
+        return parcelNumber;
+    }
+
+    public void setParcelNumber(int parcelNumber) {
+        this.parcelNumber = parcelNumber;
+    }
+
 }

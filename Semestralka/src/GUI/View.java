@@ -1,8 +1,10 @@
 package GUI;
 
+import Data.CadastralObject;
+import QuadTree.Data;
+
 import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
@@ -42,9 +44,7 @@ public class View extends JFrame {
     private JButton TreeButton;
     private JButton OtherButton;
     private JPanel IOPanel;
-    private JPanel InsertEditPanel;
-    private JPanel FindPanel;
-    private JPanel DeleteEditPanel;
+    private JPanel MainPanel;
     private JPanel TreePanel;
     private JPanel OtherPanel;
     private JLabel CoordinateOneLatitudeText;
@@ -56,7 +56,6 @@ public class View extends JFrame {
     private JPanel TypeOfObjectPanel;
     private JLabel TypeOfObject;
     private JComboBox TypeOfObjectChoose;
-    private JPanel NEObjectInfoPanel;
     private JLabel CoordinateTwoLatitudeText;
     private JComboBox CoordinateTwoLatitudeOption;
     private JTextField CoordinateTwoLatitudePosition;
@@ -75,7 +74,39 @@ public class View extends JFrame {
     private JButton ConfirmButtonDown;
     private JList ListOfOutput;
     private JScrollPane ScrollPane;
-    JList<String> outputList;
+    private JTextField TextLoadData;
+    private JTextField TextSaveData;
+    private JPanel CoordinateOneOfTreePanel;
+    private JLabel LatitudeOneTreeText;
+    private JComboBox LatitudeOneTreeOption;
+    private JTextField LatitudeOneTreePosition;
+    private JLabel LongitudeOneTreeText;
+    private JComboBox LongitudeOneTreeOption;
+    private JTextField LongitudeOneTreePosition;
+    private JPanel CoordinateTwoOfTreePanel;
+    private JLabel LatitudeTwoTreeText;
+    private JComboBox LatitudeTwoTreeOption;
+    private JTextField LatitudeTwoTreePosition;
+    private JLabel LongitudeTwoTreeText;
+    private JTextField LongitudeTwoTreePosition;
+    private JComboBox LongitudeTwoTreeOption;
+    private JPanel TypeOfTreePanel;
+    private JLabel TypeOfTreeText;
+    private JComboBox TypeOfTreeOption;
+    private JPanel DepthPanelPanel;
+    private JLabel MaxDepthText;
+    private JTextField MaxDepthNumber;
+    private JPanel AutomatizationPanel;
+    private JCheckBox AutoOptimalization;
+    private JPanel LoadDataPanel;
+    private JPanel MainTreePanel;
+    private JLabel TitleTextNTree;
+    private JLabel LoadText;
+    private JLabel TextSave;
+    private JButton LoadDataButton;
+    private JButton SaveDataButton;
+    private JButton CreateTreeButton;
+    JList<Data<? extends CadastralObject>> outputList;
     DefaultListModel outputModel;
 
     public View() {
@@ -84,10 +115,18 @@ public class View extends JFrame {
         outputModel = new DefaultListModel<>();
         outputList = new JList<>(outputModel);
         ListOfOutput.setModel(outputModel);
+
+        TreePanel.setVisible(true);
+        MainPanel.setVisible(false);
+        OtherPanel.setVisible(false);
     }
 
     /**
      * Listeners for different actions
+     */
+
+    /**
+     * Menu Button listeners
      */
     void addInsertButtonListener(ActionListener insertButtonListener) {
         InsertButton.addActionListener(insertButtonListener);
@@ -113,14 +152,34 @@ public class View extends JFrame {
         OtherButton.addActionListener(otherButtonListener);
     }
 
+    /**
+     * Main Panel Buttons
+     */
     void addMainComboBoxListener(ItemListener comboBoxListener) {
         TypeOfObjectChoose.addItemListener(comboBoxListener);
     }
 
+    void addConfirmButtonListener(ActionListener createConfirmButtonListener) {
+        ConfirmButton.addActionListener(createConfirmButtonListener);
+    }
+
+    void addConfirmButtonDownListener(ActionListener createConfirmButtonDownListener) {
+        ConfirmButtonDown.addActionListener(createConfirmButtonDownListener);
+    }
+
+    /**
+     * Tree Panel Buttons
+     */
+    void addCreateTreeButtonListener(ActionListener createTreeButtonListener) {
+        CreateTreeButton.addActionListener(createTreeButtonListener);
+    }
+
+    /**
+     * List of output listener
+     */
     void addOutputListSelectionListener(ListSelectionListener listSelectionListener) {
         ListOfOutput.addListSelectionListener(listSelectionListener);
     }
-
 
     /**
      * Getters of JPanels
@@ -129,16 +188,8 @@ public class View extends JFrame {
         return RootPanel;
     }
 
-    public JPanel getInsertEditPanel() {
-        return InsertEditPanel;
-    }
-
-    public JPanel getDeleteEditPanel() {
-        return DeleteEditPanel;
-    }
-
-    public JPanel getFindPanel() {
-        return FindPanel;
+    public JPanel getMainPanel() {
+        return MainPanel;
     }
 
     public JPanel getTreePanel() {
@@ -190,32 +241,8 @@ public class View extends JFrame {
     }
 
     /**
-     * Getters of JButtons
+     * Getters of needed Buttons
      */
-    public JButton getInsertButton() {
-        return InsertButton;
-    }
-
-    public JButton getFindButton() {
-        return FindButton;
-    }
-
-    public JButton getEditButton() {
-        return EditButton;
-    }
-
-    public JButton getDeleteButton() {
-        return DeleteButton;
-    }
-
-    public JButton getTreeButton() {
-        return TreeButton;
-    }
-
-    public JButton getOtherButton() {
-        return OtherButton;
-    }
-
     public JButton getConfirmButton() {
         return ConfirmButton;
     }
@@ -229,117 +256,175 @@ public class View extends JFrame {
     }
 
     /**
-     * Getters and setters of JTextfields
+     * Getters and setters of needed Text fields
+     */
+
+    /**
+     * Coordinates One Panel
      */
     public Integer getLatitudeOnePosition() {
-        return Integer.parseInt(LatitudeOnePosition.getText());
+        return Integer.parseInt(CoordinateOneLatitudePosition.getText());
     }
 
     public void setLatitudeOnePosition(int parLatitudeOnePosition) {
-        LatitudeOnePosition.setText(Integer.toString(parLatitudeOnePosition));
+        CoordinateOneLatitudePosition.setText(Integer.toString(parLatitudeOnePosition));
     }
 
     public Integer getLongitudeOnePosition() {
-        return Integer.parseInt(LongitudeOnePosition.getText());
+        return Integer.parseInt(CoordinateOneLongitudePosition.getText());
     }
 
     public void setLongitudeOnePosition(int parLongitudeOnePosition) {
-        LongitudeOnePosition.setText(Integer.toString(parLongitudeOnePosition));
+        CoordinateOneLongitudePosition.setText(Integer.toString(parLongitudeOnePosition));
     }
 
+    /**
+     * Coordinates Two Panel
+     */
     public Integer getLatitudeTwoPosition() {
-        return Integer.parseInt(LatitudeTwoPosition.getText());
+        return Integer.parseInt(CoordinateTwoLatitudePosition.getText());
     }
 
     public void setLatitudeTwoPosition(int parLatitudeTwoPosition) {
-        LatitudeTwoPosition.setText(Integer.toString(parLatitudeTwoPosition));
+        CoordinateTwoLatitudePosition.setText(Integer.toString(parLatitudeTwoPosition));
     }
 
     public Integer getLongitudeTwoPosition() {
-        return Integer.parseInt(LongitudeTwoPosition.getText());
+        return Integer.parseInt(CoordinateTwoLongitudePosition.getText());
     }
 
     public void setLongitudeTwoPosition(int parLongitudeTwoPosition) {
-        LongitudeTwoPosition.setText(Integer.toString(parLongitudeTwoPosition));
+        CoordinateTwoLongitudePosition.setText(Integer.toString(parLongitudeTwoPosition));
     }
 
+    /**
+     * Add object Panel
+     */
     public Integer getNumberOfObject() {
-        return Integer.parseInt(NumberOfObject.getText());
+        return Integer.parseInt(ObjectNumberText.getText());
     }
 
     public void setNumberOfObject(int parNumberOfObject) {
-        NumberOfObject.setText(Integer.toString(parNumberOfObject));
+        ObjectNumberText.setText(Integer.toString(parNumberOfObject));
     }
 
     public String getAddDescription() {
-        return AddDescription.getText();
+        return ObjectDescriptionText.getText();
     }
 
     public void setAddDescription(String parAddDescription) {
-        AddDescription.setText(parAddDescription);
+        ObjectDescriptionText.setText(parAddDescription);
     }
-
 
     public JLabel getObjectNumber() {
         return ObjectNumber;
     }
 
-//    public void setListOfOutput() {
-//
-//    }
 
-    public void addItemToOutput(String param) {
-        this.outputModel.addElement(param);
+    /**
+     * Coordinates for creating tree
+     */
+    public Integer getLatitudeOneTreePosition() {
+        return Integer.parseInt(LatitudeOneTreePosition.getText());
     }
 
-    public void addMultipleItemsToOutput(ArrayList<String> param) {
-        this.outputModel.addAll(param);
+    public Integer getLongitudeOneTreePosition() {
+        return Integer.parseInt(LongitudeOneTreePosition.getText());
     }
 
-    public void removeData(Object o) {
-        this.outputModel.removeElement(o);
+    public Integer getLatitudeTwoTreePosition() {
+        return Integer.parseInt(LatitudeTwoTreePosition.getText());
     }
 
-    public void removeAllData() {
-        this.outputModel.removeAllElements();
+    public Integer getLongitudeTwoTreePosition() {
+        return Integer.parseInt(LongitudeTwoTreePosition.getText());
     }
 
-//    public DefaultListModel<String> createScrollPanel() {
-//
-//        return listModel;
-//    }
-
-
-
+    public Integer getMaxDepthOfTree() {
+        return Integer.parseInt(MaxDepthNumber.getText());
+    }
 
     /**
      *
-     * Getters of Comboboxes
+     * Getters  and setters of Comboboxes
+     */
+
+    /**
+     * Coordinates One Panel
      */
     public String getLatitudeOneOption() {
-        return Objects.requireNonNull(LatitudeOneOption.getSelectedItem()).toString();
+        return CoordinateOneLatitudeOption.getSelectedItem().toString();
     }
 
     public String getLongitudeOneOption() {
-        return LongitudeOneOption.getSelectedItem().toString();
+        return CoordinateOneLongitudeOption.getSelectedItem().toString();
     }
 
+    public void setLatitudeOneOption() {
+
+    }
+
+    public void setLongitudeOneOption() {
+
+    }
+
+    public void setLatitudeTwoOption() {
+
+    }
+
+    public void setLongitudeTwoOption() {
+
+    }
+
+
+    /**
+     * Coordinates Two Panel
+     */
     public String getLatitudeTwoOption() {
-        return LatitudeTwoOption.getSelectedItem().toString();
+        return CoordinateTwoLatitudeOption.getSelectedItem().toString();
     }
 
     public String getLongitudeTwoOption() {
-        return LongitudeTwoOption.getSelectedItem().toString();
+        return CoordinateTwoLongitudeOption.getSelectedItem().toString();
     }
 
-    public String getMainComboBoxValue() {
+    /**
+     * Coordinates of tree
+     */
+    public String getLatitudeOneTreeOption() {
+        return LatitudeOneTreeOption.getSelectedItem().toString();
+    }
+
+    public String getLongitudeOneTreeOption() {
+        return LongitudeOneTreeOption.getSelectedItem().toString();
+    }
+
+    public String getLatitudeTwoTreeOption() {
+        return LatitudeTwoTreeOption.getSelectedItem().toString();
+    }
+
+    public String getLongitudeTwoTreeOption() {
+        return LongitudeTwoTreeOption.getSelectedItem().toString();
+    }
+
+    /**
+     * Getters for types
+     */
+    public String getTypeOfObjectValue() {
         return TypeOfObjectChoose.getSelectedItem().toString();
+    }
+
+    public String getTypeOfTreeOption() {
+        return TypeOfTreeOption.getSelectedItem().toString();
+    }
+
+    public boolean getAutoOptimalization() {
+        return AutoOptimalization.isSelected();
     }
 
     /**
      *  Setters of some needed JLables
      */
-
     public void setTypeOfObject(String text) {
         TypeOfObject.setText(text);
     }
@@ -350,13 +435,27 @@ public class View extends JFrame {
         TypeOfObjectChoose.addItem(value2);
     }
 
+    /**
+     * Work with output list
+     */
+    public void addItemToOutput(Data<? extends CadastralObject> param) {
+        this.outputModel.addElement(param);
+    }
+
+    public void addMultipleItemsToOutput(ArrayList<Data<? extends CadastralObject>> param) {
+        this.outputModel.addAll(param);
+    }
+
+    public void removeData(Data<? extends CadastralObject> o) {
+        this.outputModel.removeElement(o);
+    }
+
+    public void removeAllData() {
+        this.outputModel.removeAllElements();
+    }
+
     public JList getListOfOutput() {
         return ListOfOutput;
     }
-
-    /**
-     * Setter for JList
-     */
-
 
 }

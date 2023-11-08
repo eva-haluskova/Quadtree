@@ -2,8 +2,9 @@ package QuadTree;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.UUID;
 
-public class QuadTreeNode<T extends Comparable<T>> {
+public class QuadTreeNode<T> {
 
     private static final int CHILDREN = 4;
 
@@ -79,10 +80,9 @@ public class QuadTreeNode<T extends Comparable<T>> {
     }
 
     // pay attention if data with this id dont exist!!!
-    public Data<T> removeDataUsingPK(int parId) {
-
+    public Data<T> removeData(Data<T> parData) {
         for (int i = 0; i < this.listOfData.size(); i++) {
-            if (this.listOfData.get(i).getId() == parId) {
+            if (this.listOfData.get(i).equals(parData)) {
                 return this.listOfData.remove(i);
             }
         }

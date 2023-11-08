@@ -1,5 +1,7 @@
 package QuadTree;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.UUID;
 
 /**
@@ -16,15 +18,15 @@ import java.util.UUID;
 // TODO potrebujes zabezpecit enkapuslaciu.
 // Asi to neni koser si myslim. Akoze tie gettre...minimalne tie cooridantes
 
-public class Data<T> { //} extends Comparable<T>> {
+public class Data<T> {
     private T data;
-    //private UUID primaryKey;
-    private int id;
+    private UUID primaryKey;
     private Coordinates coordinates;
 
-    public Data(T parData, Coordinates parCoordinates, int parId) {
+    public Data(T parData, Coordinates parCoordinates, UUID parPrimaryKey) {
         this.data = parData;
         this.coordinates = parCoordinates;
+        this.primaryKey = parPrimaryKey;
     }
 
     public Data(T parData, Coordinates parCoordinates) {
@@ -40,11 +42,16 @@ public class Data<T> { //} extends Comparable<T>> {
         return this.coordinates;
     }
 
-//    public UUID getPrimaryKey() {
-//        return this.primaryKey;
-//    }
-
-    public int getId() {
-        return this.id;
+    public UUID getPrimaryKey() {
+        return this.primaryKey;
     }
+
+    public boolean equals(Data<T> parAnotherData) {
+        return this.primaryKey.equals(parAnotherData.getPrimaryKey());
+    }
+
+    public void setCoordinates(Coordinates parCoordinates) {
+        this.coordinates = parCoordinates;
+    }
+
 }

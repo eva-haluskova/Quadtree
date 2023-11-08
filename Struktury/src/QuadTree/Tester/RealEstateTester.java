@@ -3,9 +3,11 @@ package QuadTree.Tester;
 import QuadTree.Coordinates;
 import QuadTree.QuadTree;
 import Data.RealEstate;
+import Data.GPS;
 import QuadTree.Data;
 
 import java.util.Random;
+import java.util.UUID;
 
 public class RealEstateTester extends QuadTreeTester {
 
@@ -33,8 +35,11 @@ public class RealEstateTester extends QuadTreeTester {
             double y2 = y1 + widthOfPolygon;
 
             Coordinates coors = new Coordinates(x1, x2, y1, y2);
-            RealEstate newObject = new RealEstate("RealEstate number3",i);
-            Data<RealEstate> data = new Data(newObject, coors, i);
+            GPS one = new GPS(GPS.Latitude.NORTH,x1,GPS.Longitude.EAST,40);
+            GPS two = new GPS(GPS.Latitude.NORTH,x1,GPS.Longitude.WEST,30);
+            GPS[] par = {one, two};
+            RealEstate newObject = new RealEstate("RealEstate number " + i,par,i);
+            Data<RealEstate> data = new Data(newObject, coors, UUID.randomUUID());
 
             this.testTree.insert(data, testTree.getRoot());
             super.testData.add(data);
