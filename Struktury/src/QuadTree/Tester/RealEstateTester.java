@@ -18,8 +18,8 @@ public class RealEstateTester extends QuadTreeTester {
 
 
     @Override
-    public void generateInsert(int parNumber, Random random, Coordinates parCoordinatesForSearch) {
-        int widthOfPolygon = 10;
+    public void generateInsert(int parNumber, double parSizeOfObject,Random random, Coordinates parCoordinatesForSearch) {
+        double widthOfPolygon = parSizeOfObject;
         dataToFindInArea.clear();
         dataToFindOfPoint.clear();
         testData.clear();

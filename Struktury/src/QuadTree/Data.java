@@ -29,10 +29,6 @@ public class Data<T> {
         this.primaryKey = parPrimaryKey;
     }
 
-    public Data(T parData, Coordinates parCoordinates) {
-        this.data = parData;
-        this.coordinates = parCoordinates;
-    }
 
     public T getData() {
         return this.data;
@@ -52,6 +48,14 @@ public class Data<T> {
 
     public void setCoordinates(Coordinates parCoordinates) {
         this.coordinates = parCoordinates;
+    }
+
+    public String toString() {
+        return "Object with pk: " + this.primaryKey + " i know its terrifying...and it has coordinates:" +
+                " x1: " + getCoordinates().getLowerX() +
+                "y1: " + getCoordinates().getLowerY() +
+                "x2: " + getCoordinates().getUpperX() +
+                "y2: "+ getCoordinates().getUpperY();
     }
 
 }

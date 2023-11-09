@@ -8,7 +8,6 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class View extends JFrame {
 
@@ -106,6 +105,9 @@ public class View extends JFrame {
     private JButton LoadDataButton;
     private JButton SaveDataButton;
     private JButton CreateTreeButton;
+    private JButton GenerateDataButton;
+    private JTextField NumberOfObjects;
+    private JTextField SizeOfGenerateObjects;
     JList<Data<? extends CadastralObject>> outputList;
     DefaultListModel outputModel;
 
@@ -115,6 +117,7 @@ public class View extends JFrame {
         outputModel = new DefaultListModel<>();
         outputList = new JList<>(outputModel);
         ListOfOutput.setModel(outputModel);
+        outputList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         TreePanel.setVisible(true);
         MainPanel.setVisible(false);
@@ -152,6 +155,10 @@ public class View extends JFrame {
         OtherButton.addActionListener(otherButtonListener);
     }
 
+    void addGenerateDataButtonListener(ActionListener generateButtonListener) {
+        GenerateDataButton.addActionListener(generateButtonListener);
+    }
+
     /**
      * Main Panel Buttons
      */
@@ -178,7 +185,7 @@ public class View extends JFrame {
      * List of output listener
      */
     void addOutputListSelectionListener(ListSelectionListener listSelectionListener) {
-        ListOfOutput.addListSelectionListener(listSelectionListener);
+        //ListOfOutput.addListSelectionListener(listSelectionListener);
     }
 
     /**
@@ -295,6 +302,22 @@ public class View extends JFrame {
 
     public void setLongitudeTwoPosition(int parLongitudeTwoPosition) {
         CoordinateTwoLongitudePosition.setText(Integer.toString(parLongitudeTwoPosition));
+    }
+
+    public JTextField getNumberOfObjects() {
+        return NumberOfObjects;
+    }
+
+    public Integer getNumberOfGeneratedObjects() {
+        return Integer.parseInt(NumberOfObjects.getText());
+    }
+
+    public JTextField getSizeOfGenerateObjects() {
+        return SizeOfGenerateObjects;
+    }
+
+    public Integer getSizeOfGeneratedObjectsNumber() {
+        return Integer.parseInt((SizeOfGenerateObjects.getText()));
     }
 
     /**
@@ -429,10 +452,13 @@ public class View extends JFrame {
         TypeOfObject.setText(text);
     }
 
-    public void setTypeOfObjectChoose(String value1, String value2) {
+    public void setTypeOfObjectChoose(String value1, String value2, String both) {
         TypeOfObjectChoose.removeAllItems();
         TypeOfObjectChoose.addItem(value1);
         TypeOfObjectChoose.addItem(value2);
+        if (both != null) {
+            TypeOfObjectChoose.addItem(both);
+        }
     }
 
     /**
@@ -447,6 +473,7 @@ public class View extends JFrame {
     }
 
     public void removeData(Data<? extends CadastralObject> o) {
+        System.out.println("preco");
         this.outputModel.removeElement(o);
     }
 
@@ -458,4 +485,12 @@ public class View extends JFrame {
         return ListOfOutput;
     }
 
+    public void updateList(ArrayList<Data<? extends CadastralObject>> param) {
+        this.outputModel.removeAllElements();
+        this.outputModel.addAll(param);
+    }
+
+    public JList<Data<? extends CadastralObject>> getOutputListOfObj() {
+        return this.outputList;
+    }
 }

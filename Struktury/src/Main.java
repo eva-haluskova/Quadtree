@@ -2,23 +2,277 @@ import Data.CadastralObject;
 import Data.GPS;
 import Data.RealEstate;
 import Data.LandParcel;
-
+import Data.MapCoordinates;
+import MainLogic.Cadaster;
 import MainLogic.CadastralObjectGenerator;
 import MainLogic.CadastralObjectGenerator.*;
 import QuadTree.Data;
+import QuadTree.Tester.CadastralObjectTester;
 import QuadTree.Tester.TesterForPlace;
 import QuadTree.Place;
 import QuadTree.Tester.RealEstateTester;
 import QuadTree.Tester.LandParcelTester;
 import QuadTree.QuadTree;
 import QuadTree.Coordinates;
+import QuadTree.ReadWriterOfTree;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.UUID;
+
+
+
 
 public class Main {
 
     public static void main(String[] args) {
+
+//        int maxDepth = 5;
+//        double sizeOfObjets = 10;
+//        int numberOfObjects = 100;
+//        int width = 100;
+//        int height = 100;
+//        Random random = new Random();
+//        Coordinates coorsOfTree = new Coordinates(0,20,0,20);
+//
+//        QuadTree quadTree = new QuadTree(coorsOfTree, maxDepth);
+//        TesterForPlace treeTester = new TesterForPlace(quadTree);
+//
+//
+//        Coordinates coorsForAreaSearch = new Coordinates(15,15,18,18);
+//        Coordinates coorsForSimpleSearch = new Coordinates(30,40);
+//
+//        // ---- generate insert ----
+//        treeTester.generateInsert(numberOfObjects,sizeOfObjets,random,coorsForAreaSearch);
+//        // ---- generate simple find ----
+//        treeTester.generateSimpleFind(coorsForAreaSearch);
+
+
+//
+//        GPS gpsOne = new GPS(GPS.Latitude.NORTH, 100,GPS.Longitude.WEST,100);
+//        GPS gpsTwo = new GPS(GPS.Latitude.SOUTH, 100,GPS.Longitude.EAST,100);
+//        GPS[] listOfRootGPS = {gpsOne,gpsTwo};
+//        MapCoordinates testMap = new MapCoordinates(listOfRootGPS);
+//        System.out.println("root");
+//        System.out.println("lat: " + listOfRootGPS[0].getLatitude() +
+//                ", pos: " + listOfRootGPS[0].getLatitudePosition() +
+//                ", long: " + listOfRootGPS[0].getLongitude() +
+//                ", pos: " + listOfRootGPS[0].getLongitudePosition());
+//        System.out.println("lat: " + listOfRootGPS[1].getLatitude() +
+//                ", pos: " + listOfRootGPS[1].getLatitudePosition() +
+//                ", long: " + listOfRootGPS[1].getLongitude() +
+//                ", pos: " + listOfRootGPS[1].getLongitudePosition());
+//
+//
+//
+//        Coordinates coors = testMap.getCoordinatesOfRoot();
+//        System.out.println("  x1 = " + coors.getLowerX() +
+//                " ,x2 = " + coors.getUpperX() +
+//                " ,y1 = " + coors.getLowerY() +
+//                " ,y2 = " + coors.getUpperY());
+//
+//        GPS gpsOne1 = new GPS(GPS.Latitude.NORTH, 80,GPS.Longitude.WEST,80);
+//        GPS gpsTwo1 = new GPS(GPS.Latitude.SOUTH, 80,GPS.Longitude.EAST,80);
+//        GPS[] o = {gpsOne1,gpsTwo1};
+//
+//        System.out.println("map");
+//        Coordinates coors1 = testMap.getCoordinatesValue(o);
+//        System.out.println("  x1 = " + coors1.getLowerX() +
+//                " ,y1 = " + coors1.getLowerY() +
+//                " ,x2 = " + coors1.getUpperX() +
+//                " ,y2 = " + coors1.getUpperY());
+//
+//        GPS[] gpss = testMap.getGPSValue(coors1);
+//        System.out.println("lat: " + gpss[0].getLatitude() +
+//                ", pos: " + gpss[0].getLatitudePosition() +
+//                ", long: " + gpss[0].getLongitude() +
+//                ", pos: " + gpss[0].getLongitudePosition());
+//        System.out.println("lat: " + gpss[1].getLatitude() +
+//                ", pos: " + gpss[1].getLatitudePosition() +
+//                ", long: " + gpss[1].getLongitude() +
+//                ", pos: " + gpss[1].getLongitudePosition());
+//
+
+
+//        // ---- generate find ----
+//        treeTester.generateFind(coorsForAreaSearch);
+//        // -- generate delete ----
+//        treeTester.generateDelete();
+
+
+//
+//        for (int j = 0; j < 1; j++) {
+//            int pocetStromou = 100;
+//            double premHlbka = 0;
+//            for (int i = 0; i < 1; i++) {
+//                QuadTree<Place> strom = new QuadTree(0, width, 0, height, maxDepth);
+//                TesterForPlace tester = new TesterForPlace(strom);
+//                strom.insert(new Data<Place>(new Place("hah"),new Coordinates(1,1,1,1), UUID.randomUUID()));
+//                strom.insert(new Data<Place>(new Place("hah"),new Coordinates(99,99,99,99), UUID.randomUUID()));
+//                strom.insert(new Data<Place>(new Place("hah"),new Coordinates(99,99,1,1), UUID.randomUUID()));
+//                strom.insert(new Data<Place>(new Place("hah"),new Coordinates(1,1,99,99), UUID.randomUUID()));
+//                strom.insert(new Data<Place>(new Place("hah"),new Coordinates(1,1,55,55), UUID.randomUUID()));
+//               // System.out.println(strom.health());
+//
+//
+//                //tester.generateInsert(numberOfObjects, sizeOfObjets, random, coorsForAreaSearch);
+//                //System.out.println(strom.getDepth());
+//                System.out.println("Health of tree is: " + strom.health() + " co je isto spatne :)");
+//                premHlbka += strom.getDepth();
+//            }
+//            System.out.println("pri velkosti objetkov: " + sizeOfObjets + " je priem hlbka " +premHlbka/pocetStromou);
+//            sizeOfObjets +=2;
+       // }
+
+//        ReadWriterOfTree workWitFile = new ReadWriterOfTree(quadTree);
+//        workWitFile.readData("hola.txt");
+
+
+
+
+
+/*
+        int maxDepth = 5;
+        double sizeOfObjets = 10;
+        int numberOfObjects = 100;
+        int width = 100;
+        int height = 100;
+        Random random = new Random();
+
+        GPS rlto = new GPS(GPS.Latitude.NORTH,50, GPS.Longitude.WEST,50);
+        GPS rltt = new GPS(GPS.Latitude.SOUTH,50,GPS.Longitude.EAST,50);
+        GPS[] tree = {rlto,rltt};
+
+        GPS lpto = new GPS(GPS.Latitude.NORTH,90, GPS.Longitude.WEST,60);
+        GPS lptt = new GPS(GPS.Latitude.SOUTH,60,GPS.Longitude.EAST,80);
+        GPS[] zero = {lpto,lptt};
+
+        GPS oneone = new GPS(GPS.Latitude.NORTH,20, GPS.Longitude.WEST,30);
+        GPS onetwo = new GPS(GPS.Latitude.SOUTH,40,GPS.Longitude.EAST,10);
+        GPS[] one = {oneone,onetwo};
+
+        GPS twoone = new GPS(GPS.Latitude.NORTH,30, GPS.Longitude.WEST,10);
+        GPS towtwo = new GPS(GPS.Latitude.SOUTH,10,GPS.Longitude.EAST,10);
+        GPS[] two = {twoone,towtwo};
+
+        GPS threeone = new GPS(GPS.Latitude.NORTH,40, GPS.Longitude.WEST,10);
+        GPS threetwo = new GPS(GPS.Latitude.SOUTH,30,GPS.Longitude.EAST,20);
+        GPS[] three = {threeone,threetwo};
+
+        GPS fourone = new GPS(GPS.Latitude.NORTH,20, GPS.Longitude.WEST,10);
+        GPS fourtwo = new GPS(GPS.Latitude.SOUTH,50,GPS.Longitude.EAST,5);
+        GPS[] four = {fourone,fourtwo};
+
+        Cadaster cadaster = new Cadaster();
+        cadaster.createLandParcelTree(tree,maxDepth);
+        cadaster.createRealEstateTree(tree,maxDepth);
+        cadaster.generateObjects(GenerateOption.LAND_PARCEL,numberOfObjects, sizeOfObjets,tree);
+        cadaster.generateObjects(GenerateOption.REAL_ESTATE,numberOfObjects,60,tree);
+        cadaster.generateObjects(GenerateOption.BOTH,numberOfObjects,sizeOfObjets-1,tree);
+
+        ArrayList<Data<? extends CadastralObject>> findedData = cadaster.findInArea(tree);
+        if (findedData.size() == 3 * numberOfObjects) {
+            System.out.println("findlo to dobre");
+        }
+
+ */
+//
+//        ArrayList<Data<? extends CadastralObject>> findedData2 = cadaster.findInArea(four);
+//        for (int i = 0; i < findedData2.size(); i++) {
+//            System.out.println(findedData2.get(i).getData());
+//        }
+//        int n = findedData.size();
+//        int m = findedData2.size();
+//        for (int i = 0; i < findedData2.size(); i++) {
+//            if (findedData2.get(i).getData().isInstanceOf().equals(CadastralObject.TypeOfCadastralObject.LAND_PARCEL)) {
+//                cadaster.deleteLandParcel((Data<LandParcel>) findedData2.get(i));
+//            } else {
+//                cadaster.deleteRealEstate((Data<RealEstate>) findedData2.get(i));
+//            }
+//        }
+//
+//        ArrayList<Data<? extends CadastralObject>> findedData3 = cadaster.findInArea(tree);
+//        if (findedData3.size() == (n - m)) {
+//            System.out.println("dobre to deletlo");
+//        }
+//
+//
+//        Data<? extends CadastralObject> datoToEdit1 = findedData3.get(4);
+//        Data<? extends CadastralObject> datoToEdit2 = findedData3.get(7);
+//        System.out.println("Dato na edit jedna: " + datoToEdit1.getData().toString());
+//        System.out.println("Dato na edit dva: " + datoToEdit2.getData().toString());
+//
+//        if (datoToEdit1.getData().isInstanceOf().equals(CadastralObject.TypeOfCadastralObject.LAND_PARCEL)) {
+//            cadaster.editLandParcelData((Data<LandParcel>) datoToEdit1,40, two, "novy popisok");
+//        } else {
+//            cadaster.editRealEstateData((Data<RealEstate>) datoToEdit1,50,two,datoToEdit1.getData().getDescription());
+//        }
+//
+//
+//        if (datoToEdit2.getData().isInstanceOf().equals(CadastralObject.TypeOfCadastralObject.LAND_PARCEL)) {
+//            cadaster.editLandParcelData((Data<LandParcel>) datoToEdit2,40, datoToEdit2.getData().getGPSCoordinates(), "novy popisok");
+//        } else {
+//            cadaster.editRealEstateData((Data<RealEstate>) datoToEdit2,80,datoToEdit2.getData().getGPSCoordinates(),"novy salal HUU");
+//        }
+//
+//        System.out.println("upravene dato jedna: " + datoToEdit1.getData().toString());
+//        System.out.println("upravene dato dva: " + datoToEdit2.getData().toString());
+
+
+
+
+       int distinctValues = 6;
+//            //public List<Integer> generateList(int distinctValues) {
+//                int length = (int) Math.pow(2, distinctValues - 1) + 1;
+//                List<Integer> result = new ArrayList<>();
+//
+//                int value = 1;
+//                for (int i = 0; i < length; i++) {
+//                    result.add(value);
+//                    value++;
+//                    if (value > distinctValues) {
+//                        value = 1; // Reset to 1 when it exceeds the distinct values
+//                    }
+//                }
+//
+//              //  return result;
+//            //}
+//        int length = (int) Math.pow(2, distinctValues - 1) + 1;
+//        List<Integer> result = new ArrayList<>();
+//
+//        int current = 1;
+//        for (int i = 0; i < length; i++) {
+//            result.add(current);
+//            if (i % 2 == 0) {
+//                current += 5;
+//            } else {
+//                current -= 3;
+//            }
+//        }
+        int length = (int) Math.pow(2, distinctValues - 1) + 1;
+        List<Integer> result = new ArrayList<>();
+
+        for (int i = 0; i < length; i++) {
+
+                int index = i;
+                int value = 1;
+                while (index > 0) {
+                    value++;
+                    index /= 2;
+                }
+            result.add(value);
+        }
+
+
+
+            // int distinctValues = 6;
+            // List<Integer> generatedList = generateList(distinctValues);
+
+            System.out.println("Generated List: " + result);
+
 
 
 
@@ -107,12 +361,12 @@ public class Main {
 // TODO gui delete all
 // TODO finvoavnie nemas dobre...teda spon to co potrebujes, ze bodov to naide vsetko cez to sa to kryje
 // TODO upratat pak pracu s coordniates v quadTree a quadNode
-
-
-
-
-
-
+// TODO overload insert
+// TODO pomenit arraylisty
+// todo cooridnates equals bigger tnat least poresit!!!
+// todo mapovanie jednej suradnice do coordinates
+// todo contins all neviem ci je koser
+// todo ten edit a delete si pories
 
 //int velkost = 100;
 //    Random random = new Random();

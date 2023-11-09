@@ -25,9 +25,9 @@ public class TesterForPlace extends QuadTreeTester {
      * specific creating of Place instances.
      */
     @Override
-    public void generateInsert(int parNumber, Random random, Coordinates parCoordinatesForSearch) {
+    public void generateInsert(int parNumber,double parSizeOfObject, Random random, Coordinates parCoordinatesForSearch) {
 
-        int widthOfPolygon = 10;
+        double widthOfPolygon = parSizeOfObject;
         dataToFindInArea.clear();
         dataToFindOfPoint.clear();
         testData.clear();
@@ -47,6 +47,7 @@ public class TesterForPlace extends QuadTreeTester {
             Place newObject = new Place("Miesto" + i);
             Data<Place> data = new Data(newObject, coors, UUID.randomUUID());
 
+            System.out.println(x1 + " " + y1 + " " + x2 + " " + y2);
             this.testTree.insert(data, testTree.getRoot());
             super.testData.add(data);
 
@@ -54,11 +55,11 @@ public class TesterForPlace extends QuadTreeTester {
                 dataToFindInArea.add(data);
             }
 
-            if (parCoordinatesForSearch.equals(data.getCoordinates())) {
+            if (super.belongToArea(data.getCoordinates(),parCoordinatesForSearch)) {
                 dataToFindOfPoint.add(data);
             }
         }
 
-        System.out.println("Insert of place is done!");
+        //System.out.println("Insert of place is done!");
     }
 }

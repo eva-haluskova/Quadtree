@@ -33,7 +33,7 @@ abstract class QuadTreeTester<T> {
     /**
      * Abstract class in which is needed to generate specific data in inherit class.
      */
-    public abstract void generateInsert(int parNumber, Random random, Coordinates parCoordinatesForSearch);
+    public abstract void generateInsert(int parNumber,double parSizeOfObject, Random random, Coordinates parCoordinatesForSearch);
 
     /**
      * Method tries to delete all data which was inserted into tree.
@@ -62,6 +62,10 @@ abstract class QuadTreeTester<T> {
         } else {
             System.out.println("Find failed! :(");
         }
+//        for (int i = 0; i < findData.size(); i++) {
+//            System.out.println(findData.get(i).toString());
+//        }
+
         return findData;
     }
 
@@ -78,8 +82,7 @@ abstract class QuadTreeTester<T> {
             System.out.println("Simple find failed! :(");
         }
         for (int i = 0; i < findData.size(); i++) {
-            System.out.println(findData.get(i));
-
+            System.out.println(findData.get(i).toString());
         }
         return findData;
     }
@@ -90,11 +93,11 @@ abstract class QuadTreeTester<T> {
      * for testing differnet seeds of numbers and test where is problem
      * in testing methods.
      */
-    public void testOfSeed(int parNumberOfSeeds, int parCountOfReplications, Coordinates parCoordinatesForSearch) {
+    public void testOfSeed(int parNumberOfSeeds, int parCountOfReplications, Coordinates parCoordinatesForSearch, double sizeOfObject) {
         for (int i = 0; i < parNumberOfSeeds; i++) {
             this.random.setSeed(i);
             System.out.println("-----TEST OF SEED " + i);
-            this.generateInsert(parCountOfReplications,this.random,parCoordinatesForSearch);
+            this.generateInsert(parCountOfReplications,sizeOfObject,this.random,parCoordinatesForSearch);
 
             System.out.println("Maximalna hlbka stromu: " + testTree.getMaxDepth());
             System.out.println("Aktualna hlbka stromu: " + testTree.getDepth());
@@ -109,16 +112,16 @@ abstract class QuadTreeTester<T> {
      * After find out in which seed program cause error, this method could be used for
      * more specific debugging of values of specific seed.
      */
-    public void testForSeed(int parSeed, int parCountOfReplications, Coordinates parCoordinatesForSearch) {
+    public void testForSeed(int parSeed, int parCountOfReplications, Coordinates parCoordinatesForSearch, double sizeOfObject) {
 
         this.random.setSeed(parSeed);
         System.out.println("-----TEST OF SEED " + parSeed);
-        this.generateInsert(parCountOfReplications,this.random,parCoordinatesForSearch);
+        this.generateInsert(parCountOfReplications,sizeOfObject,this.random,parCoordinatesForSearch);
         this.generateDelete();
     }
 
-    public void testOfChangeOfDepth(int parNewDepth,int parNumber, Coordinates parCoordinatesOfSearch) {
-        this.generateInsert(parNumber,this.random,parCoordinatesOfSearch);
+    public void testOfChangeOfDepth(int parNewDepth,int parNumber, Coordinates parCoordinatesOfSearch, double sizeOfObject) {
+        this.generateInsert(parNumber,sizeOfObject,this.random,parCoordinatesOfSearch);
 
         System.out.println("maximalna hlbka: " + testTree.getMaxDepth());
         System.out.println("aktualna hlbka: " + testTree.getDepth());

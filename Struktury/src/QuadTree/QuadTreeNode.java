@@ -51,6 +51,10 @@ public class QuadTreeNode<T> {
         return false;
     }
 
+    public int numberOfEmptySons() {
+        return CHILDREN - this.getCountOfChildren();
+    }
+
     /**
      * return true if in data list are some data with same coordiantes as parameter
      */
@@ -249,6 +253,13 @@ public class QuadTreeNode<T> {
                 parCoordinatesOfArea.getUpperX() >= parCoordinatesOfData.getUpperX() &&
                 parCoordinatesOfArea.getLowerY() <= parCoordinatesOfData.getLowerY() &&
                 parCoordinatesOfArea.getUpperY() >= parCoordinatesOfData.getUpperY());
+    }
+
+    public boolean coordinatesAreIntoNote(Coordinates parCoordinatesOfData, Coordinates parCoordinatesOfSearchPoint) {
+        return(parCoordinatesOfData.getLowerX() <= parCoordinatesOfSearchPoint.getLowerX() &&
+                parCoordinatesOfData.getUpperX() >= parCoordinatesOfSearchPoint.getUpperX() &&
+                parCoordinatesOfData.getLowerY() <= parCoordinatesOfSearchPoint.getLowerY() &&
+                parCoordinatesOfData.getUpperY() >= parCoordinatesOfSearchPoint.getUpperY());
     }
 
     public ArrayList<Data<T>> getAllAppropriateData(Coordinates parCoordinates) {

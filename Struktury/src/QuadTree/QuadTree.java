@@ -2,6 +2,7 @@ package QuadTree;
 
 import jdk.jshell.spi.ExecutionControl;
 
+import java.awt.*;
 import java.util.*;
 
 /**
@@ -17,6 +18,10 @@ public class QuadTree<T> {
     private Coordinates rangeOfTree;
     private QuadTreeNode<T> root;
 
+    private Boolean optimalizationOn;
+    private double scaleParameter;
+    private int numberOfItems;
+
     public QuadTree(
             double parMinimumX,
             double parMaximumX,
@@ -28,6 +33,9 @@ public class QuadTree<T> {
         this.root = null;
         this.rangeOfTree = new Coordinates(parMinimumX,parMaximumX,parMinimumY,parMaximumY);
         this.depth = 0;
+
+        this.optimalizationOn = false;
+        this.scaleParameter = 0;
     }
 
     public QuadTree(
@@ -38,6 +46,7 @@ public class QuadTree<T> {
         this.root = null;
         this.rangeOfTree = new Coordinates(parCoordinates);
         this.depth = 0;
+        this.numberOfItems = 0;
     }
 
     /**
@@ -61,6 +70,10 @@ public class QuadTree<T> {
 
     public Coordinates getRangeOfTree() {
         return this.rangeOfTree;
+    }
+
+    public void setScaleParameter(double parScale) {
+        this.scaleParameter = parScale;
     }
 
     /**
@@ -99,6 +112,17 @@ public class QuadTree<T> {
             return this.indices;
         }
     }
+
+    public double health() {
+        double weightDepth = 1;
+        double weightNullptr = 1.25;
+        double healthOfDepth = this.getHealthOfDepth();
+        double healthOfNullptr = this.getHealthOfNullPtr();
+        System.out.println("h: " + healthOfNullptr);
+        double health = (weightDepth * healthOfDepth + weightNullptr * healthOfNullptr)/ (weightDepth + weightNullptr);
+        return health;
+    }
+
 
     /**
      * Method will find appropriate node for next precessing.
@@ -161,6 +185,9 @@ public class QuadTree<T> {
         return new Result(current,parents,indices);
     }
 
+    public void insert(Data<T> parData) {
+        insert(parData, this.getRoot());
+    }
     /**
      * Method ensure inserting data into tree.
      */
@@ -169,6 +196,7 @@ public class QuadTree<T> {
             return;
         }
 
+        this.numberOfItems ++;
         // TODO okontrolovat ci uz tam nemam rovnaky objekt...staci pretraverzovat dole?
 
         if (this.isEmpty()) {
@@ -229,6 +257,7 @@ public class QuadTree<T> {
                 }
             }
         }
+        System.out.println("data ar inserted!!!");
     }
 
     /**
@@ -261,13 +290,40 @@ public class QuadTree<T> {
      * Return all data which have given coordinates
      * @param parCoordinates coordinates of data which we want to find
      */
+//    public ArrayList<Data<T>> find(Coordinates parCoordinates) {
+//        if (!this.checkIfFitsToTree(parCoordinates)) {
+//            return null;
+//        }
+//        QuadTreeNode<T> searchedNode = this.findAppropriateNode(parCoordinates, this.root);
+//        return searchedNode.getDataWithSameCoordinates(parCoordinates);
+//    }
     public ArrayList<Data<T>> find(Coordinates parCoordinates) {
         if (!this.checkIfFitsToTree(parCoordinates)) {
             return null;
         }
-        QuadTreeNode<T> searchedNode = this.findAppropriateNode(parCoordinates, this.root);
-        return searchedNode.getDataWithSameCoordinates(parCoordinates);
+        Stack<QuadTreeNode<T>> nodesToProcess = new Stack<>();
+        nodesToProcess.push(this.root);
+        ArrayList<Data<T>> listToReturn = new ArrayList<>();
+
+        while (!nodesToProcess.isEmpty()) {
+            QuadTreeNode<T> current = nodesToProcess.pop();
+            for (int i = 0; i < current.getListOfData().size(); i++) {
+                if (current.coordinatesAreIntoNote(current.getListOfData().get(i).getCoordinates(),parCoordinates)) {
+                    listToReturn.add(current.getListOfData().get(i));
+                }
+
+            }
+            if (!current.isLeaf()) {
+                for (QuadTreeNode<T> child: current.getChildren()) {
+                    if (child != null) {
+                        nodesToProcess.push(child);
+                    }
+                }
+            }
+        }
+        return listToReturn;
     }
+
 
     /**
      * Returns all data in given area
@@ -444,6 +500,116 @@ public class QuadTree<T> {
             }
         }
         return nodesToReturn;
+    }
+
+    public void tryToOptimalize() {
+        // to ze sa nezmenia suradnice v DATU nevadi, to bude take inkognito iba...
+
+        // 1. najskor si vyberem vsetky data zo stromu
+        // 2. idem postupne vkladat data - urcenou mierkou im zmenim suradnicu okolo strdu
+        // 3. vlozim dato
+        this.optimalizationOn = true;
+
+        this.scaleParameter = this.health();
+
+        ArrayList<Data<T>> dataToInsert = this.getAllDataInSubTree(this.root);
+        this.root = null;
+        for (int i = 0; i < dataToInsert.size(); i++) {
+            Data<T> data = dataToInsert.get(i);
+            data.getCoordinates().changeCoordinatesSize(this.scaleParameter);
+            this.insert(data, this.root);
+        }
+
+    }
+
+    private double optimalDepth() {
+        double logOne = Math.log(Math.sqrt(this.numberOfItems));
+        double logTwo = Math.log(2);
+        return (logOne/logTwo) + 1; // ;)
+    }
+
+    private double optimalNumberOfNull() {
+        if ((this.numberOfItems % 3) == 0) {
+            return 1;
+        } else if ((this.numberOfItems % 3) == 1) {
+            return 0;
+        } else if ((this.numberOfItems % 3) == 2) {
+            return 2;
+        }
+        return -1;
+    }
+
+    private int getNumberOfNullPointer() {
+        int count = 0;
+
+        Stack<QuadTreeNode<T>> nodesToProcess = new Stack<>();
+        nodesToProcess.push(this.root);
+
+        while (!nodesToProcess.isEmpty()) {
+
+            QuadTreeNode<T> current = nodesToProcess.pop();
+            if (!current.isLeaf()) {
+                count += current.numberOfEmptySons();
+            }
+            if (!current.isLeaf()) {
+                for (QuadTreeNode<T> child: current.getChildren()) {
+                    if (child != null) {
+                        nodesToProcess.push(child);
+                    }
+                }
+            }
+        }
+        return count;
+    }
+
+    private double getHealthOfDepth() {
+        double pomLogOne = Math.log(this.optimalDepth());
+        double pomLogTwo = Math.log(this.depth);
+        double healthOfDepth = (pomLogOne / pomLogTwo); // * 100
+        return healthOfDepth;
+    }
+
+    private double getHealthOfNullPtr() {
+        double pomLogThree = Math.log(2 - this.optimalNumberOfNull() + getNumberOfNullPointer());
+        double pomLogFour = Math.log(2);
+        double healthOfNullptr = (pomLogFour / pomLogThree);
+        return healthOfNullptr;
+    }
+
+    private ArrayList<Coordinates> returnListOfBoundary(int level) {
+
+        ArrayList<Coordinates> result = new ArrayList<>();
+        double lowerx = this.rangeOfTree.getLowerX();
+        double upperx = this.rangeOfTree.getUpperX();
+        double range = (lowerx + upperx)/2;
+
+        if (level == 1) {
+            result.add(new Coordinates(rangeOfTree));
+           return result;
+        }
+
+        int denominator = 2;
+        int sqare = 1;
+
+        int count = (int)Math.pow(denominator,level-1) + 1;
+        double[][] listOfBoundry = new double[level][count];
+
+
+        for (int i = 2; i < level; i++) {
+            double period = Math.pow(denominator,sqare); // perioda na urovni je 2 na ureoven minus prvu
+            for (int j = 1; j < period; j++) {
+                int index = (int) ((int) (count -1)/period);
+                double v = listOfBoundry[i][index];
+
+                // mam 6 urovni to znamena pole ma dlsku 33. ja chcem teraz count - 1 / 2 -> na to miesto zapisujem
+                // na tretej urovni chcem count - 1 / 3 -> to je index a zaroven ho prechadzam nasobkami az do konca
+                // na stvrtej urovni chcem count - 1 / 4
+            }
+
+
+            sqare++;
+        }
+        return null;
     }
 
 }

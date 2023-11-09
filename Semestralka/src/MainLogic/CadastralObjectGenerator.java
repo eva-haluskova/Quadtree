@@ -22,7 +22,7 @@ public class CadastralObjectGenerator {
     }
 
     public ArrayList<CadastralObject> generateObjects(
-            GenerateOption parType, int parCount, int parSizeOfObject, GPS[] parRangeOfGPS
+            GenerateOption parType, int parCount, double parSizeOfObject, GPS[] parRangeOfGPS
     ) {
         ArrayList<CadastralObject> listToReturn = new ArrayList<>();
         if (parType.equals(GenerateOption.LAND_PARCEL)) {
@@ -55,7 +55,7 @@ public class CadastralObjectGenerator {
         return listToReturn;
     }
 
-    private GPS[] returnObject(int parSizeOfObject, GPS[] parRangeOfGPS) {
+    private GPS[] returnObject(double parSizeOfObject, GPS[] parRangeOfGPS) {
         MapCoordinates mp = new MapCoordinates(parRangeOfGPS);
         Coordinates coors = mp.getCoordinatesOfRoot();
 

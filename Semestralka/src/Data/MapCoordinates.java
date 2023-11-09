@@ -48,6 +48,21 @@ public class MapCoordinates {
       return new Coordinates(posX,posX + width,posY,posY + height);
    }
 
+   public Coordinates getCoordinatesValue(GPS parGPSValues) {
+
+      double posX, posY;
+
+      double[] hWBetweenRootAndPoint;
+
+      hWBetweenRootAndPoint = this.getWidthHeightBetweenTwoGPS(parGPSValues, this.gpsOfRoot[0]);
+
+      posX = this.coordinatesOfRoot.getLowerX() + hWBetweenRootAndPoint[0];
+      posY = this.coordinatesOfRoot.getLowerY() + hWBetweenRootAndPoint[1];
+
+      return new Coordinates(posX,posX,posY,posY);
+   }
+
+
    public Coordinates getCoordinatesValueOfRoot(GPS[] parGPSValues) {
       GPS parGPSOne = parGPSValues[0];
       GPS parGPSTwo = parGPSValues[1];

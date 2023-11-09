@@ -109,4 +109,45 @@ public class Coordinates {
                 Math.abs(this.lowerY - parCoordinates.getLowerY()) < EPSILON &&
                 Math.abs(this.upperY - parCoordinates.getUpperY()) < EPSILON;
     }
+
+    /**
+     * Changes coorinates accoring to scale parameter.
+     * @param parScale - pay attionton! If you want to minimize cooridnates, you need to
+     *                 put here 1/parScale param, if you want to maximize, you put parScale
+     */
+    public void changeCoordinatesSize(double parScale) {
+        double lowerX = this.lowerX;
+        double lowerY = this.lowerY;
+        double upperX = this.upperX;
+        double upperY = this.upperY;
+
+        double centreX = (upperX + lowerX) / 2;
+        double centreY = (upperY + lowerY) / 2;
+
+        double deltaX = centreX - lowerX;
+        double deltaY = centreY - lowerY;
+
+        this.lowerX = centreX - (deltaX * (parScale));
+        this.lowerY = centreY - (deltaY * (parScale));
+        this.upperX = centreX + (deltaX * (parScale));
+        this.upperY = centreY + (deltaY * (parScale));
+    }
+
+    public void maximizeCoordinatesSize(double parScale) {
+        double lowerX = this.lowerX;
+        double lowerY = this.lowerY;
+        double upperX = this.upperX;
+        double upperY = this.upperY;
+
+        double centreX = (upperX + lowerX) / 2;
+        double centreY = (upperY + lowerY) / 2;
+
+        double deltaX = centreX - lowerX;
+        double deltaY = centreY - lowerY;
+
+        this.lowerX = centreX - (deltaX * parScale);
+        this.lowerY = centreY - (deltaY * parScale);
+        this.upperX = centreX + (deltaX * parScale);
+        this.upperY = centreY + (deltaY * parScale);
+    }
 }
