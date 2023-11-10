@@ -20,6 +20,7 @@ public class MapCoordinates {
       this.coordinatesOfRoot = getCoordinatesValueOfRoot(parGpsOfRoot);
    }
 
+
    public Coordinates getCoordinatesValue(GPS[] parGPSValues) {
       GPS parGPSOne = parGPSValues[0];
       GPS parGPSTwo = parGPSValues[1];

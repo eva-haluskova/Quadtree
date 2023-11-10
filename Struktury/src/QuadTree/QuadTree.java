@@ -33,7 +33,7 @@ public class QuadTree<T> {
         this.root = null;
         this.rangeOfTree = new Coordinates(parMinimumX,parMaximumX,parMinimumY,parMaximumY);
         this.depth = 0;
-
+        this.numberOfItems = 0;
         this.optimalizationOn = false;
         this.scaleParameter = 0;
     }
@@ -47,6 +47,7 @@ public class QuadTree<T> {
         this.rangeOfTree = new Coordinates(parCoordinates);
         this.depth = 0;
         this.numberOfItems = 0;
+        this.optimalizationOn = false;
     }
 
     /**
@@ -66,6 +67,10 @@ public class QuadTree<T> {
 
     public boolean isEmpty() {
         return this.root == null;
+    }
+
+    public int getNumberOfItems() {
+        return this.numberOfItems;
     }
 
     public Coordinates getRangeOfTree() {
@@ -308,8 +313,15 @@ public class QuadTree<T> {
         while (!nodesToProcess.isEmpty()) {
             QuadTreeNode<T> current = nodesToProcess.pop();
             for (int i = 0; i < current.getListOfData().size(); i++) {
-                if (current.coordinatesAreIntoNote(current.getListOfData().get(i).getCoordinates(),parCoordinates)) {
-                    listToReturn.add(current.getListOfData().get(i));
+                if (this.optimalizationOn) {
+                    Coordinates coorsForSearch = current.getListOfData().get(i).getCoordinates().potencialChangedSize(this.scaleParameter);
+                    if (current.coordinatesAreIntoNote(coorsForSearch,parCoordinates)) {
+                        listToReturn.add(current.getListOfData().get(i));
+                    }
+                } else {
+                    if (current.coordinatesAreIntoNote(current.getListOfData().get(i).getCoordinates(), parCoordinates)) {
+                        listToReturn.add(current.getListOfData().get(i));
+                    }
                 }
 
             }
@@ -323,6 +335,39 @@ public class QuadTree<T> {
         }
         return listToReturn;
     }
+
+    /**
+     * Returns all data in given area
+     * @param parCoordinates coordinates of area in which we want to find data
+     */
+    public ArrayList<Data<T>> findInAreaOptimize(Coordinates parCoordinates) {
+        if (!this.checkIfFitsToTree(parCoordinates)) {
+            return null;
+        }
+        ArrayList<Data<T>> listToReturn = new ArrayList<>();
+        Stack<QuadTreeNode> nodesToProcess = new Stack<>();
+
+        nodesToProcess.push(this.root);
+
+        while (!nodesToProcess.isEmpty()) {
+
+            QuadTreeNode<T> current = nodesToProcess.pop();
+
+            if (current.isIncludingWholeNodeArea(parCoordinates)) {
+                listToReturn.addAll(this.getAllDataInSubTree(current));
+            } else {
+                if (!current.isLeaf()) {
+                    ArrayList<Integer> indicesOfSons = current.getIncludingQuadrants(parCoordinates);
+                    for (int index : indicesOfSons) {
+                        nodesToProcess.push(current.accessToNthSon(index));
+                    }
+                }
+                listToReturn.addAll(current.getAllAppropriateData(parCoordinates));
+            }
+        }
+        return listToReturn;
+    }
+
 
 
     /**
@@ -516,8 +561,8 @@ public class QuadTree<T> {
         this.root = null;
         for (int i = 0; i < dataToInsert.size(); i++) {
             Data<T> data = dataToInsert.get(i);
-            data.getCoordinates().changeCoordinatesSize(this.scaleParameter);
-            this.insert(data, this.root);
+            data.getCoordinates().changeCoordinatesSize(1/this.scaleParameter);
+            this.insert(data);
         }
 
     }

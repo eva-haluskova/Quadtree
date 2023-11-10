@@ -42,6 +42,7 @@ public class Data<T> {
         return this.primaryKey;
     }
 
+
     public boolean equals(Data<T> parAnotherData) {
         return this.primaryKey.equals(parAnotherData.getPrimaryKey());
     }

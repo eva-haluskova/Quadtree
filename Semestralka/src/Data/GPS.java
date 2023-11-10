@@ -210,6 +210,12 @@ public class GPS {
     }
 
 
+    public String[] returnAsStringArray() {
+        // latitude, longitude, latipos, longpos
+        String[] s = {this.latitude.toString(),Double.toString(this.latitudePosition), this.longitude.toString()
+                , Double.toString(this.longitudePosition)};
+        return s;
+    }
 
 
 }

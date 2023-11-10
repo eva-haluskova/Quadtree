@@ -134,13 +134,15 @@ public class Main {
 
 
 
-/*
+
         int maxDepth = 5;
         double sizeOfObjets = 10;
         int numberOfObjects = 100;
         int width = 100;
         int height = 100;
         Random random = new Random();
+
+        Coordinates coorsForSearch = new Coordinates(20,40,30,50);
 
         GPS rlto = new GPS(GPS.Latitude.NORTH,50, GPS.Longitude.WEST,50);
         GPS rltt = new GPS(GPS.Latitude.SOUTH,50,GPS.Longitude.EAST,50);
@@ -173,12 +175,21 @@ public class Main {
         cadaster.generateObjects(GenerateOption.REAL_ESTATE,numberOfObjects,60,tree);
         cadaster.generateObjects(GenerateOption.BOTH,numberOfObjects,sizeOfObjets-1,tree);
 
-        ArrayList<Data<? extends CadastralObject>> findedData = cadaster.findInArea(tree);
-        if (findedData.size() == 3 * numberOfObjects) {
-            System.out.println("findlo to dobre");
-        }
 
- */
+        ReadWriterOfTree fileWork = new ReadWriterOfTree(cadaster.returnRealEstateTree(),cadaster.returnLandParcelTree(),cadaster.getRealEstateTreeGPS(),cadaster.getLandParcelTreeGPS());
+        //fileWork.writeData("hola.txt");
+        fileWork.readData("hola.txt");
+
+        QuadTree<RealEstate> treeR = fileWork.getTreeRealEstate();
+        QuadTree<LandParcel> treeL = fileWork.getTreeLandParcel();
+
+        LandParcelTester tester = new LandParcelTester(treeL);
+//        ArrayList<Data<? extends CadastralObject>> findedData = cadaster.findInArea(tree);
+//        if (findedData.size() == 3 * numberOfObjects) {
+//            System.out.println("findlo to dobre");
+//        }
+//
+//
 //
 //        ArrayList<Data<? extends CadastralObject>> findedData2 = cadaster.findInArea(four);
 //        for (int i = 0; i < findedData2.size(); i++) {
@@ -224,7 +235,7 @@ public class Main {
 
 
 
-       int distinctValues = 6;
+   //    int distinctValues = 6;
 //            //public List<Integer> generateList(int distinctValues) {
 //                int length = (int) Math.pow(2, distinctValues - 1) + 1;
 //                List<Integer> result = new ArrayList<>();
@@ -252,26 +263,26 @@ public class Main {
 //                current -= 3;
 //            }
 //        }
-        int length = (int) Math.pow(2, distinctValues - 1) + 1;
-        List<Integer> result = new ArrayList<>();
-
-        for (int i = 0; i < length; i++) {
-
-                int index = i;
-                int value = 1;
-                while (index > 0) {
-                    value++;
-                    index /= 2;
-                }
-            result.add(value);
-        }
+//        int length = (int) Math.pow(2, distinctValues - 1) + 1;
+//        List<Integer> result = new ArrayList<>();
+//
+//        for (int i = 0; i < length; i++) {
+//
+//                int index = i;
+//                int value = 1;
+//                while (index > 0) {
+//                    value++;
+//                    index /= 2;
+//                }
+//            result.add(value);
+//        }
 
 
 
             // int distinctValues = 6;
             // List<Integer> generatedList = generateList(distinctValues);
 
-            System.out.println("Generated List: " + result);
+           // System.out.println("Generated List: " + result);
 
 
 

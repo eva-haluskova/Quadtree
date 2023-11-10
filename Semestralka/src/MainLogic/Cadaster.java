@@ -9,6 +9,7 @@ import QuadTree.Coordinates;
 import QuadTree.Data;
 import Data.GPS;
 import Data.MapCoordinates;
+import QuadTree.ReadWriterOfTree;
 
 
 import java.util.ArrayList;
@@ -28,17 +29,25 @@ public class Cadaster {
     private QuadTree<LandParcel> landParcelQuadTree;
     private QuadTree<RealEstate> realEstateQuadTree;
 
+    private GPS[] realEstateTreeGPS;
+    private GPS[] landParcelTreeGPS;
+
+    private ReadWriterOfTree readWriterOfTree;
+
     public Cadaster() {
         GPS gpsOne = new GPS(GPS.Latitude.NORTH, 100,GPS.Longitude.WEST,100);
         GPS gpsTwo = new GPS(GPS.Latitude.SOUTH, 100,GPS.Longitude.EAST,100);
         GPS[] listOfRootGPS = {gpsOne,gpsTwo};
 
+
         this.generator = new CadastralObjectGenerator();
+        this.landParcelTreeGPS = listOfRootGPS;
         this.mapParcelTree = new MapCoordinates(listOfRootGPS);
         this.landParcelQuadTree = new QuadTree<LandParcel>(this.mapParcelTree.getCoordinatesValue(listOfRootGPS),5);
         System.out.println("Land Parcel tree is created!");
 
         this.mapEstateTree = new MapCoordinates(listOfRootGPS);
+        this.realEstateTreeGPS = listOfRootGPS;
         this.realEstateQuadTree = new QuadTree<RealEstate>(this.mapEstateTree.getCoordinatesValue(listOfRootGPS),5);
         System.out.println("Real Estate tree is created!");
 
@@ -48,12 +57,14 @@ public class Cadaster {
     }
 
     public void createLandParcelTree(GPS[] parCoordinates, int parMaxDepth) {
+        this.landParcelTreeGPS = parCoordinates;
         this.mapParcelTree = new MapCoordinates(parCoordinates);
         this.landParcelQuadTree = new QuadTree<LandParcel>(this.mapParcelTree.getCoordinatesValue(parCoordinates),parMaxDepth);
         System.out.println("Land Parcel tree is created!");
     }
 
     public void createRealEstateTree(GPS[] parCoordinates, int parMaxDepth) {
+        this.realEstateTreeGPS = parCoordinates;
         this.mapEstateTree = new MapCoordinates(parCoordinates);
         this.realEstateQuadTree = new QuadTree<RealEstate>(this.mapEstateTree.getCoordinatesValue(parCoordinates),parMaxDepth);
         System.out.println("Real Estate tree is created!");
@@ -200,6 +211,22 @@ public class Cadaster {
 
     }
 
+    public void saveTrees(String parPath) {
+        if (this.readWriterOfTree == null) {
+            this.readWriterOfTree = new ReadWriterOfTree(this.realEstateQuadTree,this.landParcelQuadTree,this.realEstateTreeGPS,this.getLandParcelTreeGPS());
+        }
+        this.readWriterOfTree.writeData(parPath);
+    }
+
+    public void loadTrees(String parPath) {
+        if (this.readWriterOfTree == null) {
+            this.readWriterOfTree = new ReadWriterOfTree(this.realEstateQuadTree,this.landParcelQuadTree,this.realEstateTreeGPS,this.getLandParcelTreeGPS());
+        }
+        this.readWriterOfTree.readData(parPath);
+        this.landParcelQuadTree = this.readWriterOfTree.getTreeLandParcel();
+        this.realEstateQuadTree = this.readWriterOfTree.getTreeRealEstate();
+    }
+
 
     public QuadTree<LandParcel> returnLandParcelTree() {
         return this.landParcelQuadTree;
@@ -209,5 +236,11 @@ public class Cadaster {
         return this.realEstateQuadTree;
     }
 
+    public GPS[] getRealEstateTreeGPS() {
+        return this.realEstateTreeGPS;
+    }
 
+    public GPS[] getLandParcelTreeGPS() {
+        return this.landParcelTreeGPS;
+    }
 }

@@ -11,10 +11,6 @@ import java.util.Iterator;
  * not polygon, class contain constructor just for point.
  */
 
-// TODO pamatova optimalizacia suradnice
-// premysli ci by nebolo viac pamatovo efektivne keby mas iba dve
-// suradnice a v pripade polygonu iba zvysne dve dopocitavas
-
 public class Coordinates {
 
     private double lowerX;
@@ -133,7 +129,7 @@ public class Coordinates {
         this.upperY = centreY + (deltaY * (parScale));
     }
 
-    public void maximizeCoordinatesSize(double parScale) {
+    public Coordinates potencialChangedSize(double parScale) {
         double lowerX = this.lowerX;
         double lowerY = this.lowerY;
         double upperX = this.upperX;
@@ -145,9 +141,35 @@ public class Coordinates {
         double deltaX = centreX - lowerX;
         double deltaY = centreY - lowerY;
 
-        this.lowerX = centreX - (deltaX * parScale);
-        this.lowerY = centreY - (deltaY * parScale);
-        this.upperX = centreX + (deltaX * parScale);
-        this.upperY = centreY + (deltaY * parScale);
+        lowerX = centreX - (deltaX * (parScale));
+        lowerY = centreY - (deltaY * (parScale));
+        upperX = centreX + (deltaX * (parScale));
+        upperY = centreY + (deltaY * (parScale));
+        Coordinates coors = new Coordinates(lowerX,upperX,lowerY,upperY);
+        return coors;
+    }
+//
+//    public void maximizeCoordinatesSize(double parScale) {
+//        double lowerX = this.lowerX;
+//        double lowerY = this.lowerY;
+//        double upperX = this.upperX;
+//        double upperY = this.upperY;
+//
+//        double centreX = (upperX + lowerX) / 2;
+//        double centreY = (upperY + lowerY) / 2;
+//
+//        double deltaX = centreX - lowerX;
+//        double deltaY = centreY - lowerY;
+//
+//        this.lowerX = centreX - (deltaX * parScale);
+//        this.lowerY = centreY - (deltaY * parScale);
+//        this.upperX = centreX + (deltaX * parScale);
+//        this.upperY = centreY + (deltaY * parScale);
+//    }
+
+    public String[] returnCoordinatesInString() {
+        String[] stringToReturn = {Double.toString(this.getLowerY()),Double.toString(this.getUpperX())
+                ,Double.toString(this.getLowerY()),Double.toString(this.getUpperY())};
+        return stringToReturn;
     }
 }

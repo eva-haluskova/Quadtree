@@ -25,6 +25,8 @@ public abstract class CadastralObject {
 
     public abstract String toString();
 
+    public abstract String[] toListOfString();
+
     public String getDescription() {
         return description;
     }

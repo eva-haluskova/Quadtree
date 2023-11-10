@@ -35,6 +35,11 @@ public class LandParcel extends CadastralObject {
                 this.returnRealEstatesInString();
     }
 
+    public String[] toListOfString() {
+        String[] s = {this.isInstanceOf().toString(),Integer.toString(this.parcelNumber),this.description};
+        return s;
+    }
+
     public int getParcelNumber() {
         return parcelNumber;
     }

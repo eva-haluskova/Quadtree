@@ -9,6 +9,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
 
+import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
+
 public class View extends JFrame {
 
     private JPanel RootPanel;
@@ -117,7 +119,8 @@ public class View extends JFrame {
         outputModel = new DefaultListModel<>();
         outputList = new JList<>(outputModel);
         ListOfOutput.setModel(outputModel);
-        outputList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        //outputList.setSelectionMode(SINGLE_SELECTION);
 
         TreePanel.setVisible(true);
         MainPanel.setVisible(false);
@@ -185,7 +188,7 @@ public class View extends JFrame {
      * List of output listener
      */
     void addOutputListSelectionListener(ListSelectionListener listSelectionListener) {
-        //ListOfOutput.addListSelectionListener(listSelectionListener);
+        ListOfOutput.addListSelectionListener(listSelectionListener);
     }
 
     /**
@@ -473,7 +476,6 @@ public class View extends JFrame {
     }
 
     public void removeData(Data<? extends CadastralObject> o) {
-        System.out.println("preco");
         this.outputModel.removeElement(o);
     }
 

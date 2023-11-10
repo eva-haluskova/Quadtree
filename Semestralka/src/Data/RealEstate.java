@@ -34,6 +34,11 @@ public class RealEstate extends CadastralObject {
                 ", pos: " + this.GPSCoordinates[1].getLongitudePosition();
     }
 
+    public String[] toListOfString() {
+        String[] s = {this.isInstanceOf().toString(),Integer.toString(this.serialNumber),this.description};
+        return s;
+    }
+
     public int getSerialNumber() {
         return serialNumber;
     }

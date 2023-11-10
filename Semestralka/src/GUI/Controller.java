@@ -241,21 +241,13 @@ public class Controller {
     class OutputListSelectionListener implements ListSelectionListener {
         @Override
         public void valueChanged(ListSelectionEvent e) {
+
             if (!e.getValueIsAdjusting()) {
-                //Data<? extends CadastralObject> selectedValue = view.getOutputListOfObj().getSelectedValue();
-//                Object selectedValue = view.getOutputListOfObj().getSelectedValue();
-//                if (selectedValue != null) {
-//                    // Process the selected value
-//                    System.out.println("Selected: " + selectedValue);
-//                }
 
-                //int index = view.getOutputListOfObj().getSelectedIndex();
-                //view.getOutputListOfObj().get
-                //Data<? extends CadastralObject> selectedValue = view.getOutputListOfObj().getSelectedValue();
-                //Data<? extends CadastralObject> t
-
+                Data<? extends CadastralObject> selectedValueObject = view.getOutputListOfObj().getSelectedValue();
+                System.out.println("obj ---" + selectedValueObject);
                 Object selectedValue = view.getListOfOutput().getSelectedValue();
-                System.out.println(selectedValue);
+                System.out.println("sv---" + selectedValue);
                 if (view.getConfirmButton().getText().equals("Get objects to edit")) {
                     view.getMainPanel().setVisible(true);
                     view.getAddObjectPanel().setVisible(true);
@@ -266,8 +258,9 @@ public class Controller {
                     view.getConfirmButton().setVisible(false);
                     manageCoordinateTwoPanel(true);
                 } else if (view.getConfirmButton().getText().equals("Get objects to delete")) {
-                    //System.out.println(selectedValue.toString());
-                    //deleteData((Data<? extends CadastralObject>) selectedValue);
+                    System.out.println("sv " +selectedValue);
+                    System.out.println("svobj " + selectedValueObject);
+                    deleteData((Data<? extends CadastralObject>) selectedValue);
                     view.removeData((Data<? extends CadastralObject>) selectedValue);
                 }
             }
