@@ -2,6 +2,8 @@ package GUI;
 
 import MainLogic.Cadaster;
 
+import java.awt.*;
+
 public class TemporaryGuiRunning {
 
     public static void main(String[] args) {
@@ -12,7 +14,8 @@ public class TemporaryGuiRunning {
         testView.setContentPane(testView.getRootPanel());
 
         testView.setResizable(false);
-        testView.setSize(600,400);
+        testView.setSize(600,600);
+        testView.setPreferredSize(new Dimension(800, 450));
         testView.setTitle("Cadaster");
         testView.setLocationRelativeTo(null);
         testView.setDefaultCloseOperation(testView.EXIT_ON_CLOSE);

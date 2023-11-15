@@ -23,6 +23,8 @@ public class Controller {
     private Cadaster cadaster;
     private View view;
 
+    private Data<? extends CadastralObject> isDataToEdit;
+
     public Controller(Cadaster parCadaster, View parView) {
         this.cadaster = parCadaster;
         this.view = parView;
@@ -59,6 +61,7 @@ public class Controller {
             manageCoordinateTwoPanel(true);
             view.getNumberOfObjects().setVisible(false);
             view.getSizeOfGenerateObjects().setVisible(false);
+            view.getScrollPanePointer().setVisible(false);
             view.getCoordinatesOnePanel().setBorder(BorderFactory.createTitledBorder("Coordinates number one:"));
             view.getCoordinatesTwoPanel().setBorder(BorderFactory.createTitledBorder("Coordinates number one:"));
 
@@ -79,6 +82,7 @@ public class Controller {
             view.getConfirmButton().setVisible(true);
             manageCoordinateTwoPanel(false);
             view.getNumberOfObjects().setVisible(false);
+            view.getScrollPanePointer().setVisible(false);
             view.getSizeOfGenerateObjects().setVisible(false);
             view.getCoordinatesOnePanel().setBorder(BorderFactory.createTitledBorder("Coordinates number one:"));
             view.getCoordinatesTwoPanel().setBorder(BorderFactory.createTitledBorder("Coordinates number one:"));
@@ -98,6 +102,7 @@ public class Controller {
             view.getConfirmButton().setText("Get objects to delete");
             view.getConfirmButton().setVisible(true);
             manageCoordinateTwoPanel(false);
+            view.getScrollPanePointer().setVisible(false);
             view.getNumberOfObjects().setVisible(false);
             view.getSizeOfGenerateObjects().setVisible(false);
             view.getCoordinatesOnePanel().setBorder(BorderFactory.createTitledBorder("Coordinates number one:"));
@@ -119,7 +124,7 @@ public class Controller {
             view.getIOPanel().setBorder(BorderFactory.createTitledBorder("Find data"));
             view.getConfirmButton().setText("Find");
             view.getConfirmButton().setVisible(true);
-            System.out.println("som tu");
+            view.getScrollPanePointer().setVisible(true);
             view.getNumberOfObjects().setVisible(false);
             view.getSizeOfGenerateObjects().setVisible(false);
             view.getCoordinatesOnePanel().setBorder(BorderFactory.createTitledBorder("Coordinates number one:"));
@@ -154,6 +159,7 @@ public class Controller {
             view.getConfirmButton().setText("Generate");
             view.getNumberOfObjects().setVisible(true);
             manageCoordinateTwoPanel(true);
+            view.getScrollPanePointer().setVisible(false);
             view.getNumberOfObjects().setBorder(BorderFactory.createTitledBorder("Count"));
             view.getSizeOfGenerateObjects().setBorder(BorderFactory.createTitledBorder("Size"));
             view.getCoordinatesOnePanel().setBorder(BorderFactory.createTitledBorder("First coordinate of range:"));
@@ -177,10 +183,12 @@ public class Controller {
                     System.out.println("hladam by point");
                 }
             } else if (view.getConfirmButton().getText().equals("Get objects to delete")) {
+                //view.updateList(findAccordingToCoordinates());
                 view.updateList(findAccordingToCoordinates());
                 // TODO najst choosnoty prvok
 
             } else if (view.getConfirmButton().getText().equals("Get objects to edit")) {
+                //view.updateList(findAccordingToCoordinates());
                 view.updateList(findAccordingToCoordinates());
                 // todo
             } else if (view.getConfirmButton().getText().equals("Generate")) {
@@ -204,7 +212,9 @@ public class Controller {
                     addLandParcel();
                 }
             } else if (view.getConfirmButtonDown().getText().equals("Edit")) {
-                // TODO
+                if (isDataToEdit != null) {
+                    editeData(isDataToEdit);
+                }
             }
         }
     }
@@ -243,25 +253,20 @@ public class Controller {
         public void valueChanged(ListSelectionEvent e) {
 
             if (!e.getValueIsAdjusting()) {
-
-                Data<? extends CadastralObject> selectedValueObject = view.getOutputListOfObj().getSelectedValue();
-                System.out.println("obj ---" + selectedValueObject);
                 Object selectedValue = view.getListOfOutput().getSelectedValue();
-                System.out.println("sv---" + selectedValue);
                 if (view.getConfirmButton().getText().equals("Get objects to edit")) {
-                    view.getMainPanel().setVisible(true);
-                    view.getAddObjectPanel().setVisible(true);
-                    view.getTypeOfObjectPanel().setVisible(false);
-                    view.getOutputPanel().setVisible(false);
-                    view.getIOPanel().setBorder(BorderFactory.createTitledBorder("Edit data"));
-                    view.getConfirmButtonDown().setText("Edit");
-                    view.getConfirmButton().setVisible(false);
-                    manageCoordinateTwoPanel(true);
+                    changeEditView();
+                    setEditValues((Data<? extends CadastralObject>) selectedValue);
+                    isDataToEdit = (Data<? extends CadastralObject>) selectedValue;
                 } else if (view.getConfirmButton().getText().equals("Get objects to delete")) {
-                    System.out.println("sv " +selectedValue);
-                    System.out.println("svobj " + selectedValueObject);
-                    deleteData((Data<? extends CadastralObject>) selectedValue);
-                    view.removeData((Data<? extends CadastralObject>) selectedValue);
+                    if ((Data<? extends CadastralObject>) selectedValue != null) {
+                        deleteData((Data<? extends CadastralObject>) selectedValue);
+                        view.removeData((Data<? extends CadastralObject>) selectedValue);
+                    }
+                } else if (view.getConfirmButton().getText().equals("Find")) {
+                    if ((Data<? extends CadastralObject>) selectedValue != null) {
+                        view.updatePointerList(showData((Data<? extends CadastralObject>) selectedValue));
+                    }
                 }
             }
         }
@@ -298,19 +303,44 @@ public class Controller {
         return this.cadaster.returnAllData();
     }
 
+//    public ArrayList<LandParcel> returnBelongingParcels(Data<RealEstate> parData) {
+//        return this.cadaster.returnAllIncludingParcels(parData);
+//    }
+//
+//    public ArrayList<RealEstate> returnBelongingEstates(Data<LandParcel> parData) {
+//        return this.cadaster.returnAllIncludingEstates(parData);
+//    }
+
+
     public ArrayList<Data<? extends CadastralObject>> generateData(CadastralObjectGenerator.GenerateOption type) {
         return this.cadaster.generateObjects(type, view.getNumberOfGeneratedObjects(),view.getSizeOfGeneratedObjectsNumber(),returnGPSFromView());
     }
 
     public void deleteData(Data<? extends CadastralObject> dataToDelete) {
-        System.out.println("ale do metodky som sa dostala");
-        System.out.println(dataToDelete.toString());
         if (dataToDelete.getData().isInstanceOf().equals(CadastralObject.TypeOfCadastralObject.LAND_PARCEL)) {
             this.cadaster.deleteLandParcel((Data<LandParcel>)dataToDelete);
         } else {
             this.cadaster.deleteRealEstate((Data<RealEstate>)dataToDelete);
         }
+    }
 
+    public void editeData(Data<? extends CadastralObject> dataToDelete) {
+        if (dataToDelete.getData().isInstanceOf().equals(CadastralObject.TypeOfCadastralObject.LAND_PARCEL)) {
+            this.cadaster.editLandParcelData((Data<LandParcel>)dataToDelete,view.getNumberOfObject(),returnGPSFromView(),view.getAddDescription());
+        } else {
+            this.cadaster.editRealEstateData((Data<RealEstate>)dataToDelete,view.getNumberOfObject(),returnGPSFromView(),view.getAddDescription());
+        }
+    }
+
+    public ArrayList<? extends CadastralObject> showData(Data<? extends CadastralObject> data) {
+
+        if (data.getData().isInstanceOf().equals(CadastralObject.TypeOfCadastralObject.LAND_PARCEL)) {
+            System.out.println("land parcel");
+            return this.cadaster.returnAllIncludingEstates((Data<LandParcel>)data);
+        } else {
+            System.out.println("real estate");
+            return this.cadaster.returnAllIncludingParcels((Data<RealEstate>)data);
+        }
     }
 
     /**
@@ -448,5 +478,66 @@ public class Controller {
         for (Component cp : view.getCoordinatesTwoPanel().getComponents() ) {
             cp.setEnabled(setValue);
         }
+    }
+
+    private void changeEditView() {
+        view.getMainPanel().setVisible(true);
+        view.getAddObjectPanel().setVisible(true);
+        view.getTypeOfObjectPanel().setVisible(false);
+        view.getOutputPanel().setVisible(false);
+        view.getIOPanel().setBorder(BorderFactory.createTitledBorder("Edit data"));
+        view.getConfirmButtonDown().setText("Edit");
+        view.getConfirmButton().setVisible(false);
+        manageCoordinateTwoPanel(true);
+    }
+
+    private void setEditValues(Data<? extends CadastralObject> data) {
+        view.setLatitudeOnePosition(data.getData().getGPSCoordinates()[0].getLatitudePosition());
+        view.setLatitudeTwoPosition(data.getData().getGPSCoordinates()[1].getLatitudePosition());
+
+        view.setLongitudeOnePosition(data.getData().getGPSCoordinates()[0].getLongitudePosition());
+        view.setLongitudeTwoPosition(data.getData().getGPSCoordinates()[1].getLongitudePosition());
+        if (data.getData().getGPSCoordinates()[0].getLatitude().equals(GPS.Latitude.NORTH)) {
+            view.setLatitudeOneOption(0);
+        } else {
+            view.setLatitudeOneOption(1);
+        }
+
+        if (data.getData().getGPSCoordinates()[1].getLatitude().equals(GPS.Latitude.NORTH)) {
+            view.setLatitudeTwoOption(0);
+        } else {
+            view.setLatitudeTwoOption(1);
+        }
+
+        if (data.getData().getGPSCoordinates()[0].getLongitude().equals(GPS.Longitude.WEST)) {
+            view.setLongitudeOneOption(0);
+        } else {
+            view.setLongitudeOneOption(1);
+
+        }
+
+        if (data.getData().getGPSCoordinates()[1].getLongitude().equals(GPS.Longitude.WEST)) {
+            view.setLongitudeTwoOption(0);
+        } else {
+            view.setLongitudeTwoOption(1);
+
+        }
+
+        if (data.getData().isInstanceOf().equals(CadastralObject.TypeOfCadastralObject.LAND_PARCEL)) {
+            setLandParcelData((LandParcel) data.getData());
+        } else {
+            setRealEstateData((RealEstate) data.getData());
+        }
+
+    }
+
+    private void setLandParcelData(LandParcel data) {
+        view.setAddDescription(data.getDescription());
+        view.setNumberOfObject(data.getParcelNumber());
+    }
+
+    private void setRealEstateData(RealEstate data) {
+        view.setAddDescription(data.getDescription());
+        view.setNumberOfObject(data.getSerialNumber());
     }
 }

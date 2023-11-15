@@ -193,7 +193,7 @@ public class QuadTreeNode<T> {
     /**
      * Return true if some part of quadrant belong to area, or if some data belongs to area
      */
-    private boolean belongsToArea(Coordinates parCoordinatesOfArea, Coordinates parCoordinatesOfQuadrant) {
+    public boolean belongsToArea(Coordinates parCoordinatesOfArea, Coordinates parCoordinatesOfQuadrant) {
         return (
             //1
                 (parCoordinatesOfArea.getLowerX() > parCoordinatesOfQuadrant.getLowerX() &&
@@ -323,46 +323,46 @@ public class QuadTreeNode<T> {
     public int isFitsToQuadrant(Coordinates parCoordinates) {
 
         if (
-                this.coordinates.getLowerX() < parCoordinates.getLowerX() &&
+                this.coordinates.getLowerX() <= parCoordinates.getLowerX() &&
                         (this.coordinates.getLowerX() + this.coordinates.getUpperX()) / 2
-                                > parCoordinates.getUpperX() &&
-                        this.coordinates.getLowerY() < parCoordinates.getLowerY() &&
+                                >= parCoordinates.getUpperX() &&
+                        this.coordinates.getLowerY() <= parCoordinates.getLowerY() &&
                         (this.coordinates.getLowerY() + this.coordinates.getUpperY()) / 2
-                                > parCoordinates.getUpperY()
+                                >= parCoordinates.getUpperY()
         ) {
             return 0;
         } else if (
                 (this.coordinates.getLowerX() + this.coordinates.getUpperX()) / 2
-                        < parCoordinates.getLowerX() &&
-                        this.coordinates.getUpperX() > parCoordinates.getUpperX() &&
-                        this.coordinates.getLowerY() < parCoordinates.getLowerY() &&
+                        <= parCoordinates.getLowerX() &&
+                        this.coordinates.getUpperX() >= parCoordinates.getUpperX() &&
+                        this.coordinates.getLowerY() <= parCoordinates.getLowerY() &&
                         (this.coordinates.getLowerY() + this.coordinates.getUpperY()) / 2
-                                > parCoordinates.getUpperY()
+                                >= parCoordinates.getUpperY()
         ) {
             return 1;
         } else if (
                 (this.coordinates.getLowerX() + this.coordinates.getUpperX()) / 2
-                        < parCoordinates.getLowerX() &&
-                        this.coordinates.getUpperX() > parCoordinates.getUpperX() &&
+                        <= parCoordinates.getLowerX() &&
+                        this.coordinates.getUpperX() >= parCoordinates.getUpperX() &&
                         (this.coordinates.getLowerY() + this.coordinates.getUpperY()) / 2
-                                < parCoordinates.getLowerY() &&
-                        this.coordinates.getUpperY() > parCoordinates.getUpperY()
+                                <= parCoordinates.getLowerY() &&
+                        this.coordinates.getUpperY() >= parCoordinates.getUpperY()
         ) {
             return 2;
         } else if (
-                this.coordinates.getLowerX() < parCoordinates.getLowerX() &&
+                this.coordinates.getLowerX() <= parCoordinates.getLowerX() &&
                         (this.coordinates.getLowerX() + this.coordinates.getUpperX()) / 2
-                                > parCoordinates.getUpperX() &&
+                                >= parCoordinates.getUpperX() &&
                         (this.coordinates.getLowerY() + this.coordinates.getUpperY()) / 2
-                                < parCoordinates.getLowerY() &&
-                        this.coordinates.getUpperY() > parCoordinates.getUpperY()
+                                <= parCoordinates.getLowerY() &&
+                        this.coordinates.getUpperY() >= parCoordinates.getUpperY()
         ) {
             return 3;
         } else if (
-                this.coordinates.getLowerX() < parCoordinates.getLowerX() &&
-                        this.coordinates.getUpperX() > parCoordinates.getUpperX() &&
-                        this.coordinates.getLowerY() < parCoordinates.getLowerY() &&
-                        this.coordinates.getUpperY() > parCoordinates.getUpperY()
+                this.coordinates.getLowerX() <= parCoordinates.getLowerX() &&
+                        this.coordinates.getUpperX() >= parCoordinates.getUpperX() &&
+                        this.coordinates.getLowerY() <= parCoordinates.getLowerY() &&
+                        this.coordinates.getUpperY() >= parCoordinates.getUpperY()
         ) {
             return -1;
         } else {

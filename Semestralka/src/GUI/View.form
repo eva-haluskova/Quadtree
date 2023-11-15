@@ -284,6 +284,20 @@
                     </constraints>
                     <properties/>
                   </component>
+                  <scrollpane id="741a0" binding="ScrollPaneOfPointers">
+                    <constraints>
+                      <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                      <gridbag weightx="0.0" weighty="0.0"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <component id="b1741" class="javax.swing.JList" binding="ListOfPointers">
+                        <constraints/>
+                        <properties/>
+                      </component>
+                    </children>
+                  </scrollpane>
                 </children>
               </grid>
               <grid id="2efc4" binding="LowerPanel" layout-manager="CardLayout" hgap="0" vgap="0">

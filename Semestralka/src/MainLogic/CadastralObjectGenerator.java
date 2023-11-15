@@ -28,13 +28,13 @@ public class CadastralObjectGenerator {
         if (parType.equals(GenerateOption.LAND_PARCEL)) {
             for (int i = 0; i < parCount; i++) {
                 listToReturn.add(
-                        new LandParcel("Generated land parcel number " + i, this.returnObject(parSizeOfObject,parRangeOfGPS),i)
+                        new LandParcel("Land_Parcel_" + i, this.returnObject(parSizeOfObject,parRangeOfGPS),i)
                 );
             }
         } else if (parType.equals(GenerateOption.REAL_ESTATE)) {
             for (int i = 0; i < parCount; i++) {
                 listToReturn.add(
-                        new RealEstate("Generated real estate number " + i, this.returnObject(parSizeOfObject, parRangeOfGPS), i)
+                        new RealEstate("Real_Estate_" + i, this.returnObject(parSizeOfObject, parRangeOfGPS), i)
                 );
             }
         } else {
@@ -42,11 +42,11 @@ public class CadastralObjectGenerator {
                 double objectProbability = random.nextDouble();
                 if (objectProbability > 0.5) {
                     listToReturn.add(
-                            new LandParcel("Generated land parcel number " + i,this.returnObject(parSizeOfObject,parRangeOfGPS),i)
+                            new LandParcel("Land_Parcel_" + i,this.returnObject(parSizeOfObject,parRangeOfGPS),i)
                     );
                 } else {
                     listToReturn.add(
-                            new RealEstate("Generated real estate number " + i, this.returnObject(parSizeOfObject, parRangeOfGPS), i)
+                            new RealEstate("Real_Estate_" + i, this.returnObject(parSizeOfObject, parRangeOfGPS), i)
                     );
                 }
             }

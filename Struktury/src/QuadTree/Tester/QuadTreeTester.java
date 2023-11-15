@@ -81,9 +81,10 @@ abstract class QuadTreeTester<T> {
         } else {
             System.out.println("Simple find failed! :(");
         }
-        for (int i = 0; i < findData.size(); i++) {
-            System.out.println(findData.get(i).toString());
-        }
+//        for (int i = 0; i < findData.size(); i++) {
+//            System.out.println(findData.get(i).toString());
+//        }
+        System.out.println("Find is done");
         return findData;
     }
 

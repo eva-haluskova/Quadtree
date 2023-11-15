@@ -5,11 +5,10 @@ import QuadTree.Data;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
+import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
-
-import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
 
 public class View extends JFrame {
 
@@ -110,15 +109,28 @@ public class View extends JFrame {
     private JButton GenerateDataButton;
     private JTextField NumberOfObjects;
     private JTextField SizeOfGenerateObjects;
+    private JList ListOfPointers;
+    private JScrollPane ScrollPaneOfPointers;
     JList<Data<? extends CadastralObject>> outputList;
     DefaultListModel outputModel;
+
+    DefaultListModel pointerModel;
 
     public View() {
         CoordinatesOnePanel.setBorder(BorderFactory.createTitledBorder("Coordinate number one"));
         CoordinatesTwoPanel.setBorder(BorderFactory.createTitledBorder("Coordinate number two"));
         outputModel = new DefaultListModel<>();
-        outputList = new JList<>(outputModel);
+        outputList = new JList<>();
+        pointerModel = new DefaultListModel<>();
+
+        // TODO dbaj na to ze tu pridelujes veci dvom roznym veciam salalala
+        //this.outputList.setCellRenderer(new CadastralObjectRender());
+        ListOfOutput.setCellRenderer(new CadastralObjectRender());
         ListOfOutput.setModel(outputModel);
+        LowerPanel.setPreferredSize(new Dimension(800,150));
+        LoadDataButton.setPreferredSize(new Dimension(800,90));
+        ListOfPointers.setModel(pointerModel);
+
 
         //outputList.setSelectionMode(SINGLE_SELECTION);
 
@@ -126,6 +138,28 @@ public class View extends JFrame {
         MainPanel.setVisible(false);
         OtherPanel.setVisible(false);
     }
+
+
+    public class CadastralObjectRender extends JLabel implements ListCellRenderer<Data<? extends CadastralObject>> {
+        public CadastralObjectRender() {
+            setOpaque(true);
+        }
+        @Override
+        public Component getListCellRendererComponent(JList<? extends Data<? extends CadastralObject>> list, Data<? extends CadastralObject> data, int index, boolean isSelected, boolean cellHasFocus) {
+            setText(data.getData().toString());
+
+            if (isSelected) {
+                setBackground(list.getSelectionBackground());
+                setForeground(list.getSelectionForeground());
+            } else {
+                setBackground(list.getBackground());
+                setForeground(list.getForeground());
+            }
+
+            return this;
+        }
+    }
+
 
     /**
      * Listeners for different actions
@@ -272,39 +306,39 @@ public class View extends JFrame {
     /**
      * Coordinates One Panel
      */
-    public Integer getLatitudeOnePosition() {
-        return Integer.parseInt(CoordinateOneLatitudePosition.getText());
+    public Double getLatitudeOnePosition() {
+        return Double.parseDouble(CoordinateOneLatitudePosition.getText());
     }
 
-    public void setLatitudeOnePosition(int parLatitudeOnePosition) {
-        CoordinateOneLatitudePosition.setText(Integer.toString(parLatitudeOnePosition));
+    public void setLatitudeOnePosition(double parLatitudeOnePosition) {
+        CoordinateOneLatitudePosition.setText(Double.toString(parLatitudeOnePosition));
     }
 
-    public Integer getLongitudeOnePosition() {
-        return Integer.parseInt(CoordinateOneLongitudePosition.getText());
+    public Double getLongitudeOnePosition() {
+        return Double.parseDouble(CoordinateOneLongitudePosition.getText());
     }
 
-    public void setLongitudeOnePosition(int parLongitudeOnePosition) {
-        CoordinateOneLongitudePosition.setText(Integer.toString(parLongitudeOnePosition));
+    public void setLongitudeOnePosition(double parLongitudeOnePosition) {
+        CoordinateOneLongitudePosition.setText(Double.toString(parLongitudeOnePosition));
     }
 
     /**
      * Coordinates Two Panel
      */
-    public Integer getLatitudeTwoPosition() {
-        return Integer.parseInt(CoordinateTwoLatitudePosition.getText());
+    public Double getLatitudeTwoPosition() {
+        return Double.parseDouble(CoordinateTwoLatitudePosition.getText());
     }
 
-    public void setLatitudeTwoPosition(int parLatitudeTwoPosition) {
-        CoordinateTwoLatitudePosition.setText(Integer.toString(parLatitudeTwoPosition));
+    public void setLatitudeTwoPosition(double parLatitudeTwoPosition) {
+        CoordinateTwoLatitudePosition.setText(Double.toString(parLatitudeTwoPosition));
     }
 
-    public Integer getLongitudeTwoPosition() {
-        return Integer.parseInt(CoordinateTwoLongitudePosition.getText());
+    public Double getLongitudeTwoPosition() {
+        return Double.parseDouble(CoordinateTwoLongitudePosition.getText());
     }
 
-    public void setLongitudeTwoPosition(int parLongitudeTwoPosition) {
-        CoordinateTwoLongitudePosition.setText(Integer.toString(parLongitudeTwoPosition));
+    public void setLongitudeTwoPosition(double parLongitudeTwoPosition) {
+        CoordinateTwoLongitudePosition.setText(Double.toString(parLongitudeTwoPosition));
     }
 
     public JTextField getNumberOfObjects() {
@@ -386,20 +420,20 @@ public class View extends JFrame {
         return CoordinateOneLongitudeOption.getSelectedItem().toString();
     }
 
-    public void setLatitudeOneOption() {
-
+    public void setLatitudeOneOption(int index) {
+        CoordinateOneLatitudeOption.setSelectedIndex(index);
     }
 
-    public void setLongitudeOneOption() {
-
+    public void setLongitudeOneOption(int index) {
+        CoordinateOneLongitudeOption.setSelectedIndex(index);
     }
 
-    public void setLatitudeTwoOption() {
-
+    public void setLatitudeTwoOption(int index) {
+        CoordinateTwoLatitudeOption.setSelectedIndex(index);
     }
 
-    public void setLongitudeTwoOption() {
-
+    public void setLongitudeTwoOption(int index) {
+        CoordinateTwoLongitudeOption.setSelectedIndex(index);
     }
 
 
@@ -492,7 +526,16 @@ public class View extends JFrame {
         this.outputModel.addAll(param);
     }
 
+    public void updatePointerList(ArrayList<? extends CadastralObject> param) {
+        this.pointerModel.removeAllElements();
+        this.pointerModel.addAll(param);
+    }
+
     public JList<Data<? extends CadastralObject>> getOutputListOfObj() {
         return this.outputList;
+    }
+
+    public JScrollPane getScrollPanePointer() {
+        return ScrollPaneOfPointers;
     }
 }

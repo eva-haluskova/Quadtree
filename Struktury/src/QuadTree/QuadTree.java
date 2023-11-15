@@ -50,6 +50,14 @@ public class QuadTree<T> {
         this.optimalizationOn = false;
     }
 
+    public void reinicializeValueOftree(Coordinates newRange) {
+        this.depth = 0;
+        this.numberOfItems = 0;
+        this.optimalizationOn = false;
+        this.root = null;
+        this.rangeOfTree = newRange;
+    }
+
     /**
      * Getters and requests
      */
@@ -198,6 +206,7 @@ public class QuadTree<T> {
      */
     public void insert(Data<T> parData, QuadTreeNode<T> parStartNode) {
         if (!this.checkIfFitsToTree(parData.getCoordinates())) {
+            System.out.println("data not fints to tree");
             return;
         }
 
@@ -262,7 +271,7 @@ public class QuadTree<T> {
                 }
             }
         }
-        System.out.println("data ar inserted!!!");
+        //System.out.println("data ar inserted!!!");
     }
 
     /**
@@ -315,11 +324,13 @@ public class QuadTree<T> {
             for (int i = 0; i < current.getListOfData().size(); i++) {
                 if (this.optimalizationOn) {
                     Coordinates coorsForSearch = current.getListOfData().get(i).getCoordinates().potencialChangedSize(this.scaleParameter);
-                    if (current.coordinatesAreIntoNote(coorsForSearch,parCoordinates)) {
+                    if (current.belongsToArea(coorsForSearch,parCoordinates) ||
+                            current.isIncludingWholeData(current.getListOfData().get(i).getCoordinates(), parCoordinates)) {
                         listToReturn.add(current.getListOfData().get(i));
                     }
                 } else {
-                    if (current.coordinatesAreIntoNote(current.getListOfData().get(i).getCoordinates(), parCoordinates)) {
+                    if (current.belongsToArea(current.getListOfData().get(i).getCoordinates(), parCoordinates) ||
+                    current.isIncludingWholeData(current.getListOfData().get(i).getCoordinates(), parCoordinates)) {
                         listToReturn.add(current.getListOfData().get(i));
                     }
                 }
@@ -567,6 +578,90 @@ public class QuadTree<T> {
 
     }
 
+
+    public void tryToOptimalizeTwoObjects() {
+        // porovnat vsetky objekty a najst tie najvzialenejsie
+        // urcit si nove hranice stormu
+        // presypat strom
+
+        ArrayList<Data<T>> dataToInsert = this.getAllDataInSubTree(this.root);
+        System.out.println(dataToInsert.size());
+        int indexOfFirstData = 0;
+        int indexOfSecondData = 0;
+        double maxDistance = 0;
+
+        double minX = Double.MAX_VALUE, minY = Double.MAX_VALUE;
+        double maxX = Double.MIN_VALUE, maxY = Double.MIN_VALUE;
+        int indexMinX, indexMaxX, indexMinY, indexMaxY = 0;
+
+        for (int i = 0; i < dataToInsert.size(); i++) {
+            for (int j = 0; j < dataToInsert.size(); j++) {
+                double surX = dataToInsert.get(i).getCoordinates().getLowerX() -
+                        dataToInsert.get(j).getCoordinates().getLowerX();
+                double surY = dataToInsert.get(i).getCoordinates().getLowerY() -
+                        dataToInsert.get(j).getCoordinates().getLowerY();
+                double sqaredC = Math.sqrt(Math.pow(surX,2) +
+                        Math.pow(surY,2));
+                if (sqaredC > maxDistance) {
+                    maxDistance = sqaredC;
+                    indexOfFirstData = i;
+                    indexOfSecondData = j;
+                }
+            }
+
+            if (dataToInsert.get(i).getCoordinates().getLowerX() < minX) {
+                minX = dataToInsert.get(i).getCoordinates().getLowerX();
+                indexMinX = i; // porbabbly will not used
+            }
+            if (dataToInsert.get(i).getCoordinates().getUpperX() > maxX) {
+                maxX = dataToInsert.get(i).getCoordinates().getUpperX();
+                indexMaxX = i;
+            }
+            if (dataToInsert.get(i).getCoordinates().getLowerY() < minY) {
+                minY = dataToInsert.get(i).getCoordinates().getLowerY();
+                indexMinY = i;
+            }
+            if (dataToInsert.get(i).getCoordinates().getUpperY() > maxY) {
+                maxY = dataToInsert.get(i).getCoordinates().getUpperY();
+                indexMaxY = i;
+            }
+        }
+        System.out.println(dataToInsert.get(indexOfFirstData).getCoordinates().returnCoordinatesInString());
+        System.out.println(dataToInsert.get(indexOfSecondData).getCoordinates().returnCoordinatesInString());
+
+        double centerX = (dataToInsert.get(indexOfFirstData).getCoordinates().getLowerX() + dataToInsert.get(indexOfSecondData).getCoordinates().getUpperX()) / 2;
+        double centerY = (dataToInsert.get(indexOfFirstData).getCoordinates().getLowerY() + dataToInsert.get(indexOfSecondData).getCoordinates().getUpperY()) / 2;
+
+        double lowerX, lowerY, upperX, upperY, newXRange, newYRange;
+
+        if (Math.abs(centerX - maxX) < Math.abs(centerX - minX)) {
+            newXRange = Math.abs(centerX - minX);
+        } else  {
+            newXRange = Math.abs(centerX - maxX);
+        }
+
+        if (Math.abs(centerY - maxY) < Math.abs(centerY - minY)) {
+            newYRange = Math.abs(centerY - minY);
+        } else  {
+            newYRange = Math.abs(centerY - maxY);
+        }
+
+        lowerX = centerX - newXRange - 1;
+        upperX = centerX + newXRange + 1;
+        lowerY = centerY - newYRange - 1;
+        upperY = centerY + newYRange + 1;
+
+        Coordinates newRange = new Coordinates(lowerX, upperX, lowerY,upperX);
+        this.reinicializeValueOftree(newRange);
+
+        System.out.println(dataToInsert.size());
+        for (int i = 0; i < dataToInsert.size(); i++) {
+            this.insert(dataToInsert.get(i));
+        }
+
+    }
+
+
     private double optimalDepth() {
         double logOne = Math.log(Math.sqrt(this.numberOfItems));
         double logTwo = Math.log(2);
@@ -656,5 +751,6 @@ public class QuadTree<T> {
         }
         return null;
     }
+
 
 }

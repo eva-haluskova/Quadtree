@@ -2,6 +2,7 @@ package Data;
 
 import QuadTree.Coordinates;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 
@@ -23,15 +24,7 @@ public class RealEstate extends CadastralObject {
 
     @Override
     public String toString() {
-        return "Type of object: Real Estate, serial number: " + this.serialNumber + ", desc: " + this.getDescription() +
-        "    lat: " + this.GPSCoordinates[0].getLatitude() +
-                ", pos: " + this.GPSCoordinates[0].getLatitudePosition() +
-                ", long: " + this.GPSCoordinates[0].getLongitude() +
-                ", pos: " + this.GPSCoordinates[0].getLongitudePosition() +
-                "    lat: " + this.GPSCoordinates[1].getLatitude() +
-                ", pos: " + this.GPSCoordinates[1].getLatitudePosition() +
-                ", long: " + this.GPSCoordinates[1].getLongitude() +
-                ", pos: " + this.GPSCoordinates[1].getLongitudePosition();
+        return "Real Estate, serial number: " + this.serialNumber + ", " + super.toString();
     }
 
     public String[] toListOfString() {

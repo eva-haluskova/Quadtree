@@ -217,5 +217,21 @@ public class GPS {
         return s;
     }
 
+    public String stringMapLongitudeName() {
+        if (this.longitude.equals(Longitude.WEST)) {
+            return "W";
+        } else {
+            return "E";
+        }
+    }
+
+    public String stringMapLatitudeName() {
+        if (this.latitude.equals(Latitude.NORTH)) {
+            return "N";
+        } else {
+            return "S";
+        }
+    }
+
 
 }

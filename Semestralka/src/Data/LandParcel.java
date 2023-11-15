@@ -23,16 +23,7 @@ public class LandParcel extends CadastralObject {
 
     @Override
     public String toString() {
-        return "Type of object: Land Parcel, parcel number: " + this.parcelNumber + ", desc: " + this.getDescription() +
-                    "    lat: " + this.GPSCoordinates[0].getLatitude() +
-                        ", pos: " + this.GPSCoordinates[0].getLatitudePosition() +
-                        ", long: " + this.GPSCoordinates[0].getLongitude() +
-                        ", pos: " + this.GPSCoordinates[0].getLongitudePosition() +
-        "    lat: " + this.GPSCoordinates[1].getLatitude() +
-                ", pos: " + this.GPSCoordinates[1].getLatitudePosition() +
-                ", long: " + this.GPSCoordinates[1].getLongitude() +
-                ", pos: " + this.GPSCoordinates[1].getLongitudePosition() +
-                this.returnRealEstatesInString();
+        return "Land Parcel, parcel number: " + this.parcelNumber + ", "  + super.toString();
     }
 
     public String[] toListOfString() {

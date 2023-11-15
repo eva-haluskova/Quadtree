@@ -47,7 +47,7 @@ public class TesterForPlace extends QuadTreeTester {
             Place newObject = new Place("Miesto" + i);
             Data<Place> data = new Data(newObject, coors, UUID.randomUUID());
 
-            System.out.println(x1 + " " + y1 + " " + x2 + " " + y2);
+            //System.out.println(x1 + " " + y1 + " " + x2 + " " + y2);
             this.testTree.insert(data, testTree.getRoot());
             super.testData.add(data);
 
@@ -60,6 +60,6 @@ public class TesterForPlace extends QuadTreeTester {
             }
         }
 
-        //System.out.println("Insert of place is done!");
+        System.out.println("Insert of place is done!");
     }
 }

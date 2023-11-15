@@ -2,6 +2,8 @@ package Data;
 
 import QuadTree.Coordinates;
 
+import java.text.DecimalFormat;
+
 public abstract class CadastralObject {
 
     public enum TypeOfCadastralObject {
@@ -23,7 +25,19 @@ public abstract class CadastralObject {
 
     public abstract TypeOfCadastralObject isInstanceOf();
 
-    public abstract String toString();
+    public String toString() {
+
+        DecimalFormat df = new DecimalFormat("#.###");
+        return  "desc: " + this.description +
+                ", 1. coors: lat: " + this.GPSCoordinates[0].stringMapLatitudeName() +
+                ", pos: " + df.format(this.GPSCoordinates[0].getLatitudePosition()) +
+                ", long: " + this.GPSCoordinates[0].stringMapLongitudeName() +
+                ", pos: " + df.format(this.GPSCoordinates[0].getLongitudePosition()) +
+                ", 2. coors: lat: " + this.GPSCoordinates[1].stringMapLatitudeName() +
+                ", pos: " + df.format(this.GPSCoordinates[1].getLatitudePosition()) +
+                ", long: " + this.GPSCoordinates[1].stringMapLongitudeName() +
+                ", pos: " + df.format(this.GPSCoordinates[1].getLongitudePosition());
+    }
 
     public abstract String[] toListOfString();
 

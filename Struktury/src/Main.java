@@ -30,6 +30,206 @@ public class Main {
 
     public static void main(String[] args) {
 
+        int maxDepth = 5;
+        double sizeOfObjets = 10;
+        int numberOfObjects = 100;
+        int width = 100;
+        int height = 100;
+        Random random = new Random();
+
+        Coordinates coorsForSearch = new Coordinates(20,40,30,50);
+
+        GPS rlto = new GPS(GPS.Latitude.NORTH,100, GPS.Longitude.WEST,100);
+        GPS rltt = new GPS(GPS.Latitude.SOUTH,100,GPS.Longitude.EAST,100);
+        GPS[] tree = {rlto,rltt};
+
+        GPS lpto = new GPS(GPS.Latitude.NORTH,90, GPS.Longitude.WEST,60);
+        GPS lptt = new GPS(GPS.Latitude.NORTH,60,GPS.Longitude.WEST,40);
+        GPS[] zero = {lpto,lptt};
+
+        GPS oneone = new GPS(GPS.Latitude.NORTH,80, GPS.Longitude.WEST,55);
+        GPS onetwo = new GPS(GPS.Latitude.NORTH,50,GPS.Longitude.EAST,40);
+        GPS[] one = {oneone,onetwo};
+
+        GPS twoone = new GPS(GPS.Latitude.NORTH,95, GPS.Longitude.WEST,70);
+        GPS towtwo = new GPS(GPS.Latitude.NORTH,40,GPS.Longitude.WEST,35);
+        GPS[] two = {twoone,towtwo};
+
+        GPS threeone = new GPS(GPS.Latitude.NORTH,85, GPS.Longitude.WEST,55);
+        GPS threetwo = new GPS(GPS.Latitude.NORTH,65,GPS.Longitude.WEST,45);
+        GPS[] three = {threeone,threetwo};
+
+        GPS fourone = new GPS(GPS.Latitude.NORTH,70, GPS.Longitude.WEST,55);
+        GPS fourtwo = new GPS(GPS.Latitude.NORTH,65,GPS.Longitude.WEST,55);
+        GPS[] four = {fourone,fourtwo};
+
+        Cadaster cadaster = new Cadaster();
+        cadaster.createLandParcelTree(tree,maxDepth);
+        cadaster.createRealEstateTree(tree,maxDepth);
+        cadaster.insertRealEstate(56,one,"raz");
+        cadaster.insertRealEstate(54,two,"dva");
+        cadaster.insertRealEstate(57,three,"tri");
+        cadaster.insertRealEstate(51,four,"styri");
+        cadaster.insertLandParcel(52,zero,"xc");
+
+
+//        cadaster.generateObjects(GenerateOption.LAND_PARCEL,numberOfObjects, sizeOfObjets,tree);
+//        cadaster.generateObjects(GenerateOption.REAL_ESTATE,numberOfObjects,sizeOfObjets,tree);
+//        cadaster.generateObjects(GenerateOption.BOTH,numberOfObjects,sizeOfObjets-1,tree);
+
+//        int maxDepth = 5;
+//        double sizeOfObjets = 10;
+//        int numberOfObjects = 100;
+//        int width = 100;
+//        int height = 100;
+//        Random random = new Random();
+//        random.setSeed(30);
+//        QuadTree<Place> testTree = new QuadTree<Place>(0, width, 0, height,maxDepth);
+//
+//        Coordinates coorsOfSearch = new Coordinates(30,60,30,80);
+//        TesterForPlace placeTester = new TesterForPlace(testTree);
+//        //placeTester.testOfSeed(4,100000,coorsOfSearch);
+//        //placeTester.testForSeed(2,20,coorsOfSearch);
+//        placeTester.generateInsert(20000,sizeOfObjets,random,coorsOfSearch);
+//
+//        placeTester.generateFind(coorsOfSearch);
+//
+//        System.out.println(testTree.getNumberOfItems());
+//        testTree.tryToOptimalizeTwoObjects();
+//
+//        System.out.println("Optimalized");
+//        placeTester.generateFind(coorsOfSearch);
+//        System.out.println(testTree.getNumberOfItems());
+//        placeTester.generateDelete();
+
+        System.out.println("Zatial to funguje ^-^");
+    }
+
+}
+
+
+/**
+ * skoncila si asi tak, ze okna I,F,E,D mas zhruba hotove, potrbujes dorobit prevolavanie sprvanych metodiek.
+ * Ale na to si predtym dorob:
+ * utorok:
+ * - urob si model:
+ * - vytvorenie troch stromov
+ * - vsetky metodky zo stromu
+ * - praca so surdnicami!!
+ * - edit
+ * - oprav si PK, pracu s generikami :)
+ * - AUTOMATICKE NAPLNENIE PARCIEL A TAK...
+ * potom, bud:
+ * - nasadis na to gui
+ * alebo:
+ * - SPRAVIS OPTIMALIZACIU
+ */
+// TODO porovnavanie cez equals
+
+/**
+ * dneska este:
+ * dorobit guja:
+ *      - vytvorenie stromu
+ *      - editacia
+ *      - vytvorenie
+ *      - find
+ *      - delete
+ * opravit delete
+ * opravit insert
+ * urobit find
+ * model aj s premenov coordinates, mysli na to
+ * spatna funkcia pre curadnice
+ * automaticke smerniky na parceli
+ *
+ * ak nahodou:
+ * - generator instanci
+ * - porozmyslat nad ukladanim
+ */
+
+
+
+/*
+upravit strom - zmenit vysku - zmenit rozsah
+automaticky naplnit
+optimalizacia aj po upraveni
+takze aj hrana je includnuta v inom objekte
+osetrit aby ked zmenim surqadnice na mimo stromun tak sa mi nezmenina
+ */
+
+
+
+/**
+ * ESTE TREBA
+ * - ukladanie a nacitavanie do suborov
+ * - spravit vhodny generator
+ * - poriesit suradnice
+ * - poriesti generika
+ * - edit
+ * - urobit optimalizaciu
+ * - porfilerom pokukat
+ * - dorobit gui
+ * - zdravie stromu
+ * - spravit cadaster
+ * - isto mnoho dalsieho
+ */
+
+
+
+// TODO vdase pozjednodusovat vyrazy list.get(0). a zaroevn list.remove(0)....da sa to, vis?
+// TODO over si ci to doublevanie ma zmysel pri < >
+// TODO over si ci niekde neporusujes zapuzdrenie, getovanie zoznamov cez kopiu!!!
+// TODO with index access method pay attention if index exists?
+// TODO zaujimavy poznaok o zmene velkosti ako ked som zvacsila velkost sa mi pekne krasne zvysila vyska stromu pri vlastne 10satine dat...teda dat na desasitine velkosti
+// TODO MUST!!! change your arrays at least to linked list or sometnig more efficient!!!!
+// TODO pri mazanai aj znizovanie stupna stromu?
+// TODO think about if is needed in method findAppropriateNode that one if in case current isnt leaf.!
+// TODO pripadne si refactorni insert na krajsi
+// TODO returvnovanie tych onych. Porusenie zapuzdrenia? (DUfam ze nie)(salala)RESULT
+// TODO dories ten generator poondiaty
+// TODO refactorni si cooridnates a s tym vsetky suvisiace metody ktore mas vsade po triedach...to tam nema co robit, ked to porovnana iba dooridnates!!!
+// TODO refactorni cely node, isto vela sa da pomazat a dat do coorinates a tak
+// TODO ZAPUZDRENIE!!!
+// TODO sorry jako, ale v delete nemas osetrenu zmenu hlbky stromu..teda akoze iba aktualizovanie ciselok, vis, ked tak potom oprav aj ten test na to
+// TODO tu zmenu vysky zvas si to ukladanie levelu nodu!! ulahcilo by ti to zivot, dobra rada nad zlato to je!!!
+// TODO gui delete all
+// TODO finvoavnie nemas dobre...teda spon to co potrebujes, ze bodov to naide vsetko cez to sa to kryje
+// TODO upratat pak pracu s coordniates v quadTree a quadNode
+// TODO overload insert
+// TODO pomenit arraylisty
+// todo cooridnates equals bigger tnat least poresit!!!
+// todo mapovanie jednej suradnice do coordinates
+// todo contins all neviem ci je koser
+// todo ten edit a delete si pories
+// todo prerob int na double v gui
+
+//int velkost = 100;
+//    Random random = new Random();
+//        random.setSeed(30);
+//                QuadTree<Place> testTree = new QuadTree<Place>(0, velkost, 0, velkost,6);
+//
+//        Coordinates coorsOfSearch = new Coordinates(30,60,30,80);
+//        TesterForPlace placeTester = new TesterForPlace(testTree);
+//        //placeTester.testOfSeed(4,100000,coorsOfSearch);
+//        //placeTester.testForSeed(2,20,coorsOfSearch);
+//        //placeTester.generateInsert(50000,random,coorsOfSearch);
+//
+//        System.out.println("-------- SKUSKA INSER DELETE CHANGE OF DEPTH-------------");
+//
+//        placeTester.testOfChangeOfDepth(3,10000, coorsOfSearch);
+//
+//        System.out.println("--------- SKUSKA FIND ----------");
+//
+//
+//        QuadTree<LandParcel> parcelTest = new QuadTree<LandParcel>(0, velkost, 0, velkost,6);
+//
+//        LandParcelTester parcelTester = new LandParcelTester(parcelTest);
+//        parcelTester.generateInsert(100,random,coorsOfSearch);
+//        ArrayList<Data<LandParcel>> zoznam2 =  parcelTester.generateFind(coorsOfSearch);
+//        for (int i = 0; i < zoznam2.size(); i++) {
+//        System.out.println(zoznam2.get(i).getData());
+//        }
+//        parcelTester.generateDelete();
+
 //        int maxDepth = 5;
 //        double sizeOfObjets = 10;
 //        int numberOfObjects = 100;
@@ -125,7 +325,7 @@ public class Main {
 //            }
 //            System.out.println("pri velkosti objetkov: " + sizeOfObjets + " je priem hlbka " +premHlbka/pocetStromou);
 //            sizeOfObjets +=2;
-       // }
+// }
 
 //        ReadWriterOfTree workWitFile = new ReadWriterOfTree(quadTree);
 //        workWitFile.readData("hola.txt");
@@ -133,7 +333,7 @@ public class Main {
 
 
 
-
+/*
 
         int maxDepth = 5;
         double sizeOfObjets = 10;
@@ -184,6 +384,8 @@ public class Main {
         QuadTree<LandParcel> treeL = fileWork.getTreeLandParcel();
 
         LandParcelTester tester = new LandParcelTester(treeL);
+
+ */
 //        ArrayList<Data<? extends CadastralObject>> findedData = cadaster.findInArea(tree);
 //        if (findedData.size() == 3 * numberOfObjects) {
 //            System.out.println("findlo to dobre");
@@ -235,7 +437,7 @@ public class Main {
 
 
 
-   //    int distinctValues = 6;
+//    int distinctValues = 6;
 //            //public List<Integer> generateList(int distinctValues) {
 //                int length = (int) Math.pow(2, distinctValues - 1) + 1;
 //                List<Integer> result = new ArrayList<>();
@@ -279,133 +481,12 @@ public class Main {
 
 
 
-            // int distinctValues = 6;
-            // List<Integer> generatedList = generateList(distinctValues);
+// int distinctValues = 6;
+// List<Integer> generatedList = generateList(distinctValues);
 
-           // System.out.println("Generated List: " + result);
-
-
+// System.out.println("Generated List: " + result);
 
 
-
-        System.out.println("Zatial to funguje ^-^");
-    }
-
-}
-
-// TODO porovnavanie cez equals
-/**
- * skoncila si asi tak, ze okna I,F,E,D mas zhruba hotove, potrbujes dorobit prevolavanie sprvanych metodiek.
- * Ale na to si predtym dorob:
- * utorok:
- * - urob si model:
- * - vytvorenie troch stromov
- * - vsetky metodky zo stromu
- * - praca so surdnicami!!
- * - edit
- * - oprav si PK, pracu s generikami :)
- * - AUTOMATICKE NAPLNENIE PARCIEL A TAK...
- * potom, bud:
- * - nasadis na to gui
- * alebo:
- * - SPRAVIS OPTIMALIZACIU
- */
-
-
-/**
- * dneska este:
- * dorobit guja:
- *      - vytvorenie stromu
- *      - editacia
- *      - vytvorenie
- *      - find
- *      - delete
- * opravit delete
- * opravit insert
- * urobit find
- * model aj s premenov coordinates, mysli na to
- * spatna funkcia pre curadnice
- * automaticke smerniky na parceli
- *
- * ak nahodou:
- * - generator instanci
- * - porozmyslat nad ukladanim
- */
-
-
-
-
-
-/**
- * ESTE TREBA
- * - ukladanie a nacitavanie do suborov
- * - spravit vhodny generator
- * - poriesit suradnice
- * - poriesti generika
- * - edit
- * - urobit optimalizaciu
- * - porfilerom pokukat
- * - dorobit gui
- * - zdravie stromu
- * - spravit cadaster
- * - isto mnoho dalsieho
- */
-
-
-
-// TODO vdase pozjednodusovat vyrazy list.get(0). a zaroevn list.remove(0)....da sa to, vis?
-// TODO over si ci to doublevanie ma zmysel pri < >
-// TODO over si ci niekde neporusujes zapuzdrenie, getovanie zoznamov cez kopiu!!!
-// TODO with index access method pay attention if index exists?
-// TODO zaujimavy poznaok o zmene velkosti ako ked som zvacsila velkost sa mi pekne krasne zvysila vyska stromu pri vlastne 10satine dat...teda dat na desasitine velkosti
-// TODO MUST!!! change your arrays at least to linked list or sometnig more efficient!!!!
-// TODO pri mazanai aj znizovanie stupna stromu?
-// TODO think about if is needed in method findAppropriateNode that one if in case current isnt leaf.!
-// TODO pripadne si refactorni insert na krajsi
-// TODO returvnovanie tych onych. Porusenie zapuzdrenia? (DUfam ze nie)(salala)RESULT
-// TODO dories ten generator poondiaty
-// TODO refactorni si cooridnates a s tym vsetky suvisiace metody ktore mas vsade po triedach...to tam nema co robit, ked to porovnana iba dooridnates!!!
-// TODO refactorni cely node, isto vela sa da pomazat a dat do coorinates a tak
-// TODO ZAPUZDRENIE!!!
-// TODO sorry jako, ale v delete nemas osetrenu zmenu hlbky stromu..teda akoze iba aktualizovanie ciselok, vis, ked tak potom oprav aj ten test na to
-// TODO tu zmenu vysky zvas si to ukladanie levelu nodu!! ulahcilo by ti to zivot, dobra rada nad zlato to je!!!
-// TODO gui delete all
-// TODO finvoavnie nemas dobre...teda spon to co potrebujes, ze bodov to naide vsetko cez to sa to kryje
-// TODO upratat pak pracu s coordniates v quadTree a quadNode
-// TODO overload insert
-// TODO pomenit arraylisty
-// todo cooridnates equals bigger tnat least poresit!!!
-// todo mapovanie jednej suradnice do coordinates
-// todo contins all neviem ci je koser
-// todo ten edit a delete si pories
-
-//int velkost = 100;
-//    Random random = new Random();
-//        random.setSeed(30);
-//                QuadTree<Place> testTree = new QuadTree<Place>(0, velkost, 0, velkost,6);
-//
-//        Coordinates coorsOfSearch = new Coordinates(30,60,30,80);
-//        TesterForPlace placeTester = new TesterForPlace(testTree);
-//        //placeTester.testOfSeed(4,100000,coorsOfSearch);
-//        //placeTester.testForSeed(2,20,coorsOfSearch);
-//        //placeTester.generateInsert(50000,random,coorsOfSearch);
-//
-//        System.out.println("-------- SKUSKA INSER DELETE CHANGE OF DEPTH-------------");
-//
-//        placeTester.testOfChangeOfDepth(3,10000, coorsOfSearch);
-//
-//        System.out.println("--------- SKUSKA FIND ----------");
-//
-//
-//        QuadTree<LandParcel> parcelTest = new QuadTree<LandParcel>(0, velkost, 0, velkost,6);
-//
-//        LandParcelTester parcelTester = new LandParcelTester(parcelTest);
-//        parcelTester.generateInsert(100,random,coorsOfSearch);
-//        ArrayList<Data<LandParcel>> zoznam2 =  parcelTester.generateFind(coorsOfSearch);
-//        for (int i = 0; i < zoznam2.size(); i++) {
-//        System.out.println(zoznam2.get(i).getData());
-//        }
-//        parcelTester.generateDelete();
 
 
 
