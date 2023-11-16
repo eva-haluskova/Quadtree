@@ -111,6 +111,9 @@ public class View extends JFrame {
     private JTextField SizeOfGenerateObjects;
     private JList ListOfPointers;
     private JScrollPane ScrollPaneOfPointers;
+    private JPanel TypeOfFindedObjectPanel;
+    private JComboBox TypeOfFindedObjectValue;
+    private JLabel TypeOfFindedObjectName;
     JList<Data<? extends CadastralObject>> outputList;
     DefaultListModel outputModel;
 
@@ -127,17 +130,17 @@ public class View extends JFrame {
         //this.outputList.setCellRenderer(new CadastralObjectRender());
         ListOfOutput.setCellRenderer(new CadastralObjectRender());
         ListOfOutput.setModel(outputModel);
-        LowerPanel.setPreferredSize(new Dimension(800,150));
-        LoadDataButton.setPreferredSize(new Dimension(800,90));
+
         ListOfPointers.setModel(pointerModel);
 
-
-        //outputList.setSelectionMode(SINGLE_SELECTION);
+        LowerPanel.setPreferredSize(new Dimension(800,150));
+        LoadDataButton.setPreferredSize(new Dimension(800,90));
 
         TreePanel.setVisible(true);
         MainPanel.setVisible(false);
         OtherPanel.setVisible(false);
     }
+
 
 
     public class CadastralObjectRender extends JLabel implements ListCellRenderer<Data<? extends CadastralObject>> {
@@ -218,6 +221,14 @@ public class View extends JFrame {
         CreateTreeButton.addActionListener(createTreeButtonListener);
     }
 
+    void addLoadDataButtonListener(ActionListener loadTreeButtonListener) {
+        LoadDataButton.addActionListener(loadTreeButtonListener);
+    }
+
+    void addSaveDataButtonListener(ActionListener saveTreeButtonListener) {
+        SaveDataButton.addActionListener(saveTreeButtonListener);
+    }
+
     /**
      * List of output listener
      */
@@ -282,6 +293,10 @@ public class View extends JFrame {
 
     public JPanel getOutputPanel() {
         return OutputPanel;
+    }
+
+    public JPanel getTypeOfFindedObjectPanel() {
+        return TypeOfFindedObjectPanel;
     }
 
     /**
@@ -405,6 +420,20 @@ public class View extends JFrame {
     }
 
     /**
+     * loading and saving tree
+     */
+
+    public String getTextLoadData() {
+        System.out.println(TextLoadData.getText());
+        return TextLoadData.getText();
+    }
+
+    public String getTextSaveData() {
+        System.out.println(TextSaveData.getText());
+        return TextSaveData.getText();
+    }
+
+    /**
      *
      * Getters  and setters of Comboboxes
      */
@@ -478,6 +507,9 @@ public class View extends JFrame {
         return TypeOfTreeOption.getSelectedItem().toString();
     }
 
+    public String getTypeOfFindedObjectValue() {
+        return TypeOfFindedObjectValue.getSelectedItem().toString();
+    }
     public boolean getAutoOptimalization() {
         return AutoOptimalization.isSelected();
     }

@@ -80,7 +80,7 @@
                 <children>
                   <grid id="5ca4f" binding="CoordinatesOnePanel" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag top="5" left="10" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
                     </constraints>
                     <properties/>
@@ -181,7 +181,7 @@
                   </grid>
                   <grid id="893ce" binding="CoordinatesTwoPanel" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="1" column="1" row-span="1" col-span="3" vsize-policy="3" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="2" column="2" row-span="1" col-span="3" vsize-policy="3" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag top="5" left="5" bottom="5" right="10" weightx="0.0" weighty="0.0"/>
                     </constraints>
                     <properties/>
@@ -253,7 +253,7 @@
                   </grid>
                   <component id="33141" class="javax.swing.JButton" binding="ConfirmButton">
                     <constraints>
-                      <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                       <gridbag top="0" left="60" bottom="0" right="60" weightx="0.0" weighty="0.0"/>
                     </constraints>
                     <properties>
@@ -266,7 +266,7 @@
                   </component>
                   <component id="634e4" class="javax.swing.JTextField" binding="NumberOfObjects">
                     <constraints>
-                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                      <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                         <preferred-size width="150" height="-1"/>
                       </grid>
                       <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0" ipadx="50"/>
@@ -277,7 +277,7 @@
                   </component>
                   <component id="2053b" class="javax.swing.JTextField" binding="SizeOfGenerateObjects">
                     <constraints>
-                      <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                      <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                         <preferred-size width="150" height="-1"/>
                       </grid>
                       <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0" ipadx="50"/>
@@ -286,18 +286,51 @@
                   </component>
                   <scrollpane id="741a0" binding="ScrollPaneOfPointers">
                     <constraints>
-                      <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                      <gridbag weightx="0.0" weighty="0.0"/>
+                      <grid row="2" column="5" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                      <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0" ipadx="250" ipady="10"/>
                     </constraints>
                     <properties/>
                     <border type="none"/>
                     <children>
                       <component id="b1741" class="javax.swing.JList" binding="ListOfPointers">
                         <constraints/>
-                        <properties/>
+                        <properties>
+                          <enabled value="true"/>
+                        </properties>
                       </component>
                     </children>
                   </scrollpane>
+                  <grid id="77683" binding="TypeOfFindedObjectPanel" layout-manager="GridBagLayout">
+                    <constraints>
+                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <gridbag top="5" left="10" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <component id="fb03a" class="javax.swing.JLabel" binding="TypeOfFindedObjectName">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                          <gridbag top="10" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <text value="Type of object"/>
+                        </properties>
+                      </component>
+                      <component id="89dfc" class="javax.swing.JComboBox" binding="TypeOfFindedObjectValue">
+                        <constraints>
+                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                          <gridbag top="10" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <model>
+                            <item value="Real Estate"/>
+                            <item value="Land Parcel"/>
+                          </model>
+                        </properties>
+                      </component>
+                    </children>
+                  </grid>
                 </children>
               </grid>
               <grid id="2efc4" binding="LowerPanel" layout-manager="CardLayout" hgap="0" vgap="0">
@@ -414,16 +447,18 @@
                       <verticalAlignment value="0"/>
                     </properties>
                   </component>
-                  <component id="24e4a" class="javax.swing.JTextField" binding="TextLoadData">
+                  <component id="24e4a" class="javax.swing.JTextField" binding="TextSaveData">
                     <constraints>
                       <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                         <preferred-size width="150" height="-1"/>
                       </grid>
                       <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
                     </constraints>
-                    <properties/>
+                    <properties>
+                      <text value=""/>
+                    </properties>
                   </component>
-                  <component id="dd4e" class="javax.swing.JTextField" binding="TextSaveData">
+                  <component id="dd4e" class="javax.swing.JTextField" binding="TextLoadData">
                     <constraints>
                       <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                         <preferred-size width="150" height="-1"/>

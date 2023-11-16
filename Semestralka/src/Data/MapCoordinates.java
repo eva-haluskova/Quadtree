@@ -23,7 +23,6 @@ public class MapCoordinates {
          GPS[] ofRoot = {one, two};
          this.gpsOfRoot = ofRoot;
       }
-      //this.coordinatesOfRoot = getCoordinatesValue(parGpsOfRoot);
       this.coordinatesOfRoot = getCoordinatesValueOfRoot(parGpsOfRoot);
    }
 
@@ -185,19 +184,15 @@ public class MapCoordinates {
 
       if (parGPSOne.getLatitude().equals(parGPSTwo.getLatitude())) {
          dimension[1] = Math.abs(parGPSOne.getLatitudePosition() - parGPSTwo.getLatitudePosition());
-        // dimension[1] = parGPSOne.getLatitudePosition() - parGPSTwo.getLatitudePosition();
 
       } else if (!parGPSOne.getLatitude().equals(parGPSTwo.getLatitude())) {
          dimension[1] = Math.abs(parGPSOne.getLatitudePosition() + parGPSTwo.getLatitudePosition());
-         //dimension[1] = parGPSOne.getLatitudePosition() + parGPSTwo.getLatitudePosition();
       }
 
       if (parGPSOne.getLongitude().equals(parGPSTwo.getLongitude())) {
          dimension[0] = Math.abs(parGPSOne.getLongitudePosition() - parGPSTwo.getLongitudePosition());
-         //dimension[0] = parGPSOne.getLongitudePosition() - parGPSTwo.getLongitudePosition();
       } else if (!parGPSOne.getLongitude().equals(parGPSTwo.getLongitude())) {
         dimension[0] = Math.abs(parGPSOne.getLongitudePosition() + parGPSTwo.getLongitudePosition());
-        // dimension[0] = parGPSOne.getLongitudePosition() + parGPSTwo.getLongitudePosition();
       }
 
       return dimension;

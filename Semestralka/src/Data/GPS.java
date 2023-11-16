@@ -54,6 +54,7 @@ public class GPS {
 
     /**
      *     -1 - param gps is smaller than this , 1  - param gps is bigger than this
+     *     what i mean is, that if first coordinates is more northern and western
      */
     public int isBiggerThan(GPS parGps) {
 

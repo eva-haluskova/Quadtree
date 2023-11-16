@@ -15,6 +15,7 @@ import QuadTree.ReadWriterOfTree;
 import static Data.CadastralObjectGenerator.GenerateOption.LAND_PARCEL;
 import static Data.CadastralObjectGenerator.GenerateOption.REAL_ESTATE;
 
+import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -41,28 +42,26 @@ public class Cadaster {
 
         this.generator = new CadastralObjectGenerator();
 
-        GPS gpsOne = new GPS(GPS.Latitude.NORTH, 100,GPS.Longitude.WEST,100);
-        GPS gpsTwo = new GPS(GPS.Latitude.SOUTH, 100,GPS.Longitude.EAST,100);
-        GPS[] listOfRootGPS = {gpsOne,gpsTwo};
-
-        GPS gpsOne4 = new GPS(GPS.Latitude.NORTH, 100,GPS.Longitude.WEST,100);
-        GPS gpsTwo4 = new GPS(GPS.Latitude.SOUTH, 100,GPS.Longitude.EAST,100);
-        GPS[] listOfRootGPSe = {gpsOne4,gpsTwo4};
-
-
-
-        this.landParcelTreeGPS = listOfRootGPS;
-        this.mapParcelTree = new MapCoordinates(listOfRootGPS);
-        this.landParcelQuadTree = new QuadTree<LandParcel>(this.mapParcelTree.getCoordinatesValue(listOfRootGPS),5);
-        System.out.println("Land Parcel tree is created!");
-
-        this.mapEstateTree = new MapCoordinates(listOfRootGPS);
-        this.realEstateTreeGPS = listOfRootGPS;
-        this.realEstateQuadTree = new QuadTree<RealEstate>(this.mapEstateTree.getCoordinatesValue(listOfRootGPSe),5);
-        System.out.println("Real Estate tree is created!");
-
-        this.generateObjects(REAL_ESTATE,500,50,listOfRootGPS);
-        this.generateObjects(LAND_PARCEL,500,10,listOfRootGPSe);
+//        GPS gpsOne = new GPS(GPS.Latitude.NORTH, 100,GPS.Longitude.WEST,100);
+//        GPS gpsTwo = new GPS(GPS.Latitude.SOUTH, 100,GPS.Longitude.EAST,100);
+//        GPS[] listOfRootGPS = {gpsOne,gpsTwo};
+//
+//        GPS gpsOne4 = new GPS(GPS.Latitude.NORTH, 100,GPS.Longitude.WEST,100);
+//        GPS gpsTwo4 = new GPS(GPS.Latitude.SOUTH, 100,GPS.Longitude.EAST,100);
+//        GPS[] listOfRootGPSe = {gpsOne4,gpsTwo4};
+//
+//        this.landParcelTreeGPS = listOfRootGPS;
+//        this.mapParcelTree = new MapCoordinates(listOfRootGPS);
+//        this.landParcelQuadTree = new QuadTree<LandParcel>(this.mapParcelTree.getCoordinatesValue(listOfRootGPS),5);
+//        System.out.println("Land Parcel tree is created!");
+//
+//        this.mapEstateTree = new MapCoordinates(listOfRootGPS);
+//        this.realEstateTreeGPS = listOfRootGPS;
+//        this.realEstateQuadTree = new QuadTree<RealEstate>(this.mapEstateTree.getCoordinatesValue(listOfRootGPSe),5);
+//        System.out.println("Real Estate tree is created!");
+//
+//        this.generateObjects(REAL_ESTATE,5000,10,listOfRootGPS);
+//        this.generateObjects(LAND_PARCEL,5000,10,listOfRootGPSe);
 
     }
 
@@ -98,10 +97,11 @@ public class Cadaster {
         LandParcel newLandParcel = new LandParcel(parDescription,parCoordinates, parParcelNumber);
         Data<LandParcel> dataToInsert = new Data(newLandParcel,this.mapParcelTree.getCoordinatesValue(parCoordinates),UUID.randomUUID());
         this.fillLandParcelWithBelongingRealEstates(dataToInsert);
+        this.refillEstateData(dataToInsert,dataToInsert.getCoordinates());
         this.landParcelQuadTree.insert(dataToInsert);
-        for (int i = 0; i < dataToInsert.getData().getBelongingRealEstates().size(); i++) {
-            System.out.println(dataToInsert.getData().getBelongingRealEstates().get(i).toString());
-        }
+//        for (int i = 0; i < dataToInsert.getData().getBelongingRealEstates().size(); i++) {
+//            System.out.println(dataToInsert.getData().getBelongingRealEstates().get(i).toString());
+//        }
         //System.out.println("Data land parcel: " + newLandParcel.toString() + " is created!");
     }
 
@@ -109,6 +109,7 @@ public class Cadaster {
         RealEstate newRealEstate = new RealEstate(parDescription,parCoordinates,parSerialNumber);
         Data<RealEstate> dataToInsert = new Data(newRealEstate,this.mapEstateTree.getCoordinatesValue(parCoordinates),UUID.randomUUID());
         this.fillRealEstateWithBelongingLandParcels(dataToInsert);
+        this.refillParcelData(dataToInsert,dataToInsert.getCoordinates());
         this.realEstateQuadTree.insert(dataToInsert);
         //System.out.println("Data real estate: " + newRealEstate.toString() + " is created!");
     }
@@ -150,9 +151,11 @@ public class Cadaster {
      */
     public void delete(Data<? extends CadastralObject> dataToDelete) {
         if (dataToDelete.getData().isInstanceOf().equals(CadastralObject.TypeOfCadastralObject.LAND_PARCEL)) {
+            this.deleteRealEstatesReferences((Data<LandParcel>) dataToDelete, dataToDelete.getCoordinates());
             this.landParcelQuadTree.delete((Data<LandParcel>) dataToDelete);
             System.out.println("delete land parcel");
         } else {
+            this.deleteLandParcelReferences((Data<RealEstate>) dataToDelete, dataToDelete.getCoordinates());
             this.realEstateQuadTree.delete((Data<RealEstate>) dataToDelete);
             System.out.println("delete real estate");
         }
@@ -161,13 +164,16 @@ public class Cadaster {
     /**
      * methods for finding data
      */
-    public ArrayList<Data<? extends CadastralObject>> findAccordingCoordinates(GPS parCoordinates) {
-        Coordinates coorsForSearchEstates = this.mapEstateTree.getCoordinatesValue(parCoordinates);
-        Coordinates coorsForSearchParcels = this.mapParcelTree.getCoordinatesValue(parCoordinates);
+    public ArrayList<Data<? extends CadastralObject>> findAccordingCoordinates(GPS parCoordinates, CadastralObject.TypeOfCadastralObject parType) {
         ArrayList<Data<? extends CadastralObject>> dataToReturn = new ArrayList<>();
-        dataToReturn.addAll(this.landParcelQuadTree.find(coorsForSearchParcels));
-        dataToReturn.addAll(this.realEstateQuadTree.find(coorsForSearchEstates));
-        System.out.println("simple find was successful");
+        if (parType.equals(CadastralObject.TypeOfCadastralObject.REAL_ESTATE)) {
+            Coordinates coorsForSearchEstates = this.mapEstateTree.getCoordinatesValue(parCoordinates);
+            dataToReturn.addAll(this.realEstateQuadTree.find(coorsForSearchEstates));
+            System.out.println("simple find was successful");
+        } else {
+            Coordinates coorsForSearchParcels = this.mapParcelTree.getCoordinatesValue(parCoordinates);
+            dataToReturn.addAll(this.landParcelQuadTree.find(coorsForSearchParcels));
+        }
         return dataToReturn;
     }
 
@@ -201,10 +207,8 @@ public class Cadaster {
             Data newData = new Data(list.get(i),mp.getCoordinatesValue(list.get(i).getGPSCoordinates()),UUID.randomUUID());
             dataToReturn.add(newData);
             if (list.get(i).isInstanceOf().equals(CadastralObject.TypeOfCadastralObject.LAND_PARCEL)) {
-                //this.fillLandParcelWithBelongingRealEstates(newData);
                 generatedLandParcel.add(newData);
             } else {
-                //this.fillRealEstateWithBelongingLandParcels(newData);
                 generatedRealEstates.add(newData);
             }
         }
@@ -216,9 +220,11 @@ public class Cadaster {
         }
         for (int i = 0; i < generatedLandParcel.size(); i++) {
             this.fillLandParcelWithBelongingRealEstates(generatedLandParcel.get(i));
+            this.refillEstateData(generatedLandParcel.get(i),generatedLandParcel.get(i).getCoordinates());
         }
         for (int i = 0; i < generatedRealEstates.size(); i++) {
             this.fillRealEstateWithBelongingLandParcels(generatedRealEstates.get(i));
+            this.refillParcelData(generatedRealEstates.get(i),generatedRealEstates.get(i).getCoordinates());
         }
 
         return dataToReturn;
@@ -250,6 +256,7 @@ public class Cadaster {
             this.readWriterOfTree = new ReadWriterOfTree(this.realEstateQuadTree,this.landParcelQuadTree,this.realEstateTreeGPS,this.getLandParcelTreeGPS());
         }
         this.readWriterOfTree.writeData(parPath);
+        System.out.println("Data wa succesfull saved!");
     }
 
     public void loadTrees(String parPath) {
@@ -258,7 +265,14 @@ public class Cadaster {
         }
         this.readWriterOfTree.readData(parPath);
         this.landParcelQuadTree = this.readWriterOfTree.getTreeLandParcel();
+        this.landParcelTreeGPS = this.readWriterOfTree.getParTreeLPGPS();
+        this.mapParcelTree = new MapCoordinates(this.landParcelTreeGPS);
+
         this.realEstateQuadTree = this.readWriterOfTree.getTreeRealEstate();
+        this.realEstateTreeGPS = this.readWriterOfTree.getParTreeREGPS();
+        this.mapEstateTree = new MapCoordinates(this.realEstateTreeGPS);
+        this.fillAll();
+        System.out.println("Data was succesfull loaded!");
     }
 
 
@@ -281,46 +295,74 @@ public class Cadaster {
 
 
     /**
-     * methods for automatic filling parcel with pointers to estates which contains and vice versa
+     * methods for automatic filling and refilling parcel with pointers to estates which
+     * contains and vice versa, also for removing pointers
      */
     private void fillLandParcelWithBelongingRealEstates(Data<LandParcel> parLandParcel) {
-        if (!this.realEstateQuadTree.isEmpty()) {
+        if (this.realEstateQuadTree != null && !this.realEstateQuadTree.isEmpty()) {
             ArrayList<Data<RealEstate>> data = this.realEstateQuadTree.find(parLandParcel.getCoordinates());
-            System.out.println(" land parcel data has size:" + data.size());
             for (int i = 0; i < data.size(); i++) {
                 parLandParcel.getData().addBelongingRealEstate(data.get(i).getData());
-                //System.out.println("vlozilo sa mi dato");
             }
         }
     }
     private void fillRealEstateWithBelongingLandParcels(Data<RealEstate> parRealEstate) {
-        if (!this.landParcelQuadTree.isEmpty()) {
+        if (this.landParcelQuadTree != null && !this.landParcelQuadTree.isEmpty()) {
             ArrayList<Data<LandParcel>> data = this.landParcelQuadTree.find(parRealEstate.getCoordinates());
-            System.out.println("real estate data has size:" + data.size());
             for (int i = 0; i < data.size(); i++) {
                 parRealEstate.getData().addBelongingLandParcel(data.get(i).getData());
-                //System.out.println("zvlozilo sa mi dato");
             }
         }
     }
 
-    /*
-
-   po vlozeni vsetkych dat. Prejde sa ti kazde jedno dato a povkladaju do neho objekty kore don patria.
-
-     */
-
-    private void refillEstateData(Coordinates parCoordinatesOfNewData) {
-        // po kazdnom vlozeni data najskor musim do vlozeneho data povkladat referencie a nasledne aj skontrolovat do akych inych dat zasahuje aby sa mi tam vyvtorila referencia na toto dato.
-        // ked vymazem dato, musia sa mi nan vymzataz referencie
-        ArrayList<Data<RealEstate>> dataForControl = this.realEstateQuadTree.find(parCoordinatesOfNewData);
-//        for (int i = 0; i < dataForControl.size(); i++) {
-//            dataForControl.get(i).getData().addBelongingLandParcel();
-//        }
+    private void refillEstateData(Data<LandParcel> parData, Coordinates parCoordinatesOfNewData) {
+        if (this.realEstateQuadTree != null && !this.realEstateQuadTree.isEmpty()) {
+            ArrayList<Data<RealEstate>> dataForControl = this.realEstateQuadTree.find(parCoordinatesOfNewData);
+            for (int i = 0; i < dataForControl.size(); i++) {
+                dataForControl.get(i).getData().addBelongingLandParcel(parData.getData());
+            }
+        }
     }
 
-    private void refillParcelData(Coordinates parCoordinatesOfNewData) {
+    private void refillParcelData(Data<RealEstate> parData,Coordinates parCoordinatesOfNewData) {
+        if (this.landParcelQuadTree != null && !this.landParcelQuadTree.isEmpty()) {
+            ArrayList<Data<LandParcel>> dataForControl = this.landParcelQuadTree.find(parCoordinatesOfNewData);
+            for (int i = 0; i < dataForControl.size(); i++) {
+                dataForControl.get(i).getData().addBelongingRealEstate(parData.getData());
+            }
+        }
+    }
+
+    private void deleteLandParcelReferences(Data<RealEstate> parData, Coordinates parCoordinatesOfDeletedData) {
+        if (this.landParcelQuadTree != null && !this.landParcelQuadTree.isEmpty()) {
+            ArrayList<Data<LandParcel>> dataForControl = this.landParcelQuadTree.find(parCoordinatesOfDeletedData);
+            for (int i = 0; i < dataForControl.size(); i++) {
+                dataForControl.get(i).getData().deleteBelongingRealEstate(parData.getData());
+            }
+        }
+    }
+
+    private void deleteRealEstatesReferences(Data<LandParcel> parData, Coordinates parCoordinatesOfDeletedData) {
+        if (this.realEstateQuadTree != null && !this.realEstateQuadTree.isEmpty()) {
+            ArrayList<Data<RealEstate>> dataForControl = this.realEstateQuadTree.find(parCoordinatesOfDeletedData);
+            for (int i = 0; i < dataForControl.size(); i++) {
+                dataForControl.get(i).getData().deleteBelongingLandParcels(parData.getData());
+            }
+        }
+    }
+
+    private void fillAll() {
+        ArrayList<Data<LandParcel>> dataToFill = this.landParcelQuadTree.getAllDataInSubTree(this.landParcelQuadTree.getRoot());
+        for (int i = 0; i < dataToFill.size(); i++) {
+            this.fillLandParcelWithBelongingRealEstates(dataToFill.get(i));
+            this.refillEstateData(dataToFill.get(i),dataToFill.get(i).getCoordinates());
+        }
+        ArrayList<Data<RealEstate>> dataToFill2 = this.realEstateQuadTree.getAllDataInSubTree(this.realEstateQuadTree.getRoot());
+        for (int i = 0; i < dataToFill2.size(); i++) {
+            this.fillRealEstateWithBelongingLandParcels(dataToFill2.get(i));
+            this.refillParcelData(dataToFill2.get(i),dataToFill2.get(i).getCoordinates());
+        }
 
     }
-    // todo eva vies jednoducho kde je chyba, tak to prosim oprav. ked jednoducho vytvars one musis to vzdy kontrolovat saalalahlalala
+
 }

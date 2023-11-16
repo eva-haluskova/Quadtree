@@ -123,10 +123,17 @@ public class Coordinates {
      * Checks if some cooridnates whole belongs to some other coordinates
      */
     public static boolean isIncludingWholeData(Coordinates parCoordinatesOfArea, Coordinates parCoordinatesOfData) {
-        return (parCoordinatesOfArea.getLowerX() <= parCoordinatesOfData.getLowerX() &&
-                parCoordinatesOfArea.getUpperX() >= parCoordinatesOfData.getUpperX() &&
-                parCoordinatesOfArea.getLowerY() <= parCoordinatesOfData.getLowerY() &&
-                parCoordinatesOfArea.getUpperY() >= parCoordinatesOfData.getUpperY());
+        return ((parCoordinatesOfArea.getLowerX() < parCoordinatesOfData.getLowerX() ||
+                Math.abs(parCoordinatesOfArea.getLowerX() - parCoordinatesOfData.getLowerX()) < EPSILON) &&
+
+                (parCoordinatesOfArea.getUpperX() > parCoordinatesOfData.getUpperX() ||
+                Math.abs(parCoordinatesOfArea.getUpperX() - parCoordinatesOfData.getUpperX()) < EPSILON) &&
+
+                (parCoordinatesOfArea.getLowerY() < parCoordinatesOfData.getLowerY() ||
+                Math.abs(parCoordinatesOfArea.getLowerY() - parCoordinatesOfData.getLowerY()) < EPSILON) &&
+
+                (parCoordinatesOfArea.getUpperY() > parCoordinatesOfData.getUpperY() ||
+                Math.abs(parCoordinatesOfArea.getUpperY() - parCoordinatesOfData.getUpperY()) < EPSILON));
     }
 
     /**
@@ -135,45 +142,110 @@ public class Coordinates {
     public static boolean belongsToArea(Coordinates parCoordinatesOfArea, Coordinates parCoordinatesOfQuadrant) {
         return (
                 //1
-                (parCoordinatesOfArea.getLowerX() > parCoordinatesOfQuadrant.getLowerX() &&
-                        parCoordinatesOfArea.getLowerX() < parCoordinatesOfQuadrant.getUpperX() &&
-                        parCoordinatesOfArea.getLowerY() > parCoordinatesOfQuadrant.getLowerY() &&
-                        parCoordinatesOfArea.getLowerY() < parCoordinatesOfQuadrant.getUpperY()) ||
+                ((parCoordinatesOfArea.getLowerX() > parCoordinatesOfQuadrant.getLowerX() ||
+                        Math.abs(parCoordinatesOfArea.getLowerX() - parCoordinatesOfQuadrant.getLowerX()) < EPSILON) &&
+
+                        (parCoordinatesOfArea.getLowerX() < parCoordinatesOfQuadrant.getUpperX() ||
+                        Math.abs(parCoordinatesOfArea.getLowerX() - parCoordinatesOfQuadrant.getUpperX()) < EPSILON) &&
+
+                        (parCoordinatesOfArea.getLowerY() > parCoordinatesOfQuadrant.getLowerY() ||
+                        Math.abs(parCoordinatesOfArea.getLowerY() - parCoordinatesOfQuadrant.getLowerY()) < EPSILON) &&
+
+                        (parCoordinatesOfArea.getLowerY() < parCoordinatesOfQuadrant.getUpperY() ||
+                        Math.abs(parCoordinatesOfArea.getLowerY() - parCoordinatesOfQuadrant.getUpperY()) < EPSILON)
+
+                ) ||
                         //2
-                        (parCoordinatesOfArea.getUpperX() > parCoordinatesOfQuadrant.getLowerX() &&
-                                parCoordinatesOfArea.getUpperX() < parCoordinatesOfQuadrant.getUpperX() &&
-                                parCoordinatesOfArea.getLowerY() > parCoordinatesOfQuadrant.getLowerY() &&
-                                parCoordinatesOfArea.getLowerY() < parCoordinatesOfQuadrant.getUpperY()) ||
+                        ((parCoordinatesOfArea.getUpperX() > parCoordinatesOfQuadrant.getLowerX() ||
+                        Math.abs(parCoordinatesOfArea.getUpperX() - parCoordinatesOfQuadrant.getLowerX()) < EPSILON) &&
+
+                        (parCoordinatesOfArea.getUpperX() < parCoordinatesOfQuadrant.getUpperX() ||
+                        Math.abs(parCoordinatesOfArea.getUpperX() - parCoordinatesOfQuadrant.getUpperX()) < EPSILON) &&
+
+                        (parCoordinatesOfArea.getLowerY() > parCoordinatesOfQuadrant.getLowerY() ||
+                        Math.abs(parCoordinatesOfArea.getLowerY() - parCoordinatesOfQuadrant.getLowerY()) < EPSILON) &&
+
+                        (parCoordinatesOfArea.getLowerY() < parCoordinatesOfQuadrant.getUpperY() ||
+                        Math.abs(parCoordinatesOfArea.getLowerY() - parCoordinatesOfQuadrant.getUpperY()) < EPSILON)
+                ) ||
                         //3
-                        (parCoordinatesOfArea.getLowerX() > parCoordinatesOfQuadrant.getLowerX() &&
-                                parCoordinatesOfArea.getLowerX() < parCoordinatesOfQuadrant.getUpperX() &&
-                                parCoordinatesOfArea.getUpperY() > parCoordinatesOfQuadrant.getLowerY() &&
-                                parCoordinatesOfArea.getUpperY() < parCoordinatesOfQuadrant.getUpperY()) ||
+                        ((parCoordinatesOfArea.getLowerX() > parCoordinatesOfQuadrant.getLowerX()  ||
+                        Math.abs(parCoordinatesOfArea.getLowerX() - parCoordinatesOfQuadrant.getLowerX()) < EPSILON) &&
+
+                        (parCoordinatesOfArea.getLowerX() < parCoordinatesOfQuadrant.getUpperX()  ||
+                        Math.abs(parCoordinatesOfArea.getLowerX() - parCoordinatesOfQuadrant.getUpperX()) < EPSILON) &&
+
+                        (parCoordinatesOfArea.getUpperY() > parCoordinatesOfQuadrant.getLowerY()  ||
+                        Math.abs(parCoordinatesOfArea.getUpperY() - parCoordinatesOfQuadrant.getLowerY()) < EPSILON) &&
+
+                        (parCoordinatesOfArea.getUpperY() < parCoordinatesOfQuadrant.getUpperY()  ||
+                        Math.abs(parCoordinatesOfArea.getUpperY() - parCoordinatesOfQuadrant.getUpperY()) < EPSILON)
+                ) ||
                         //4
-                        (parCoordinatesOfArea.getUpperX() > parCoordinatesOfQuadrant.getLowerX() &&
-                                parCoordinatesOfArea.getUpperX() < parCoordinatesOfQuadrant.getUpperX() &&
-                                parCoordinatesOfArea.getUpperY() > parCoordinatesOfQuadrant.getLowerY() &&
-                                parCoordinatesOfArea.getUpperY() < parCoordinatesOfQuadrant.getUpperY()) ||
+                        ((parCoordinatesOfArea.getUpperX() > parCoordinatesOfQuadrant.getLowerX()  ||
+                        Math.abs(parCoordinatesOfArea.getUpperX() - parCoordinatesOfQuadrant.getLowerX()) < EPSILON) &&
+
+                        (parCoordinatesOfArea.getUpperX() < parCoordinatesOfQuadrant.getUpperX()  ||
+                        Math.abs(parCoordinatesOfArea.getUpperX() - parCoordinatesOfQuadrant.getUpperX()) < EPSILON) &&
+
+                        (parCoordinatesOfArea.getUpperY() > parCoordinatesOfQuadrant.getLowerY()  ||
+                        Math.abs(parCoordinatesOfArea.getUpperY() - parCoordinatesOfQuadrant.getLowerY()) < EPSILON) &&
+
+                        (parCoordinatesOfArea.getUpperY() < parCoordinatesOfQuadrant.getUpperY()  ||
+                        Math.abs(parCoordinatesOfArea.getUpperY() - parCoordinatesOfQuadrant.getUpperY()) < EPSILON)
+                ) ||
                         //5
-                        (parCoordinatesOfArea.getLowerY() > parCoordinatesOfQuadrant.getLowerY() &&
-                                parCoordinatesOfArea.getLowerY() < parCoordinatesOfQuadrant.getUpperY() &&
-                                parCoordinatesOfArea.getLowerX() < parCoordinatesOfQuadrant.getLowerX() &&
-                                parCoordinatesOfArea.getUpperX() > parCoordinatesOfQuadrant.getUpperX()) ||
+                        ((parCoordinatesOfArea.getLowerY() > parCoordinatesOfQuadrant.getLowerY()  ||
+                        Math.abs(parCoordinatesOfArea.getLowerY() - parCoordinatesOfQuadrant.getLowerY()) < EPSILON) &&
+
+                        (parCoordinatesOfArea.getLowerY() < parCoordinatesOfQuadrant.getUpperY() ||
+                        Math.abs(parCoordinatesOfArea.getLowerY() - parCoordinatesOfQuadrant.getUpperY()) < EPSILON) &&
+
+                        (parCoordinatesOfArea.getLowerX() < parCoordinatesOfQuadrant.getLowerX() ||
+                        Math.abs(parCoordinatesOfArea.getLowerX() - parCoordinatesOfQuadrant.getLowerX()) < EPSILON) &&
+
+                        (parCoordinatesOfArea.getUpperX() > parCoordinatesOfQuadrant.getUpperX() ||
+                        Math.abs(parCoordinatesOfArea.getUpperX() - parCoordinatesOfQuadrant.getUpperX()) < EPSILON)
+                ) ||
                         //6
-                        (parCoordinatesOfArea.getUpperY() > parCoordinatesOfQuadrant.getLowerY() &&
-                                parCoordinatesOfArea.getUpperY() < parCoordinatesOfQuadrant.getUpperY() &&
-                                parCoordinatesOfArea.getLowerX() < parCoordinatesOfQuadrant.getLowerX() &&
-                                parCoordinatesOfArea.getUpperX() > parCoordinatesOfQuadrant.getUpperX()) ||
+                        ((parCoordinatesOfArea.getUpperY() > parCoordinatesOfQuadrant.getLowerY() ||
+                        Math.abs(parCoordinatesOfArea.getUpperY() - parCoordinatesOfQuadrant.getLowerY()) < EPSILON) &&
+
+                        (parCoordinatesOfArea.getUpperY() < parCoordinatesOfQuadrant.getUpperY() ||
+                        Math.abs(parCoordinatesOfArea.getUpperY() - parCoordinatesOfQuadrant.getUpperY()) < EPSILON) &&
+
+                        (parCoordinatesOfArea.getLowerX() < parCoordinatesOfQuadrant.getLowerX() ||
+                        Math.abs(parCoordinatesOfArea.getLowerX() - parCoordinatesOfQuadrant.getLowerX()) < EPSILON) &&
+
+                        (parCoordinatesOfArea.getUpperX() > parCoordinatesOfQuadrant.getUpperX() ||
+                        Math.abs(parCoordinatesOfArea.getUpperX() - parCoordinatesOfQuadrant.getUpperX()) < EPSILON)
+                ) ||
                         //7
-                        (parCoordinatesOfArea.getLowerX() > parCoordinatesOfQuadrant.getLowerX() &&
-                                parCoordinatesOfArea.getLowerX() < parCoordinatesOfQuadrant.getUpperX() &&
-                                parCoordinatesOfArea.getLowerY() < parCoordinatesOfQuadrant.getLowerY() &&
-                                parCoordinatesOfArea.getUpperY() > parCoordinatesOfQuadrant.getUpperY()) ||
+                        ((parCoordinatesOfArea.getLowerX() > parCoordinatesOfQuadrant.getLowerX() ||
+                        Math.abs(parCoordinatesOfArea.getLowerX() - parCoordinatesOfQuadrant.getLowerX()) < EPSILON) &&
+
+                        (parCoordinatesOfArea.getLowerX() < parCoordinatesOfQuadrant.getUpperX() ||
+                        Math.abs(parCoordinatesOfArea.getLowerX() - parCoordinatesOfQuadrant.getUpperX()) < EPSILON) &&
+
+                        (parCoordinatesOfArea.getLowerY() < parCoordinatesOfQuadrant.getLowerY() ||
+                        Math.abs(parCoordinatesOfArea.getLowerY() - parCoordinatesOfQuadrant.getLowerY()) < EPSILON) &&
+
+                        (parCoordinatesOfArea.getUpperY() > parCoordinatesOfQuadrant.getUpperY() ||
+                        Math.abs(parCoordinatesOfArea.getUpperY() - parCoordinatesOfQuadrant.getUpperY()) < EPSILON)
+                ) ||
                         //8
-                        (parCoordinatesOfArea.getUpperX() > parCoordinatesOfQuadrant.getLowerX() &&
-                                parCoordinatesOfArea.getUpperX() < parCoordinatesOfQuadrant.getUpperX() &&
-                                parCoordinatesOfArea.getLowerY() < parCoordinatesOfQuadrant.getLowerY() &&
-                                parCoordinatesOfArea.getUpperY() > parCoordinatesOfQuadrant.getUpperY())
+                        ((parCoordinatesOfArea.getUpperX() > parCoordinatesOfQuadrant.getLowerX()||
+                        Math.abs(parCoordinatesOfArea.getUpperX() - parCoordinatesOfQuadrant.getLowerX()) < EPSILON) &&
+
+                        (parCoordinatesOfArea.getUpperX() < parCoordinatesOfQuadrant.getUpperX()||
+                        Math.abs(parCoordinatesOfArea.getUpperX() - parCoordinatesOfQuadrant.getUpperX()) < EPSILON) &&
+
+                        (parCoordinatesOfArea.getLowerY() < parCoordinatesOfQuadrant.getLowerY()||
+                        Math.abs(parCoordinatesOfArea.getLowerY() - parCoordinatesOfQuadrant.getLowerY()) < EPSILON) &&
+
+                        (parCoordinatesOfArea.getUpperY() > parCoordinatesOfQuadrant.getUpperY() ||
+                        Math.abs(parCoordinatesOfArea.getUpperY() - parCoordinatesOfQuadrant.getUpperY()) < EPSILON)
+                )
         );
     }
 
@@ -224,46 +296,53 @@ public class Coordinates {
     public static int isFitsToQuadrant(Coordinates parCoordinatesOfActual, Coordinates parCoordinates) {
 
         if (
-                parCoordinatesOfActual.getLowerX() <= parCoordinates.getLowerX() &&
+                parCoordinatesOfActual.getLowerX() < parCoordinates.getLowerX() &&
                         (parCoordinatesOfActual.getLowerX() + parCoordinatesOfActual.getUpperX()) / 2
-                                >= parCoordinates.getUpperX() &&
-                        parCoordinatesOfActual.getLowerY() <= parCoordinates.getLowerY() &&
+                                > parCoordinates.getUpperX() &&
+                        parCoordinatesOfActual.getLowerY() < parCoordinates.getLowerY() &&
                         (parCoordinatesOfActual.getLowerY() + parCoordinatesOfActual.getUpperY()) / 2
-                                >= parCoordinates.getUpperY()
+                                > parCoordinates.getUpperY()
         ) {
             return 0;
         } else if (
                 (parCoordinatesOfActual.getLowerX() + parCoordinatesOfActual.getUpperX()) / 2
-                        <= parCoordinates.getLowerX() &&
-                        parCoordinatesOfActual.getUpperX() >= parCoordinates.getUpperX() &&
-                        parCoordinatesOfActual.getLowerY() <= parCoordinates.getLowerY() &&
+                        < parCoordinates.getLowerX() &&
+                        parCoordinatesOfActual.getUpperX() > parCoordinates.getUpperX() &&
+                        parCoordinatesOfActual.getLowerY() < parCoordinates.getLowerY() &&
                         (parCoordinatesOfActual.getLowerY() + parCoordinatesOfActual.getUpperY()) / 2
-                                >= parCoordinates.getUpperY()
+                                > parCoordinates.getUpperY()
         ) {
             return 1;
         } else if (
                 (parCoordinatesOfActual.getLowerX() + parCoordinatesOfActual.getUpperX()) / 2
-                        <= parCoordinates.getLowerX() &&
-                        parCoordinatesOfActual.getUpperX() >= parCoordinates.getUpperX() &&
+                        < parCoordinates.getLowerX() &&
+                        parCoordinatesOfActual.getUpperX() > parCoordinates.getUpperX() &&
                         (parCoordinatesOfActual.getLowerY() + parCoordinatesOfActual.getUpperY()) / 2
-                                <= parCoordinates.getLowerY() &&
-                        parCoordinatesOfActual.getUpperY() >= parCoordinates.getUpperY()
+                                < parCoordinates.getLowerY() &&
+                        parCoordinatesOfActual.getUpperY() > parCoordinates.getUpperY()
         ) {
             return 2;
         } else if (
-                parCoordinatesOfActual.getLowerX() <= parCoordinates.getLowerX() &&
+                parCoordinatesOfActual.getLowerX() < parCoordinates.getLowerX() &&
                         (parCoordinatesOfActual.getLowerX() + parCoordinatesOfActual.getUpperX()) / 2
-                                >= parCoordinates.getUpperX() &&
+                                > parCoordinates.getUpperX() &&
                         (parCoordinatesOfActual.getLowerY() + parCoordinatesOfActual.getUpperY()) / 2
-                                <= parCoordinates.getLowerY() &&
-                        parCoordinatesOfActual.getUpperY() >= parCoordinates.getUpperY()
+                                < parCoordinates.getLowerY() &&
+                        parCoordinatesOfActual.getUpperY() > parCoordinates.getUpperY()
         ) {
             return 3;
         } else if (
-                parCoordinatesOfActual.getLowerX() <= parCoordinates.getLowerX() &&
-                        parCoordinatesOfActual.getUpperX() >= parCoordinates.getUpperX() &&
-                        parCoordinatesOfActual.getLowerY() <= parCoordinates.getLowerY() &&
-                        parCoordinatesOfActual.getUpperY() >= parCoordinates.getUpperY()
+                (parCoordinatesOfActual.getLowerX() < parCoordinates.getLowerX() ||
+                        Math.abs(parCoordinatesOfActual.getLowerX() - parCoordinates.getLowerX()) < EPSILON) &&
+
+                        (parCoordinatesOfActual.getUpperX() > parCoordinates.getUpperX() ||
+                        Math.abs(parCoordinatesOfActual.getUpperX() - parCoordinates.getUpperX()) < EPSILON) &&
+
+                        (parCoordinatesOfActual.getLowerY() < parCoordinates.getLowerY() ||
+                        Math.abs(parCoordinatesOfActual.getLowerY() - parCoordinates.getLowerY()) < EPSILON) &&
+
+                        (parCoordinatesOfActual.getUpperY() > parCoordinates.getUpperY() ||
+                        Math.abs(parCoordinatesOfActual.getUpperY() - parCoordinates.getUpperY()) < EPSILON)
         ) {
             return -1;
         } else {

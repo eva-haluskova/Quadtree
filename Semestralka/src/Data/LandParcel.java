@@ -42,6 +42,10 @@ public class LandParcel extends CadastralObject {
         this.belongingRealEstates.add(parRealEstate);
     }
 
+    public void deleteBelongingRealEstate(RealEstate parRealEstate) {
+        this.belongingRealEstates.remove(parRealEstate);
+    }
+
     public ArrayList<RealEstate> getBelongingRealEstates() {
         return this.belongingRealEstates;
     }
