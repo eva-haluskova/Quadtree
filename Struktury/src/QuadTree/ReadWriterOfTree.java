@@ -192,6 +192,8 @@ public class ReadWriterOfTree {
 
             this.treeLandParcel = newLandParcelTree;
             this.treeRealEstate = newRealEstateTree;
+            this.parTreeREGPS = rootRE;
+            this.parTreeLPGPS = rootRE;
             System.out.println("data loaded");
 
         } catch (IOException e) {
@@ -258,4 +260,11 @@ public class ReadWriterOfTree {
         return this.treeRealEstate;
     }
 
+    public GPS[] getParTreeREGPS() {
+        return parTreeREGPS;
+    }
+
+    public GPS[] getParTreeLPGPS() {
+        return parTreeLPGPS;
+    }
 }
