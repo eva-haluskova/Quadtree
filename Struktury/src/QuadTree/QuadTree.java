@@ -35,7 +35,6 @@ public class QuadTree<T> {
         this.depth = 0;
         this.numberOfItems = 0;
         this.optimalizationOn = false;
-        this.scaleParameter = 0;
     }
 
     public QuadTree(
@@ -199,6 +198,7 @@ public class QuadTree<T> {
 
     public void insert(Data<T> parData, QuadTreeNode<T> parStartNode) {
         if (!Coordinates.isIncludingWholeData(this.rangeOfTree,parData.getCoordinates())) {
+            System.out.println(parData.getCoordinates().getLowerX() + " " + parData.getCoordinates().getUpperX() + " " + parData.getCoordinates().getLowerY() + " " + parData.getCoordinates().getUpperY());
             System.out.println("data not fints to tree");
             return;
         }
@@ -462,10 +462,15 @@ public class QuadTree<T> {
      */
     public double health() {
         double weightDepth = 1;
-        double weightNullptr = 1.25;
+        double weightNullptr = 2;
         double healthOfDepth = this.getHealthOfDepth();
         double healthOfNullptr = this.getHealthOfNullPtr();
         double health = (weightDepth * healthOfDepth + weightNullptr * healthOfNullptr)/ (weightDepth + weightNullptr);
+        if (health > 1) {
+            health = 100;
+        } else {
+            health = Math.round(health * 100);
+        }
         System.out.println("health: " + health);
         return health;
     }
@@ -517,6 +522,7 @@ public class QuadTree<T> {
         double pomLogOne = Math.log(this.optimalDepth());
         double pomLogTwo = Math.log(this.depth);
         double healthOfDepth = (pomLogOne / pomLogTwo); // * 100
+
         return healthOfDepth;
     }
 
@@ -649,59 +655,98 @@ public class QuadTree<T> {
 
 
     public void tryToOptimalize() {
-        // to ze sa nezmenia suradnice v DATU nevadi, to bude take inkognito iba...
+        // look on 10 percent of width and height and figure out on which line is the less colision of objects
+        // count how should be width/height according to far away item
+        // change tree boundaries
+        // delete end insert whole data
+        // find if health is better
+        // end :)
 
-        // 1. najskor si vyberem vsetky data zo stromu
-        // 2. idem postupne vkladat data - urcenou mierkou im zmenim suradnicu okolo strdu
-        // 3. vlozim dato
-        this.optimalizationOn = true;
+        this.health();
+        System.out.println("----Optimalize----");
+        double width = this.rangeOfTree.getUpperX() - this.rangeOfTree.getLowerX();
+        double height = this.rangeOfTree.getUpperY() - this.rangeOfTree.getLowerY();
+        int tenPercentageWidth = (int) Math.round(width/10);
+        int tenPercentageHeight = (int) Math.round(height/10);
+        int indexOfNewLineWidth = returnIndexOfTheLeastNumberOfColisionForWidth(tenPercentageWidth);
+        int indexOfNewLineHeight = returnIndexOfTheLeastNumberOfColisionForHeight(tenPercentageHeight);
 
-        this.scaleParameter = this.health();
+        double newXcentre = (this.rangeOfTree.getLowerX() + this.rangeOfTree.getUpperX()) / 2 + indexOfNewLineWidth;
+        double newYcentre = (this.rangeOfTree.getLowerY() + this.rangeOfTree.getUpperY()) / 2 + indexOfNewLineHeight;
+
+        double newWidth = this.calculateWidth(newXcentre);
+        double newHeight = this.calculateHeight(newYcentre);
+// TODO halooo akoze
+        Coordinates newCoors = new Coordinates(0,2*newWidth,0,2*newHeight);
 
         ArrayList<Data<T>> dataToInsert = this.getAllDataInSubTree(this.root);
-        this.root = null;
+        this.reinicializeValueOfTree(newCoors);
         for (int i = 0; i < dataToInsert.size(); i++) {
-            Data<T> data = dataToInsert.get(i);
-            data.getCoordinates().changeCoordinatesSize(1/this.scaleParameter);
-            this.insert(data);
+            this.insert(dataToInsert.get(i));
         }
-
+        this.health();
     }
 
+    private int returnIndexOfTheLeastNumberOfColisionForWidth(int parRange) {
+        int minColision = Integer.MAX_VALUE;
+        int indexOfArea = 0;
+        double centreX = (this.rangeOfTree.getLowerX() + this.rangeOfTree.getUpperX())/2;
 
-    private ArrayList<Coordinates> returnListOfBoundary(int level) {
-
-        ArrayList<Coordinates> result = new ArrayList<>();
-        double lowerx = this.rangeOfTree.getLowerX();
-        double upperx = this.rangeOfTree.getUpperX();
-        double range = (lowerx + upperx)/2;
-
-        if (level == 1) {
-            result.add(new Coordinates(rangeOfTree));
-            return result;
-        }
-
-        int denominator = 2;
-        int sqare = 1;
-
-        int count = (int)Math.pow(denominator,level-1) + 1;
-        double[][] listOfBoundry = new double[level][count];
-
-
-        for (int i = 2; i < level; i++) {
-            double period = Math.pow(denominator,sqare); // perioda na urovni je 2 na ureoven minus prvu
-            for (int j = 1; j < period; j++) {
-                int index = (int) ((int) (count -1)/period);
-                double v = listOfBoundry[i][index];
-
-                // mam 6 urovni to znamena pole ma dlsku 33. ja chcem teraz count - 1 / 2 -> na to miesto zapisujem
-                // na tretej urovni chcem count - 1 / 3 -> to je index a zaroven ho prechadzam nasobkami az do konca
-                // na stvrtej urovni chcem count - 1 / 4
+        // width
+        for (int i = -parRange; i < parRange; i++) {
+            Coordinates coors = new Coordinates(centreX + i, centreX+i+1,this.rangeOfTree.getLowerY(),this.rangeOfTree.getUpperY());
+            ArrayList<Data<T>> data = this.findInArea(coors);
+            if (data.size() < minColision) {
+                minColision = data.size();
+                indexOfArea = i;
             }
-
-
-            sqare++;
         }
-        return null;
+        return indexOfArea;
     }
+
+    private int returnIndexOfTheLeastNumberOfColisionForHeight(int parRange) {
+        int minColision = Integer.MAX_VALUE;
+        int indexOfArea = 0;
+        double centreY = (this.rangeOfTree.getLowerY() + this.rangeOfTree.getUpperY())/2;
+
+        // height
+        for (int i = -parRange; i < parRange; i++) {
+            Coordinates coors = new Coordinates(this.rangeOfTree.getLowerX(),this.rangeOfTree.getUpperX(),centreY + i, centreY+i+1);
+            ArrayList<Data<T>> data = this.findInArea(coors);
+            if (data.size() < minColision) {
+                minColision = data.size();
+                indexOfArea = i;
+            }
+        }
+        return indexOfArea;
+    }
+
+    private double calculateWidth(double newCentreX) {
+        ArrayList<Data<T>> data = this.getAllDataInSubTree(this.root);
+        double maxDistance = Double.MIN_VALUE;
+        for (int i = 0; i < data.size(); i++) {
+            if (Math.abs(newCentreX - data.get(i).getCoordinates().getLowerX()) > maxDistance) {
+                maxDistance = Math.abs(newCentreX - data.get(i).getCoordinates().getLowerX());
+            }
+            if (Math.abs(data.get(i).getCoordinates().getUpperX() - newCentreX) > maxDistance) {
+                maxDistance = Math.abs(data.get(i).getCoordinates().getUpperX() - newCentreX);
+            }
+        }
+        return maxDistance;
+    }
+
+    private double calculateHeight(double newCentreY) {
+        ArrayList<Data<T>> data = this.getAllDataInSubTree(this.root);
+        double maxDistance = Double.MIN_VALUE;
+        for (int i = 0; i < data.size(); i++) {
+            if (Math.abs(newCentreY - data.get(i).getCoordinates().getLowerY()) > maxDistance) {
+                maxDistance = Math.abs(newCentreY - data.get(i).getCoordinates().getLowerY());
+            }
+            if (Math.abs(data.get(i).getCoordinates().getUpperY() - newCentreY) > maxDistance) {
+                maxDistance = Math.abs(data.get(i).getCoordinates().getUpperY() - newCentreY);
+            }
+        }
+        return maxDistance;
+    }
+
 }

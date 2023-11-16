@@ -12,10 +12,6 @@ import QuadTree.Coordinates;
 import QuadTree.Data;
 import QuadTree.ReadWriterOfTree;
 
-import static Data.CadastralObjectGenerator.GenerateOption.LAND_PARCEL;
-import static Data.CadastralObjectGenerator.GenerateOption.REAL_ESTATE;
-
-import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -34,35 +30,11 @@ public class Cadaster {
     private QuadTree<RealEstate> realEstateQuadTree;
     private ReadWriterOfTree readWriterOfTree;
 
-    // TODO needed?
     private GPS[] realEstateTreeGPS;
     private GPS[] landParcelTreeGPS;
 
     public Cadaster() {
-
         this.generator = new CadastralObjectGenerator();
-
-//        GPS gpsOne = new GPS(GPS.Latitude.NORTH, 100,GPS.Longitude.WEST,100);
-//        GPS gpsTwo = new GPS(GPS.Latitude.SOUTH, 100,GPS.Longitude.EAST,100);
-//        GPS[] listOfRootGPS = {gpsOne,gpsTwo};
-//
-//        GPS gpsOne4 = new GPS(GPS.Latitude.NORTH, 100,GPS.Longitude.WEST,100);
-//        GPS gpsTwo4 = new GPS(GPS.Latitude.SOUTH, 100,GPS.Longitude.EAST,100);
-//        GPS[] listOfRootGPSe = {gpsOne4,gpsTwo4};
-//
-//        this.landParcelTreeGPS = listOfRootGPS;
-//        this.mapParcelTree = new MapCoordinates(listOfRootGPS);
-//        this.landParcelQuadTree = new QuadTree<LandParcel>(this.mapParcelTree.getCoordinatesValue(listOfRootGPS),5);
-//        System.out.println("Land Parcel tree is created!");
-//
-//        this.mapEstateTree = new MapCoordinates(listOfRootGPS);
-//        this.realEstateTreeGPS = listOfRootGPS;
-//        this.realEstateQuadTree = new QuadTree<RealEstate>(this.mapEstateTree.getCoordinatesValue(listOfRootGPSe),5);
-//        System.out.println("Real Estate tree is created!");
-//
-//        this.generateObjects(REAL_ESTATE,5000,10,listOfRootGPS);
-//        this.generateObjects(LAND_PARCEL,5000,10,listOfRootGPSe);
-
     }
 
     /**
@@ -99,10 +71,8 @@ public class Cadaster {
         this.fillLandParcelWithBelongingRealEstates(dataToInsert);
         this.refillEstateData(dataToInsert,dataToInsert.getCoordinates());
         this.landParcelQuadTree.insert(dataToInsert);
-//        for (int i = 0; i < dataToInsert.getData().getBelongingRealEstates().size(); i++) {
-//            System.out.println(dataToInsert.getData().getBelongingRealEstates().get(i).toString());
-//        }
-        //System.out.println("Data land parcel: " + newLandParcel.toString() + " is created!");
+        System.out.println("Data land parcel is created!");
+        System.out.println("Tree contains " + this.landParcelQuadTree.getNumberOfItems() + " items.");
     }
 
     public void insertRealEstate(int parSerialNumber, GPS[] parCoordinates, String parDescription) {
@@ -111,7 +81,8 @@ public class Cadaster {
         this.fillRealEstateWithBelongingLandParcels(dataToInsert);
         this.refillParcelData(dataToInsert,dataToInsert.getCoordinates());
         this.realEstateQuadTree.insert(dataToInsert);
-        //System.out.println("Data real estate: " + newRealEstate.toString() + " is created!");
+        System.out.println("Data real estate is created!");
+        System.out.println("Tree contains " + this.realEstateQuadTree.getNumberOfItems() + " items.");
     }
 
 
@@ -143,7 +114,7 @@ public class Cadaster {
             dataToEdit.getData().setGPSCoordinates(parCoordinates);
             this.realEstateQuadTree.edit(dataToEdit,this.mapEstateTree.getCoordinatesValue(parCoordinates));
         }
-        System.out.println("edited real estate data");
+        System.out.println("Edited real estate data");
     }
 
     /**
@@ -154,10 +125,13 @@ public class Cadaster {
             this.deleteRealEstatesReferences((Data<LandParcel>) dataToDelete, dataToDelete.getCoordinates());
             this.landParcelQuadTree.delete((Data<LandParcel>) dataToDelete);
             System.out.println("delete land parcel");
+            System.out.println("Land parcel tree contains " + this.realEstateQuadTree.getNumberOfItems() + " items.");
         } else {
             this.deleteLandParcelReferences((Data<RealEstate>) dataToDelete, dataToDelete.getCoordinates());
             this.realEstateQuadTree.delete((Data<RealEstate>) dataToDelete);
             System.out.println("delete real estate");
+            System.out.println("Real estate tree contains " + this.realEstateQuadTree.getNumberOfItems() + " items.");
+
         }
     }
 
@@ -226,7 +200,7 @@ public class Cadaster {
             this.fillRealEstateWithBelongingLandParcels(generatedRealEstates.get(i));
             this.refillParcelData(generatedRealEstates.get(i),generatedRealEstates.get(i).getCoordinates());
         }
-
+        System.out.println(parCount + " object was created!");
         return dataToReturn;
     }
 
@@ -253,15 +227,15 @@ public class Cadaster {
      */
     public void saveTrees(String parPath) {
         if (this.readWriterOfTree == null) {
-            this.readWriterOfTree = new ReadWriterOfTree(this.realEstateQuadTree,this.landParcelQuadTree,this.realEstateTreeGPS,this.getLandParcelTreeGPS());
+            this.readWriterOfTree = new ReadWriterOfTree(this.realEstateQuadTree,this.landParcelQuadTree,this.realEstateTreeGPS,this.landParcelTreeGPS);
         }
         this.readWriterOfTree.writeData(parPath);
-        System.out.println("Data wa succesfull saved!");
+        System.out.println("Data wa successful saved!");
     }
 
     public void loadTrees(String parPath) {
         if (this.readWriterOfTree == null) {
-            this.readWriterOfTree = new ReadWriterOfTree(this.realEstateQuadTree,this.landParcelQuadTree,this.realEstateTreeGPS,this.getLandParcelTreeGPS());
+            this.readWriterOfTree = new ReadWriterOfTree(this.realEstateQuadTree,this.landParcelQuadTree,this.realEstateTreeGPS,this.landParcelTreeGPS);
         }
         this.readWriterOfTree.readData(parPath);
         this.landParcelQuadTree = this.readWriterOfTree.getTreeLandParcel();
@@ -272,25 +246,7 @@ public class Cadaster {
         this.realEstateTreeGPS = this.readWriterOfTree.getParTreeREGPS();
         this.mapEstateTree = new MapCoordinates(this.realEstateTreeGPS);
         this.fillAll();
-        System.out.println("Data was succesfull loaded!");
-    }
-
-
-    // TODO not sure if will used
-    public QuadTree<LandParcel> returnLandParcelTree() {
-        return this.landParcelQuadTree;
-    }
-
-    public QuadTree<RealEstate> returnRealEstateTree() {
-        return this.realEstateQuadTree;
-    }
-
-    public GPS[] getRealEstateTreeGPS() {
-        return this.realEstateTreeGPS;
-    }
-
-    public GPS[] getLandParcelTreeGPS() {
-        return this.landParcelTreeGPS;
+        System.out.println("Data was successful loaded!");
     }
 
 
