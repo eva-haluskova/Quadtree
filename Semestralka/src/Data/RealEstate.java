@@ -1,11 +1,9 @@
 package Data;
-
-import QuadTree.Coordinates;
-
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-
+/**
+ * This class extends cadastral object abstract class. Contains added data specific for this class.
+ */
 public class RealEstate extends CadastralObject {
 
     private int serialNumber;

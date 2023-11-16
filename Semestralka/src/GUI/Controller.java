@@ -1,9 +1,8 @@
 package GUI;
 
 import Data.CadastralObject;
-import MainLogic.Cadaster;
 import Data.GPS;
-import MainLogic.CadastralObjectGenerator;
+import Data.CadastralObjectGenerator;
 import QuadTree.Data;
 import Data.LandParcel;
 import Data.RealEstate;
@@ -317,11 +316,7 @@ public class Controller {
     }
 
     public void deleteData(Data<? extends CadastralObject> dataToDelete) {
-        if (dataToDelete.getData().isInstanceOf().equals(CadastralObject.TypeOfCadastralObject.LAND_PARCEL)) {
-            this.cadaster.deleteLandParcel((Data<LandParcel>)dataToDelete);
-        } else {
-            this.cadaster.deleteRealEstate((Data<RealEstate>)dataToDelete);
-        }
+        this.cadaster.delete(dataToDelete);
     }
 
     public void editeData(Data<? extends CadastralObject> dataToDelete) {

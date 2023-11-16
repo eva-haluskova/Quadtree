@@ -45,7 +45,7 @@ public class CadastralObjectTester extends QuadTreeTester {
             if (objectProbability > 0.5) {
                 LandParcel newObject = new LandParcel("LandParcel number " + i,par,i);
                 Data<LandParcel> data = new Data(newObject, coors, UUID.randomUUID());
-                this.testTree.insert(data, testTree.getRoot());
+                this.testTree.insert(data);
                 super.testData.add(data);
 
                 if (super.belongToArea(parCoordinatesForSearch,data.getCoordinates())) {
@@ -58,7 +58,7 @@ public class CadastralObjectTester extends QuadTreeTester {
             } else {
                 RealEstate newObject = new RealEstate("RealEstate number " + i,par,i);
                 Data<RealEstate> data = new Data(newObject, coors, UUID.randomUUID());
-                this.testTree.insert(data, testTree.getRoot());
+                this.testTree.insert(data);
                 super.testData.add(data);
 
                 if (super.belongToArea(parCoordinatesForSearch,data.getCoordinates())) {

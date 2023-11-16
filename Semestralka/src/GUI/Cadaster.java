@@ -1,18 +1,19 @@
-package MainLogic;
+package GUI;
 
 import Data.CadastralObject;
 import Data.LandParcel;
 import Data.RealEstate;
 import Data.GPS;
 import Data.MapCoordinates;
+import Data.CadastralObjectGenerator;
 
 import QuadTree.QuadTree;
 import QuadTree.Coordinates;
 import QuadTree.Data;
 import QuadTree.ReadWriterOfTree;
 
-import static MainLogic.CadastralObjectGenerator.GenerateOption.LAND_PARCEL;
-import static MainLogic.CadastralObjectGenerator.GenerateOption.REAL_ESTATE;
+import static Data.CadastralObjectGenerator.GenerateOption.LAND_PARCEL;
+import static Data.CadastralObjectGenerator.GenerateOption.REAL_ESTATE;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -38,6 +39,7 @@ public class Cadaster {
 
     public Cadaster() {
 
+        this.generator = new CadastralObjectGenerator();
 
         GPS gpsOne = new GPS(GPS.Latitude.NORTH, 100,GPS.Longitude.WEST,100);
         GPS gpsTwo = new GPS(GPS.Latitude.SOUTH, 100,GPS.Longitude.EAST,100);
@@ -47,7 +49,7 @@ public class Cadaster {
         GPS gpsTwo4 = new GPS(GPS.Latitude.SOUTH, 100,GPS.Longitude.EAST,100);
         GPS[] listOfRootGPSe = {gpsOne4,gpsTwo4};
 
-        this.generator = new CadastralObjectGenerator();
+
 
         this.landParcelTreeGPS = listOfRootGPS;
         this.mapParcelTree = new MapCoordinates(listOfRootGPS);
@@ -115,7 +117,6 @@ public class Cadaster {
     /**
      * methods for editing data
      */
-    // TODO you probably know and shoud use there below your birliant cadastralObject to make it less of code :)
     public void editLandParcelData(Data<LandParcel> dataToEdit, int parParcelNumber, GPS[] parCoordinates, String parDescription) {
 
         if (parParcelNumber != dataToEdit.getData().getParcelNumber()) {
@@ -145,23 +146,15 @@ public class Cadaster {
     }
 
     /**
-     * methods for deleting data
+     * method for deleting data
      */
-    public void deleteLandParcel(Data<LandParcel> dataToDelete) {
-        if (dataToDelete != null) {
-            this.landParcelQuadTree.delete(dataToDelete);
-            System.out.println("deleted land parcel");
+    public void delete(Data<? extends CadastralObject> dataToDelete) {
+        if (dataToDelete.getData().isInstanceOf().equals(CadastralObject.TypeOfCadastralObject.LAND_PARCEL)) {
+            this.landParcelQuadTree.delete((Data<LandParcel>) dataToDelete);
+            System.out.println("delete land parcel");
         } else {
-            System.out.println("data su VRAJ null");
-        }
-    }
-
-    public void deleteRealEstate(Data<RealEstate> dataToDelete) {
-        if (dataToDelete != null) {
-            this.realEstateQuadTree.delete(dataToDelete);
+            this.realEstateQuadTree.delete((Data<RealEstate>) dataToDelete);
             System.out.println("delete real estate");
-        } else {
-            System.out.println("Data su VRAJ null");
         }
     }
 
@@ -198,7 +191,7 @@ public class Cadaster {
     /**
      * method for generating new objects
      */
-    public ArrayList<Data<? extends CadastralObject>> generateObjects(CadastralObjectGenerator.GenerateOption parType,int parCount, double parSize, GPS[] parRange) {
+    public ArrayList<Data<? extends CadastralObject>> generateObjects(CadastralObjectGenerator.GenerateOption parType, int parCount, double parSize, GPS[] parRange) {
         ArrayList<CadastralObject> list = this.generator.generateObjects(parType,parCount,parSize,parRange);
         MapCoordinates mp = new MapCoordinates(parRange);
         ArrayList<Data<? extends CadastralObject>> dataToReturn = new ArrayList<>();

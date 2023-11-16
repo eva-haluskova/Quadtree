@@ -2,6 +2,13 @@ package Data;
 
 import QuadTree.Coordinates;
 
+/**
+ * Because we need to put data with GPS coordinates into quadtree, while
+ * this implementation of tree is made for coordinates, we need to map them.
+ * This class ensure correct conversion form GPS coordinates to tree coordinates
+ * and vice versa. Instance of this class is created once for tree - it holds
+ * coordinates of root node, so it calculate offset for data coordinates.
+ */
 public class MapCoordinates {
 
    private GPS[] gpsOfRoot;
@@ -176,19 +183,19 @@ public class MapCoordinates {
    public double[] getWidthHeightBetweenTwoGPS(GPS parGPSOne, GPS parGPSTwo) {
       double[] dimension = new double[2];
 
-      if (parGPSOne.getLatitude() == parGPSTwo.getLatitude()) {
+      if (parGPSOne.getLatitude().equals(parGPSTwo.getLatitude())) {
          dimension[1] = Math.abs(parGPSOne.getLatitudePosition() - parGPSTwo.getLatitudePosition());
         // dimension[1] = parGPSOne.getLatitudePosition() - parGPSTwo.getLatitudePosition();
 
-      } else if (parGPSOne.getLatitude() != parGPSTwo.getLatitude()) {
+      } else if (!parGPSOne.getLatitude().equals(parGPSTwo.getLatitude())) {
          dimension[1] = Math.abs(parGPSOne.getLatitudePosition() + parGPSTwo.getLatitudePosition());
          //dimension[1] = parGPSOne.getLatitudePosition() + parGPSTwo.getLatitudePosition();
       }
 
-      if (parGPSOne.getLongitude() == parGPSTwo.getLongitude()) {
+      if (parGPSOne.getLongitude().equals(parGPSTwo.getLongitude())) {
          dimension[0] = Math.abs(parGPSOne.getLongitudePosition() - parGPSTwo.getLongitudePosition());
          //dimension[0] = parGPSOne.getLongitudePosition() - parGPSTwo.getLongitudePosition();
-      } else if (parGPSOne.getLongitude() != parGPSTwo.getLongitude()) {
+      } else if (!parGPSOne.getLongitude().equals(parGPSTwo.getLongitude())) {
         dimension[0] = Math.abs(parGPSOne.getLongitudePosition() + parGPSTwo.getLongitudePosition());
         // dimension[0] = parGPSOne.getLongitudePosition() + parGPSTwo.getLongitudePosition();
       }

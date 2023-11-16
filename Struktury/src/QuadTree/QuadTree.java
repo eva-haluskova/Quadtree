@@ -6,7 +6,7 @@ import java.awt.*;
 import java.util.*;
 
 /**
- * Class represents QuadTree, into which can be inserted any data.
+ * Class represents univeral QuadTree, into which can be inserted any data.
  * This data needs to be type class Data, which holds needed things for
  * data inserted in quadtree - coordinates and uniqe id - and of course
  * data itself.
@@ -50,12 +50,15 @@ public class QuadTree<T> {
         this.optimalizationOn = false;
     }
 
-    public void reinicializeValueOftree(Coordinates newRange) {
+    /**
+     * Method which is called when optimalization is on which reset values of tree
+     */
+    private void reinicializeValueOfTree(Coordinates newRange) {
         this.depth = 0;
         this.numberOfItems = 0;
-        this.optimalizationOn = false;
         this.root = null;
         this.rangeOfTree = newRange;
+        this.optimalizationOn = false;
     }
 
     /**
@@ -126,17 +129,6 @@ public class QuadTree<T> {
         }
     }
 
-    public double health() {
-        double weightDepth = 1;
-        double weightNullptr = 1.25;
-        double healthOfDepth = this.getHealthOfDepth();
-        double healthOfNullptr = this.getHealthOfNullPtr();
-        System.out.println("h: " + healthOfNullptr);
-        double health = (weightDepth * healthOfDepth + weightNullptr * healthOfNullptr)/ (weightDepth + weightNullptr);
-        return health;
-    }
-
-
     /**
      * Method will find appropriate node for next precessing.
      */
@@ -146,7 +138,7 @@ public class QuadTree<T> {
         boolean nodeIsFind = false;
 
         while (!nodeIsFind) {
-            int quadrant = current.isFitsToQuadrant(parCoordinates);
+            int quadrant = Coordinates.isFitsToQuadrant(current.getCoordinates(), parCoordinates);
 
             if (quadrant == -1) {
                 nodeIsFind = true;
@@ -177,7 +169,7 @@ public class QuadTree<T> {
         boolean nodeIsFind = false;
 
         while (!nodeIsFind) {
-            int quadrant = current.isFitsToQuadrant(parCoordinates);
+            int quadrant = Coordinates.isFitsToQuadrant(current.getCoordinates(), parCoordinates);
 
             if (quadrant == -1) {
                 nodeIsFind = true;
@@ -198,14 +190,15 @@ public class QuadTree<T> {
         return new Result(current,parents,indices);
     }
 
-    public void insert(Data<T> parData) {
-        insert(parData, this.getRoot());
-    }
     /**
      * Method ensure inserting data into tree.
      */
+    public void insert(Data<T> parData) {
+        insert(parData, this.getRoot());
+    }
+
     public void insert(Data<T> parData, QuadTreeNode<T> parStartNode) {
-        if (!this.checkIfFitsToTree(parData.getCoordinates())) {
+        if (!Coordinates.isIncludingWholeData(this.rangeOfTree,parData.getCoordinates())) {
             System.out.println("data not fints to tree");
             return;
         }
@@ -226,12 +219,12 @@ public class QuadTree<T> {
         QuadTreeNode<T> searchedNode = this.findAppropriateNode(dataToInsert.get(0).getCoordinates(), parStartNode);
 
         while (!dataToInsert.isEmpty()) {
-            int quadrant = searchedNode.isFitsToQuadrant(dataToInsert.get(0).getCoordinates());
+            int quadrant = Coordinates.isFitsToQuadrant(searchedNode.getCoordinates(), dataToInsert.get(0).getCoordinates());
 
             if (quadrant == -1) {
                 searchedNode.addData(dataToInsert.remove(0));
             } else if (!searchedNode.isLeaf()) {
-                QuadTreeNode<T> newNode = new QuadTreeNode<T>(dataToInsert.remove(0),searchedNode.coordinatesOfNewNode(quadrant),searchedNode.getLevel() + 1);
+                QuadTreeNode<T> newNode = new QuadTreeNode<T>(dataToInsert.remove(0),Coordinates.coordinatesOfNewNode(quadrant, searchedNode.getCoordinates()),searchedNode.getLevel() + 1);
                 searchedNode.setChild(quadrant, newNode);
             } else if (searchedNode.isLeaf()) {
                 if (searchedNode.getLevel() == this.maxDepth) {
@@ -246,13 +239,13 @@ public class QuadTree<T> {
                     Iterator<Data<T>> iterator = dataToInsert.iterator();
                     while (iterator.hasNext()) {
                         Data<T> data = iterator.next();
-                        int newQuadrant = searchedNode.isFitsToQuadrant(data.getCoordinates());
+                        int newQuadrant = Coordinates.isFitsToQuadrant(searchedNode.getCoordinates(),data.getCoordinates());
                         if (newQuadrant == -1) {
                             searchedNode.addData(data);
                             iterator.remove();
                         } else if (!searchedNode.hasNthChild(newQuadrant)) {
 
-                            QuadTreeNode<T> newNode = new QuadTreeNode<T>(data, searchedNode.coordinatesOfNewNode(newQuadrant), searchedNode.getLevel() + 1);
+                            QuadTreeNode<T> newNode = new QuadTreeNode<T>(data, Coordinates.coordinatesOfNewNode(newQuadrant, searchedNode.getCoordinates()), searchedNode.getLevel() + 1);
                             searchedNode.setChild(newQuadrant, newNode);
 
                             if (searchedNode.accessToNthSon(newQuadrant).getLevel() > this.depth) {
@@ -271,7 +264,6 @@ public class QuadTree<T> {
                 }
             }
         }
-        //System.out.println("data ar inserted!!!");
     }
 
     /**
@@ -304,15 +296,8 @@ public class QuadTree<T> {
      * Return all data which have given coordinates
      * @param parCoordinates coordinates of data which we want to find
      */
-//    public ArrayList<Data<T>> find(Coordinates parCoordinates) {
-//        if (!this.checkIfFitsToTree(parCoordinates)) {
-//            return null;
-//        }
-//        QuadTreeNode<T> searchedNode = this.findAppropriateNode(parCoordinates, this.root);
-//        return searchedNode.getDataWithSameCoordinates(parCoordinates);
-//    }
     public ArrayList<Data<T>> find(Coordinates parCoordinates) {
-        if (!this.checkIfFitsToTree(parCoordinates)) {
+        if (!Coordinates.isIncludingWholeData(this.rangeOfTree,parCoordinates)) {
             return null;
         }
         Stack<QuadTreeNode<T>> nodesToProcess = new Stack<>();
@@ -322,17 +307,9 @@ public class QuadTree<T> {
         while (!nodesToProcess.isEmpty()) {
             QuadTreeNode<T> current = nodesToProcess.pop();
             for (int i = 0; i < current.getListOfData().size(); i++) {
-                if (this.optimalizationOn) {
-                    Coordinates coorsForSearch = current.getListOfData().get(i).getCoordinates().potencialChangedSize(this.scaleParameter);
-                    if (current.belongsToArea(coorsForSearch,parCoordinates) ||
-                            current.isIncludingWholeData(current.getListOfData().get(i).getCoordinates(), parCoordinates)) {
-                        listToReturn.add(current.getListOfData().get(i));
-                    }
-                } else {
-                    if (current.belongsToArea(current.getListOfData().get(i).getCoordinates(), parCoordinates) ||
-                    current.isIncludingWholeData(current.getListOfData().get(i).getCoordinates(), parCoordinates)) {
-                        listToReturn.add(current.getListOfData().get(i));
-                    }
+                if (Coordinates.belongsToArea(current.getListOfData().get(i).getCoordinates(), parCoordinates) ||
+                        Coordinates.isIncludingWholeData(current.getListOfData().get(i).getCoordinates(), parCoordinates)) {
+                    listToReturn.add(current.getListOfData().get(i));
                 }
 
             }
@@ -351,42 +328,8 @@ public class QuadTree<T> {
      * Returns all data in given area
      * @param parCoordinates coordinates of area in which we want to find data
      */
-    public ArrayList<Data<T>> findInAreaOptimize(Coordinates parCoordinates) {
-        if (!this.checkIfFitsToTree(parCoordinates)) {
-            return null;
-        }
-        ArrayList<Data<T>> listToReturn = new ArrayList<>();
-        Stack<QuadTreeNode> nodesToProcess = new Stack<>();
-
-        nodesToProcess.push(this.root);
-
-        while (!nodesToProcess.isEmpty()) {
-
-            QuadTreeNode<T> current = nodesToProcess.pop();
-
-            if (current.isIncludingWholeNodeArea(parCoordinates)) {
-                listToReturn.addAll(this.getAllDataInSubTree(current));
-            } else {
-                if (!current.isLeaf()) {
-                    ArrayList<Integer> indicesOfSons = current.getIncludingQuadrants(parCoordinates);
-                    for (int index : indicesOfSons) {
-                        nodesToProcess.push(current.accessToNthSon(index));
-                    }
-                }
-                listToReturn.addAll(current.getAllAppropriateData(parCoordinates));
-            }
-        }
-        return listToReturn;
-    }
-
-
-
-    /**
-     * Returns all data in given area
-     * @param parCoordinates coordinates of area in which we want to find data
-     */
     public ArrayList<Data<T>> findInArea(Coordinates parCoordinates) {
-        if (!this.checkIfFitsToTree(parCoordinates)) {
+        if (!Coordinates.isIncludingWholeData(this.rangeOfTree,parCoordinates)) {
             return null;
         }
 
@@ -399,7 +342,7 @@ public class QuadTree<T> {
 
             QuadTreeNode<T> current = nodesToProcess.pop();
 
-            if (current.isIncludingWholeNodeArea(parCoordinates)) {
+            if (Coordinates.isIncludingWholeData(parCoordinates,current.getCoordinates())) {
                 listToReturn.addAll(this.getAllDataInSubTree(current));
             } else {
                 if (!current.isLeaf()) {
@@ -413,8 +356,6 @@ public class QuadTree<T> {
         }
         return listToReturn;
     }
-
-    // poslem tam tie triedy a porovnavam, ziedne idecko!!!
 
     /**
      * Method delete appropriate data from tree
@@ -441,7 +382,7 @@ public class QuadTree<T> {
                 correctlyRemoved = true;
             } else if (nodeWithDataToDelete.isLeaf() && nodeWithDataToDelete.isEmpty()) {
                 // vymazanie nodeWithDataToDelete
-                if (nodeWithDataToDelete == this.root) {
+                if (nodeWithDataToDelete.equals(this.root)) {
                     correctlyRemoved = true;
                     this.root = null;
                 } else {
@@ -473,7 +414,7 @@ public class QuadTree<T> {
     public void edit(Data<T> parData, Coordinates newCoordinates) {
         this.delete(parData);
         parData.setCoordinates(newCoordinates);
-        this.insert(parData,this.root);
+        this.insert(parData);
     }
 
     /**
@@ -514,14 +455,76 @@ public class QuadTree<T> {
     }
 
     /**
-     * Before inserting data this method checks if data can be inserted,
-     * if coordinates are in range of tree. Outer points of tree are not accepted.
+     * Method for calculate health of quad tree. It's calculate from two "subhealths"
+     * 1. health of depth - if depth of tree is appropriate to number of items in it
+     * 2. health of nullpointers - if tree has optimal number of nullpointers
+     * (closer explanation in documentation)
      */
-    private boolean checkIfFitsToTree(Coordinates parCoordinates) {
-        return !(parCoordinates.getLowerX() < this.rangeOfTree.getLowerX()) &&
-                !(parCoordinates.getUpperX() > this.rangeOfTree.getUpperX()) &&
-                !(parCoordinates.getLowerY() < this.rangeOfTree.getLowerY()) &&
-                !(parCoordinates.getUpperY() > this.rangeOfTree.getUpperY());
+    public double health() {
+        double weightDepth = 1;
+        double weightNullptr = 1.25;
+        double healthOfDepth = this.getHealthOfDepth();
+        double healthOfNullptr = this.getHealthOfNullPtr();
+        double health = (weightDepth * healthOfDepth + weightNullptr * healthOfNullptr)/ (weightDepth + weightNullptr);
+        System.out.println("health: " + health);
+        return health;
+    }
+
+    /**
+     * Submethods for calculating health of tree
+     */
+    private double optimalDepth() {
+        double logOne = Math.log(Math.sqrt(this.numberOfItems));
+        double logTwo = Math.log(2);
+        return (logOne/logTwo) + 1; // ;)
+    }
+
+    private double optimalNumberOfNull() {
+        if ((this.numberOfItems % 3) == 0) {
+            return 1;
+        } else if ((this.numberOfItems % 3) == 1) {
+            return 0;
+        } else if ((this.numberOfItems % 3) == 2) {
+            return 2;
+        }
+        return -1;
+    }
+
+    private int getNumberOfNullPointer() {
+        int count = 0;
+
+        Stack<QuadTreeNode<T>> nodesToProcess = new Stack<>();
+        nodesToProcess.push(this.root);
+
+        while (!nodesToProcess.isEmpty()) {
+
+            QuadTreeNode<T> current = nodesToProcess.pop();
+            if (!current.isLeaf()) {
+                count += current.numberOfEmptySons();
+            }
+            if (!current.isLeaf()) {
+                for (QuadTreeNode<T> child: current.getChildren()) {
+                    if (child != null) {
+                        nodesToProcess.push(child);
+                    }
+                }
+            }
+        }
+        return count;
+    }
+
+    private double getHealthOfDepth() {
+        double pomLogOne = Math.log(this.optimalDepth());
+        double pomLogTwo = Math.log(this.depth);
+        double healthOfDepth = (pomLogOne / pomLogTwo); // * 100
+        return healthOfDepth;
+    }
+
+    private double getHealthOfNullPtr() {
+        double pomLogThree = Math.log(2 - this.optimalNumberOfNull() + getNumberOfNullPointer());
+        double pomLogFour = Math.log(2);
+        double healthOfNullptr = (pomLogFour / pomLogThree);
+        return healthOfNullptr;
     }
 
     private ArrayList<QuadTreeNode<T>> findAllNodesInLevel(int parLevel) {
@@ -558,27 +561,9 @@ public class QuadTree<T> {
         return nodesToReturn;
     }
 
-    public void tryToOptimalize() {
-        // to ze sa nezmenia suradnice v DATU nevadi, to bude take inkognito iba...
-
-        // 1. najskor si vyberem vsetky data zo stromu
-        // 2. idem postupne vkladat data - urcenou mierkou im zmenim suradnicu okolo strdu
-        // 3. vlozim dato
-        this.optimalizationOn = true;
-
-        this.scaleParameter = this.health();
-
-        ArrayList<Data<T>> dataToInsert = this.getAllDataInSubTree(this.root);
-        this.root = null;
-        for (int i = 0; i < dataToInsert.size(); i++) {
-            Data<T> data = dataToInsert.get(i);
-            data.getCoordinates().changeCoordinatesSize(1/this.scaleParameter);
-            this.insert(data);
-        }
-
-    }
-
-
+    /**
+     * optimalizacion number two
+     */
     public void tryToOptimalizeTwoObjects() {
         // porovnat vsetky objekty a najst tie najvzialenejsie
         // urcit si nove hranice stormu
@@ -652,7 +637,7 @@ public class QuadTree<T> {
         upperY = centerY + newYRange + 1;
 
         Coordinates newRange = new Coordinates(lowerX, upperX, lowerY,upperX);
-        this.reinicializeValueOftree(newRange);
+        this.reinicializeValueOfTree(newRange);
 
         System.out.println(dataToInsert.size());
         for (int i = 0; i < dataToInsert.size(); i++) {
@@ -662,59 +647,27 @@ public class QuadTree<T> {
     }
 
 
-    private double optimalDepth() {
-        double logOne = Math.log(Math.sqrt(this.numberOfItems));
-        double logTwo = Math.log(2);
-        return (logOne/logTwo) + 1; // ;)
-    }
 
-    private double optimalNumberOfNull() {
-        if ((this.numberOfItems % 3) == 0) {
-            return 1;
-        } else if ((this.numberOfItems % 3) == 1) {
-            return 0;
-        } else if ((this.numberOfItems % 3) == 2) {
-            return 2;
+    public void tryToOptimalize() {
+        // to ze sa nezmenia suradnice v DATU nevadi, to bude take inkognito iba...
+
+        // 1. najskor si vyberem vsetky data zo stromu
+        // 2. idem postupne vkladat data - urcenou mierkou im zmenim suradnicu okolo strdu
+        // 3. vlozim dato
+        this.optimalizationOn = true;
+
+        this.scaleParameter = this.health();
+
+        ArrayList<Data<T>> dataToInsert = this.getAllDataInSubTree(this.root);
+        this.root = null;
+        for (int i = 0; i < dataToInsert.size(); i++) {
+            Data<T> data = dataToInsert.get(i);
+            data.getCoordinates().changeCoordinatesSize(1/this.scaleParameter);
+            this.insert(data);
         }
-        return -1;
+
     }
 
-    private int getNumberOfNullPointer() {
-        int count = 0;
-
-        Stack<QuadTreeNode<T>> nodesToProcess = new Stack<>();
-        nodesToProcess.push(this.root);
-
-        while (!nodesToProcess.isEmpty()) {
-
-            QuadTreeNode<T> current = nodesToProcess.pop();
-            if (!current.isLeaf()) {
-                count += current.numberOfEmptySons();
-            }
-            if (!current.isLeaf()) {
-                for (QuadTreeNode<T> child: current.getChildren()) {
-                    if (child != null) {
-                        nodesToProcess.push(child);
-                    }
-                }
-            }
-        }
-        return count;
-    }
-
-    private double getHealthOfDepth() {
-        double pomLogOne = Math.log(this.optimalDepth());
-        double pomLogTwo = Math.log(this.depth);
-        double healthOfDepth = (pomLogOne / pomLogTwo); // * 100
-        return healthOfDepth;
-    }
-
-    private double getHealthOfNullPtr() {
-        double pomLogThree = Math.log(2 - this.optimalNumberOfNull() + getNumberOfNullPointer());
-        double pomLogFour = Math.log(2);
-        double healthOfNullptr = (pomLogFour / pomLogThree);
-        return healthOfNullptr;
-    }
 
     private ArrayList<Coordinates> returnListOfBoundary(int level) {
 
@@ -725,7 +678,7 @@ public class QuadTree<T> {
 
         if (level == 1) {
             result.add(new Coordinates(rangeOfTree));
-           return result;
+            return result;
         }
 
         int denominator = 2;
@@ -751,6 +704,4 @@ public class QuadTree<T> {
         }
         return null;
     }
-
-
 }

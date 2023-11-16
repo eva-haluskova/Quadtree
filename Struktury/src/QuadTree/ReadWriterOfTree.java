@@ -11,6 +11,10 @@ import Data.CadastralObject;
 import Data.GPS;
 import Data.MapCoordinates;
 
+/**
+ * Class for loading and saving content of tree into csv file.
+ */
+
 public class ReadWriterOfTree {
 
     private QuadTree<RealEstate> treeRealEstate;

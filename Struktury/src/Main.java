@@ -1,35 +1,13 @@
-import Data.CadastralObject;
 import Data.GPS;
-import Data.RealEstate;
-import Data.LandParcel;
-import Data.MapCoordinates;
-import MainLogic.Cadaster;
-import MainLogic.CadastralObjectGenerator;
-import MainLogic.CadastralObjectGenerator.*;
-import QuadTree.Data;
-import QuadTree.Tester.CadastralObjectTester;
-import QuadTree.Tester.TesterForPlace;
-import QuadTree.Place;
-import QuadTree.Tester.RealEstateTester;
-import QuadTree.Tester.LandParcelTester;
-import QuadTree.QuadTree;
+import GUI.Cadaster;
 import QuadTree.Coordinates;
-import QuadTree.ReadWriterOfTree;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import java.util.ArrayList;
 import java.util.Random;
-import java.util.UUID;
-
-
 
 
 public class Main {
 
     public static void main(String[] args) {
-
         int maxDepth = 5;
         double sizeOfObjets = 10;
         int numberOfObjects = 100;
@@ -63,6 +41,14 @@ public class Main {
         GPS fourtwo = new GPS(GPS.Latitude.NORTH,65,GPS.Longitude.WEST,55);
         GPS[] four = {fourone,fourtwo};
 
+        GPS threeone8 = new GPS(GPS.Latitude.NORTH,20, GPS.Longitude.WEST,20);
+        GPS threetwo8 = new GPS(GPS.Latitude.NORTH,10,GPS.Longitude.WEST,10);
+        GPS[] five = {threeone8,threetwo8};
+
+        GPS fourone9 = new GPS(GPS.Latitude.SOUTH,70, GPS.Longitude.EAST,55);
+        GPS fourtwo9 = new GPS(GPS.Latitude.SOUTH,65,GPS.Longitude.EAST,55);
+        GPS[] six = {fourone9,fourtwo9};
+
         Cadaster cadaster = new Cadaster();
         cadaster.createLandParcelTree(tree,maxDepth);
         cadaster.createRealEstateTree(tree,maxDepth);
@@ -70,6 +56,9 @@ public class Main {
         cadaster.insertRealEstate(54,two,"dva");
         cadaster.insertRealEstate(57,three,"tri");
         cadaster.insertRealEstate(51,four,"styri");
+
+        cadaster.insertRealEstate(69,five,"edem");
+        cadaster.insertRealEstate(78,six,"reaz");
         cadaster.insertLandParcel(52,zero,"xc");
 
 
@@ -108,43 +97,7 @@ public class Main {
 }
 
 
-/**
- * skoncila si asi tak, ze okna I,F,E,D mas zhruba hotove, potrbujes dorobit prevolavanie sprvanych metodiek.
- * Ale na to si predtym dorob:
- * utorok:
- * - urob si model:
- * - vytvorenie troch stromov
- * - vsetky metodky zo stromu
- * - praca so surdnicami!!
- * - edit
- * - oprav si PK, pracu s generikami :)
- * - AUTOMATICKE NAPLNENIE PARCIEL A TAK...
- * potom, bud:
- * - nasadis na to gui
- * alebo:
- * - SPRAVIS OPTIMALIZACIU
- */
-// TODO porovnavanie cez equals
 
-/**
- * dneska este:
- * dorobit guja:
- *      - vytvorenie stromu
- *      - editacia
- *      - vytvorenie
- *      - find
- *      - delete
- * opravit delete
- * opravit insert
- * urobit find
- * model aj s premenov coordinates, mysli na to
- * spatna funkcia pre curadnice
- * automaticke smerniky na parceli
- *
- * ak nahodou:
- * - generator instanci
- * - porozmyslat nad ukladanim
- */
 
 
 
@@ -156,51 +109,40 @@ takze aj hrana je includnuta v inom objekte
 osetrit aby ked zmenim surqadnice na mimo stromun tak sa mi nezmenina
  */
 
-
-
-/**
- * ESTE TREBA
- * - ukladanie a nacitavanie do suborov
- * - spravit vhodny generator
- * - poriesit suradnice
- * - poriesti generika
- * - edit
- * - urobit optimalizaciu
- * - porfilerom pokukat
- * - dorobit gui
- * - zdravie stromu
- * - spravit cadaster
- * - isto mnoho dalsieho
- */
-
-
-
-// TODO vdase pozjednodusovat vyrazy list.get(0). a zaroevn list.remove(0)....da sa to, vis?
+// TODO tie suradnice pooondate pories
+// TODO suradnice dorob aby dobre bolo
+// TODO spatna funkcia pre curadnice
+// TODO praca so surdnicami!!
 // TODO over si ci to doublevanie ma zmysel pri < >
-// TODO over si ci niekde neporusujes zapuzdrenie, getovanie zoznamov cez kopiu!!!
-// TODO with index access method pay attention if index exists?
+// todo cooridnates equals bigger tnat least poresit!!!
+// todo mapovanie jednej suradnice do coordinates
+// todo porovnavanie doublov
+
+// TODO oprav finde
+// TODO insert aby neinsertol existujuce
+// TODO overenie jednotlivych operacii
+// TODO overenie find
+// TODO finvoavnie nemas dobre...teda spon to co potrebujes, ze bodov to naide vsetko cez to sa to kryje
+
+// TODO pomenit arraylisty
+// TODO z arrayov na inde polia inteligentnejise
+
+// TODO AUTOMATICKE NAPLNENIE PARCIEL A TAK...
+
+// TODO SPRAVIS OPTIMALIZACIU
+
 // TODO zaujimavy poznaok o zmene velkosti ako ked som zvacsila velkost sa mi pekne krasne zvysila vyska stromu pri vlastne 10satine dat...teda dat na desasitine velkosti
 // TODO MUST!!! change your arrays at least to linked list or sometnig more efficient!!!!
 // TODO pri mazanai aj znizovanie stupna stromu?
 // TODO think about if is needed in method findAppropriateNode that one if in case current isnt leaf.!
 // TODO pripadne si refactorni insert na krajsi
-// TODO returvnovanie tych onych. Porusenie zapuzdrenia? (DUfam ze nie)(salala)RESULT
-// TODO dories ten generator poondiaty
-// TODO refactorni si cooridnates a s tym vsetky suvisiace metody ktore mas vsade po triedach...to tam nema co robit, ked to porovnana iba dooridnates!!!
-// TODO refactorni cely node, isto vela sa da pomazat a dat do coorinates a tak
-// TODO ZAPUZDRENIE!!!
+// TODO musis pozriest tie vyhladavanie - jednotlivo land parceli a jednotlvo estati. to iste pri finde, delete, edite. find area vsetko, find bodovo jednotlivo
+
 // TODO sorry jako, ale v delete nemas osetrenu zmenu hlbky stromu..teda akoze iba aktualizovanie ciselok, vis, ked tak potom oprav aj ten test na to
 // TODO tu zmenu vysky zvas si to ukladanie levelu nodu!! ulahcilo by ti to zivot, dobra rada nad zlato to je!!!
-// TODO gui delete all
-// TODO finvoavnie nemas dobre...teda spon to co potrebujes, ze bodov to naide vsetko cez to sa to kryje
-// TODO upratat pak pracu s coordniates v quadTree a quadNode
-// TODO overload insert
-// TODO pomenit arraylisty
-// todo cooridnates equals bigger tnat least poresit!!!
-// todo mapovanie jednej suradnice do coordinates
-// todo contins all neviem ci je koser
-// todo ten edit a delete si pories
-// todo prerob int na double v gui
+
+// TODO to gujo mas zle deletovanie a tak podobne vsey objekty...musis si vybzerat iba konkretne
+// TODO gujo dorobit funckionality
 
 //int velkost = 100;
 //    Random random = new Random();

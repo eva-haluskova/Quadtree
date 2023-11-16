@@ -384,20 +384,20 @@ public class View extends JFrame {
     /**
      * Coordinates for creating tree
      */
-    public Integer getLatitudeOneTreePosition() {
-        return Integer.parseInt(LatitudeOneTreePosition.getText());
+    public Double getLatitudeOneTreePosition() {
+        return Double.parseDouble(LatitudeOneTreePosition.getText());
     }
 
-    public Integer getLongitudeOneTreePosition() {
-        return Integer.parseInt(LongitudeOneTreePosition.getText());
+    public Double getLongitudeOneTreePosition() {
+        return Double.parseDouble(LongitudeOneTreePosition.getText());
     }
 
-    public Integer getLatitudeTwoTreePosition() {
-        return Integer.parseInt(LatitudeTwoTreePosition.getText());
+    public Double getLatitudeTwoTreePosition() {
+        return Double.parseDouble(LatitudeTwoTreePosition.getText());
     }
 
-    public Integer getLongitudeTwoTreePosition() {
-        return Integer.parseInt(LongitudeTwoTreePosition.getText());
+    public Double getLongitudeTwoTreePosition() {
+        return Double.parseDouble(LongitudeTwoTreePosition.getText());
     }
 
     public Integer getMaxDepthOfTree() {

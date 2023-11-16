@@ -1,7 +1,5 @@
 package GUI;
 
-import MainLogic.Cadaster;
-
 import java.awt.*;
 
 public class TemporaryGuiRunning {

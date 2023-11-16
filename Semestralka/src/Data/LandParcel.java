@@ -1,12 +1,11 @@
 package Data;
 
-import QuadTree.Coordinates;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+/**
+ * This class extends cadastral object abstract class. Contains added data specific for this class.
+ */
 public class LandParcel extends CadastralObject {
-
     private int parcelNumber;
     private ArrayList<RealEstate> belongingRealEstates;
 

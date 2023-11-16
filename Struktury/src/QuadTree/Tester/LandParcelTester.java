@@ -40,7 +40,7 @@ public class LandParcelTester extends QuadTreeTester {
             LandParcel newObject = new LandParcel("LandParcel number " + i,par,i);
             Data<LandParcel> data = new Data(newObject, coors, UUID.randomUUID());
 
-            this.testTree.insert(data, testTree.getRoot());
+            this.testTree.insert(data);
             super.testData.add(data);
 
             if (super.belongToArea(parCoordinatesForSearch,data.getCoordinates())) {

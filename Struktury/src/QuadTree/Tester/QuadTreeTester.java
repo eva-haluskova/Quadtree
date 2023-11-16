@@ -10,7 +10,7 @@ import java.util.*;
 import java.util.function.Supplier;
 
 /**
- * This abstract class is used for testing implementation of quad tree. CLass provide
+ * This abstract class is used for testing implementation of quad tree. Class provide
  * methods for testing bacis method - insert, delete, find and some others
  * features like level order traversal and some other advanced testing.
  * As long as this class is abstract, it's needed to inherit tester for every
@@ -121,6 +121,10 @@ abstract class QuadTreeTester<T> {
         this.generateDelete();
     }
 
+    /**
+     * testing method for change depth - if depth is change and at the same time, if its possible to correct
+     * remove all data - testing if some data wasn't lost during the changing of depth.
+     */
     public void testOfChangeOfDepth(int parNewDepth,int parNumber, Coordinates parCoordinatesOfSearch, double sizeOfObject) {
         this.generateInsert(parNumber,sizeOfObject,this.random,parCoordinatesOfSearch);
 

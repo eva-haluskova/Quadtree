@@ -1,4 +1,4 @@
-package MainLogic;
+package Data;
 
 import Data.*;
 

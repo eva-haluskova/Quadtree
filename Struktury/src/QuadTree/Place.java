@@ -3,7 +3,7 @@ package QuadTree;
 /**
  * Basic class mainly for testing how quad tree implementation works.
  */
-public class Place implements Comparable<Place> {
+public class Place {
 
     private String name;
 
@@ -17,14 +17,5 @@ public class Place implements Comparable<Place> {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    @Override
-    public int compareTo(Place parOtherPlace) {
-        if (this.name.equals(parOtherPlace.getName())) {
-            return 1;
-        } else {
-            return -1;
-        }
     }
 }

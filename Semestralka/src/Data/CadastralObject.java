@@ -4,15 +4,18 @@ import QuadTree.Coordinates;
 
 import java.text.DecimalFormat;
 
+/**
+ * Represent some cadastral object - in this case it could be Land Parcel or Real Estate.
+ * This abstract class contains common data for all inherit classes, possible methods and abstract methods
+ * which is needed to override in child.
+ */
 public abstract class CadastralObject {
 
     public enum TypeOfCadastralObject {
         LAND_PARCEL,
         REAL_ESTATE
     }
-
     private static final int COORDINATES_COUNT = 2;
-
     protected String description;
     protected GPS[] GPSCoordinates;
 
