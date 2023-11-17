@@ -190,7 +190,6 @@ public class Controller {
     /**
      * Main Panel listeners
      */
-    // TODO
     class ConfirmButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if (view.getConfirmButton().getText().equals("Find")) {

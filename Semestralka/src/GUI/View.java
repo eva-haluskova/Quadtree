@@ -126,7 +126,6 @@ public class View extends JFrame {
         outputList = new JList<>();
         pointerModel = new DefaultListModel<>();
 
-        // TODO dbaj na to ze tu pridelujes veci dvom roznym veciam salalala
         //this.outputList.setCellRenderer(new CadastralObjectRender());
         ListOfOutput.setCellRenderer(new CadastralObjectRender());
         ListOfOutput.setModel(outputModel);

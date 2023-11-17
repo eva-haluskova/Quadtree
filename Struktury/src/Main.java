@@ -15,8 +15,8 @@ public class Main {
 
     public static void main(String[] args) {
 
-        int maxDepth = 6;
-        double sizeOfObjets = 10;
+        int maxDepth = 10;
+        double sizeOfObjets = 100;
         int numberOfObjects = 100000;
         int width = 1000;
         int height = 1000 ;
@@ -40,12 +40,3 @@ public class Main {
 
 }
 
-// TODO zmena vysky stromu
-// TODO insert aby neinsertol existujuce
-// TODO overenie find
-// TODO delete znizovanie hlbky stromu
-// TODO SPRAVIS OPTIMALIZACIU
-// TODO mapovanie vyrvaranie dat mas zle
-// TODO zaujimavy poznaok o zmene velkosti ako ked som zvacsila velkost sa mi pekne krasne zvysila vyska stromu pri vlastne 10satine dat...teda dat na desasitine velkosti
-// TODO gujo dorobit funckionality
-// TODO preco ti to pada :)

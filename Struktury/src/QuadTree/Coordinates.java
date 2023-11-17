@@ -292,7 +292,6 @@ public class Coordinates {
      * or it lies on edge, it will return -1 what means, data should be inserted
      * into current node.
      */
-    // todo osetirt vstupovanie okrajov
     public static int isFitsToQuadrant(Coordinates parCoordinatesOfActual, Coordinates parCoordinates) {
 
         if (

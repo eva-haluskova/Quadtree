@@ -91,6 +91,14 @@ public class QuadTree<T> {
         this.scaleParameter = parScale;
     }
 
+    public boolean isOptimalizate() {
+        return this.optimalizationOn;
+    }
+
+    public void setOptimalizationOn(boolean parBool){
+        this.optimalizationOn = parBool;
+    }
+
     /**
      * Private class used for obtaining data in method FindAppropriateNodeData,
      * for next usage in deleting data and another processing.
@@ -204,7 +212,6 @@ public class QuadTree<T> {
         }
 
         this.numberOfItems ++;
-        // TODO okontrolovat ci uz tam nemam rovnaky objekt...staci pretraverzovat dole?
 
         if (this.isEmpty()) {
             Coordinates newCoordinates = new Coordinates(this.rangeOfTree);
@@ -264,6 +271,11 @@ public class QuadTree<T> {
                 }
             }
         }
+
+        if (this.optimalizationOn && (this.numberOfItems % 100 == 0)) {
+            this.tryToOptimalize();
+        }
+
     }
 
     /**
@@ -369,7 +381,7 @@ public class QuadTree<T> {
         QuadTreeNode<T> nodeWithDataToDelete = result.getSearchedNode();
         LinkedList<QuadTreeNode<T>> parents = result.getParents();
         LinkedList<Integer> indices = result.getIndices();
-
+        this.numberOfItems --;
         nodeWithDataToDelete.removeData(parData);
 
         boolean correctlyRemoved = false;
@@ -676,8 +688,8 @@ public class QuadTree<T> {
 
         double newWidth = this.calculateWidth(newXcentre);
         double newHeight = this.calculateHeight(newYcentre);
-// TODO halooo akoze
-        Coordinates newCoors = new Coordinates(0,2*newWidth,0,2*newHeight);
+
+       Coordinates newCoors = new Coordinates(0,2*newWidth,0,2*newHeight);
 
         ArrayList<Data<T>> dataToInsert = this.getAllDataInSubTree(this.root);
         this.reinicializeValueOfTree(newCoors);
