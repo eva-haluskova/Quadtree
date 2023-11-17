@@ -206,18 +206,18 @@ public class Cadaster {
 
     public ArrayList<LandParcel> returnAllIncludingParcels(Data<RealEstate> parData) {
         ArrayList<LandParcel> o = parData.getData().getBelongingLandParcels();
-        for (int i = 0; i < o.size(); i++) {
-            System.out.println(o.get(i).toString());
-        }
+//        for (int i = 0; i < o.size(); i++) {
+//            System.out.println(o.get(i).toString());
+//        }
         return o;
     }
 
     public ArrayList<RealEstate> returnAllIncludingEstates(Data<LandParcel> parData) {
 
         ArrayList<RealEstate> o = parData.getData().getBelongingRealEstates();
-        for (int i = 0; i < o.size(); i++) {
-            System.out.println(o.get(i).toString());
-        }
+//        for (int i = 0; i < o.size(); i++) {
+//            System.out.println(o.get(i).toString());
+//        }
         return o;
     }
 
@@ -319,6 +319,22 @@ public class Cadaster {
             this.refillParcelData(dataToFill2.get(i),dataToFill2.get(i).getCoordinates());
         }
 
+    }
+
+    public void startOptimalization(boolean parBool, CadastralObject.TypeOfCadastralObject type) {
+        if (type.equals(CadastralObject.TypeOfCadastralObject.LAND_PARCEL)) {
+            this.landParcelQuadTree.setOptimalizationOn(parBool);
+        } else {
+            this.realEstateQuadTree.setOptimalizationOn(parBool);
+        }
+    }
+
+    public void changeDepth(int newDepth, CadastralObject.TypeOfCadastralObject type) {
+        if (type.equals(CadastralObject.TypeOfCadastralObject.LAND_PARCEL)) {
+            this.landParcelQuadTree.changeDepth(newDepth);
+        } else {
+            this.realEstateQuadTree.changeDepth(newDepth);
+        }
     }
 
 }

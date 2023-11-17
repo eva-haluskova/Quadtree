@@ -734,17 +734,7 @@
                     </constraints>
                     <properties/>
                     <border type="etched"/>
-                    <children>
-                      <component id="ccfb1" class="javax.swing.JCheckBox" binding="AutoOptimalization">
-                        <constraints>
-                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                          <gridbag weightx="0.0" weighty="0.0"/>
-                        </constraints>
-                        <properties>
-                          <text value="Optimalization"/>
-                        </properties>
-                      </component>
-                    </children>
+                    <children/>
                   </grid>
                   <vspacer id="61a5c">
                     <constraints>

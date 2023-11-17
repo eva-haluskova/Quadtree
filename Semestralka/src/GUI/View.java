@@ -199,6 +199,10 @@ public class View extends JFrame {
         GenerateDataButton.addActionListener(generateButtonListener);
     }
 
+    void addCheckboxListener(ActionListener checkboxListener) {
+        AutoOptimalization.addActionListener(checkboxListener);
+    }
+
     /**
      * Main Panel Buttons
      */

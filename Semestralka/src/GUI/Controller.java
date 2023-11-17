@@ -42,7 +42,7 @@ public class Controller {
         this.view.addGenerateDataButtonListener(new GenerateButtonListener());
         this.view.addLoadDataButtonListener(new LoadDataListener());
         this.view.addSaveDataButtonListener(new SaveDataListener());
-
+//        this.view.addCheckboxListener(new CheckBoxListener());
     }
 
     /**
@@ -240,6 +240,15 @@ public class Controller {
         }
     }
 
+
+    class CheckBoxListener implements ActionListener{
+        public void actionPerformed(ActionEvent e) {
+            if (view.getAutoOptimalization() == true) {
+                setOptimalizaciton(true);
+            }
+        }
+    }
+
     class MainComboBoxListener implements ItemListener {
         @Override
         public void itemStateChanged(ItemEvent e) {
@@ -363,11 +372,18 @@ public class Controller {
     public ArrayList<? extends CadastralObject> showData(Data<? extends CadastralObject> data) {
 
         if (data.getData().isInstanceOf().equals(CadastralObject.TypeOfCadastralObject.LAND_PARCEL)) {
-            System.out.println("land parcel");
             return this.cadaster.returnAllIncludingEstates((Data<LandParcel>)data);
         } else {
-            System.out.println("real estate");
             return this.cadaster.returnAllIncludingParcels((Data<RealEstate>)data);
+        }
+    }
+
+    public void setOptimalizaciton(boolean bol) {
+        if (this.view.getTypeOfTreeOption().equals("Real Estate")) {
+            this.cadaster.startOptimalization(bol, CadastralObject.TypeOfCadastralObject.REAL_ESTATE);
+        } else {
+            this.cadaster.startOptimalization(bol, CadastralObject.TypeOfCadastralObject.LAND_PARCEL);
+
         }
     }
 
@@ -484,14 +500,10 @@ public class Controller {
      * save data
      */
     public void saveData() {
-        System.out.println("we are in");
-        System.out.println(view.getTextSaveData());
         this.cadaster.saveTrees(view.getTextSaveData());
     }
 
     public void loadData() {
-        System.out.println("we are in");
-        System.out.println(view.getTextLoadData());
         this.cadaster.loadTrees(view.getTextLoadData());
     }
 
