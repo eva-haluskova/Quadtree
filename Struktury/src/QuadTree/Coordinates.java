@@ -110,7 +110,7 @@ public class Coordinates {
      * Return string representation of coordinates
      */
     public String[] returnCoordinatesInString() {
-        String[] stringToReturn = {Double.toString(this.getLowerY()),Double.toString(this.getUpperX())
+        String[] stringToReturn = {Double.toString(this.getLowerX()),Double.toString(this.getUpperX())
                 ,Double.toString(this.getLowerY()),Double.toString(this.getUpperY())};
         return stringToReturn;
     }
